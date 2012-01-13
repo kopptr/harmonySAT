@@ -9,7 +9,7 @@ type Assignment struct {
    top *assignmentNode
    // Number of nodes on the stack, not counting the empty assignment.
    // Also |PushAssign| - |PopAssign|
-   depth int
+   depth uint
 }
 
 type assignmentNode struct {
@@ -18,11 +18,16 @@ type assignmentNode struct {
    assigned int
 }
 
+
 func NewAssignment(nVars int) (a *Assignment) {
    a = &Assignment{nil,0}
    a.top = &assignmentNode{nil,nil,0}
    a.top.vars = make([]byte, nVars)
    return
+}
+
+func (a *Assignment) Depth() uint {
+   return a.depth
 }
 
 func (a *Assignment) Assign(l Lit) bool {
@@ -58,13 +63,20 @@ func (a *Assignment) PushAssign(l Lit) bool {
       log.Print("Attempted to PushAssign an unassigned literal\n")
       return false
    }
-   if a.Get(l.Val) != Unassigned {
+   if r,e := a.Get(l.Val); r.Pol != Unassigned && e {
       log.Printf("Attempted to PushAssign a previously assigned %s\n", l)
       return false
    }
 
    newNode := &assignmentNode{nil,nil,0}
-   return true
+   newNode.prev = a.top
+   a.top = newNode
+   a.depth++
+
+   newNode.assigned = a.top.assigned
+   newNode.vars = make([]byte, len(a.top.vars))
+   copy(newNode.vars, a.top.vars[:])
+   return a.Assign(l)
 }
 
 func (a *Assignment) PopAssign() bool {

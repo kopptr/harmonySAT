@@ -79,5 +79,14 @@ func TestAssign(t *testing.T) {
    }
 }
 
+func TestPushPopAssign(t *testing.T) {
+   a := NewAssignment(10)
+   a.PushAssign(Lit{2,Pos})
+   if a.Depth() != 1 {
+      t.Log("Depth updates improperly\n")
+      t.Fail()
+   }
+}
+
 
 

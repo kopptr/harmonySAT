@@ -18,7 +18,6 @@ type assignmentNode struct {
    assigned int
 }
 
-
 func NewAssignment(nVars int) (a *Assignment) {
    a = &Assignment{nil,0}
    a.top = &assignmentNode{nil,nil,0}
@@ -70,16 +69,23 @@ func (a *Assignment) PushAssign(l Lit) bool {
 
    newNode := &assignmentNode{nil,nil,0}
    newNode.prev = a.top
-   a.top = newNode
-   a.depth++
 
    newNode.assigned = a.top.assigned
    newNode.vars = make([]byte, len(a.top.vars))
    copy(newNode.vars, a.top.vars[:])
+
+   a.top = newNode
+   a.depth++
    return a.Assign(l)
 }
 
 func (a *Assignment) PopAssign() bool {
+   if a.top.prev == nil {
+      log.Printf("Attempted to PopAssign the empty assignment\n")
+      return false
+   }
+   a.top = a.top.prev
+   a.depth--
 
    return true
 }

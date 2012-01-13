@@ -81,9 +81,64 @@ func TestAssign(t *testing.T) {
 
 func TestPushPopAssign(t *testing.T) {
    a := NewAssignment(10)
+
+   if a.Depth() != 0 {
+      t.Log("Depth initializes improperly\n")
+      t.Fail()
+   }
+   if l,e := a.Get(2); l.Pol != Unassigned || l.Val != 2 || !e {
+      t.Logf("Initial value is %s\n", l)
+      t.Fail()
+   }
+
    a.PushAssign(Lit{2,Pos})
    if a.Depth() != 1 {
       t.Log("Depth updates improperly\n")
+      t.Fail()
+   }
+   if l,e := a.Get(2); l.Pol != Pos || l.Val != 2 || !e {
+      t.Logf("PushAssigned 2, value is %s\n", l)
+      t.Logf("val: %d, pol: %d\n", l.Val, l.Pol)
+      t.Fail()
+   }
+   a.PushAssign(Lit{3,Neg})
+   if a.Depth() != 2 {
+      t.Log("Depth updates improperly\n")
+      t.Fail()
+   }
+   if l,e := a.Get(3); l.Pol != Neg || l.Val != 3 || !e {
+      t.Logf("PushAssigned 3, value is %s\n", l)
+      t.Logf("val: %d, pol: %d\n", l.Val, l.Pol)
+      t.Fail()
+   }
+   if l,e := a.Get(2); l.Pol != Pos || l.Val != 2 || !e {
+      t.Logf("PushAssigned 2, value is %s\n", l)
+      t.Logf("val: %d, pol: %d\n", l.Val, l.Pol)
+      t.Fail()
+   }
+
+   a.PopAssign()
+   if a.Depth() != 1 {
+      t.Log("Depth PopAssigns improperly\n")
+      t.Fail()
+   }
+   if l,e := a.Get(3); l.Pol != Unassigned || l.Val != 3 || !e {
+      t.Logf("PopAssigned value is %s\n", l)
+      t.Fail()
+   }
+   if l,e := a.Get(2); l.Pol != Pos || l.Val != 2 || !e {
+      t.Logf("PushAssigned 2, value is %s\n", l)
+      t.Logf("val: %d, pol: %d\n", l.Val, l.Pol)
+      t.Fail()
+   }
+
+   a.PopAssign()
+   if a.Depth() != 0 {
+      t.Log("Depth PopAssigns improperly\n")
+      t.Fail()
+   }
+   if l,e := a.Get(2); l.Pol != Unassigned || l.Val != 2 || !e {
+      t.Logf("PopAssigned value is %s\n", l)
       t.Fail()
    }
 }

@@ -29,39 +29,39 @@ func TestNew(t *testing.T) {
 func TestAssign(t *testing.T) {
 	b := NewAssignment(10)
 
-	if l, e := b.Get(2); l.Pol != Unassigned || l.Val != 2 || !e {
-		t.Logf("Assign nothing, get 2, it returns %s\n", l)
+	if p, e := b.Get(2); p != Unassigned || !e {
+		t.Logf("Assign nothing, get 2, it returns %s\n", p)
 		t.Fail()
 	}
 
-	if e := b.Assign(Lit{2, Pos}); !e {
+	if e := b.Assign(2, Pos); !e {
 		t.Log("Assigning 2 failed\n")
 		t.Fail()
 	}
-	if l, e := b.Get(2); l.Pol != Pos || l.Val != 2 || !e {
-		t.Logf("Assign 2, get, it returns %s\n", l)
+	if p, e := b.Get(2); p != Pos || !e {
+		t.Logf("Assign 2, get, it returns %s\n", p)
 		t.Fail()
 	}
 
-	if e := b.Assign(Lit{2, Neg}); !e {
+	if e := b.Assign(2, Neg); !e {
 		t.Log("Assigning -2 failed\n")
 		t.Fail()
 	}
-	if l, e := b.Get(2); l.Pol != Neg || l.Val != 2 || !e {
-		t.Logf("Assign -2, get, it returns %s\n", l)
+	if p, e := b.Get(2); p != Neg || !e {
+		t.Logf("Assign -2, get, it returns %s\n", p)
 		t.Fail()
 	}
 
-	if e := b.Assign(Lit{2, Unassigned}); !e {
+	if e := b.Assign(2, Unassigned); !e {
 		t.Log("Assigning <2> failed\n")
 		t.Fail()
 	}
-	if l, e := b.Get(2); l.Pol != Unassigned || l.Val != 2 || !e {
-		t.Logf("Assign <2>, get, it returns %s\n", l)
+	if p, e := b.Get(2); p != Unassigned || !e {
+		t.Logf("Assign <2>, get, it returns %s\n", p)
 		t.Fail()
 	}
 
-	if e := b.Assign(Lit{11, Pos}); e {
+	if e := b.Assign(11, Pos); e {
 		t.Log("Assigning 11 succeeded\n")
 		t.Fail()
 	}
@@ -69,7 +69,7 @@ func TestAssign(t *testing.T) {
 		t.Log("Getting 11 succeeded\n")
 		t.Fail()
 	}
-	if e := b.Assign(Lit{0, Pos}); e {
+	if e := b.Assign(0, Pos); e {
 		t.Log("Assigning 0 succeeded\n")
 		t.Fail()
 	}
@@ -86,34 +86,34 @@ func TestPushPopAssign(t *testing.T) {
 		t.Log("Depth initializes improperly\n")
 		t.Fail()
 	}
-	if l, e := a.Get(2); l.Pol != Unassigned || l.Val != 2 || !e {
-		t.Logf("Initial value is %s\n", l)
+	if p, e := a.Get(2); p != Unassigned || !e {
+		t.Logf("Initial value is %s\n", p)
 		t.Fail()
 	}
 
-	a.PushAssign(Lit{2, Pos})
+	a.PushAssign(2, Pos)
 	if a.Depth() != 1 {
 		t.Log("Depth updates improperly\n")
 		t.Fail()
 	}
-	if l, e := a.Get(2); l.Pol != Pos || l.Val != 2 || !e {
-		t.Logf("PushAssigned 2, value is %s\n", l)
-		t.Logf("val: %d, pol: %d\n", l.Val, l.Pol)
+	if p, e := a.Get(2); p != Pos || !e {
+		t.Logf("PushAssigned 2, value is %s\n", p)
+		t.Logf("val: %d, pol: %d\n", 2, p)
 		t.Fail()
 	}
-	a.PushAssign(Lit{3, Neg})
+	a.PushAssign(3, Neg)
 	if a.Depth() != 2 {
 		t.Log("Depth updates improperly\n")
 		t.Fail()
 	}
-	if l, e := a.Get(3); l.Pol != Neg || l.Val != 3 || !e {
-		t.Logf("PushAssigned 3, value is %s\n", l)
-		t.Logf("val: %d, pol: %d\n", l.Val, l.Pol)
+	if p, e := a.Get(3); p != Neg || !e {
+		t.Logf("PushAssigned 3, value is %s\n", p)
+		t.Logf("val: %d, pol: %d\n", 3, p)
 		t.Fail()
 	}
-	if l, e := a.Get(2); l.Pol != Pos || l.Val != 2 || !e {
-		t.Logf("PushAssigned 2, value is %s\n", l)
-		t.Logf("val: %d, pol: %d\n", l.Val, l.Pol)
+	if p, e := a.Get(2); p != Pos || !e {
+		t.Logf("PushAssigned 2, value is %s\n", p)
+		t.Logf("val: %d, pol: %d\n", 2, p)
 		t.Fail()
 	}
 
@@ -122,13 +122,13 @@ func TestPushPopAssign(t *testing.T) {
 		t.Log("Depth PopAssigns improperly\n")
 		t.Fail()
 	}
-	if l, e := a.Get(3); l.Pol != Unassigned || l.Val != 3 || !e {
-		t.Logf("PopAssigned value is %s\n", l)
+	if p, e := a.Get(3); p != Unassigned || !e {
+		t.Logf("PopAssigned value is %s\n", p)
 		t.Fail()
 	}
-	if l, e := a.Get(2); l.Pol != Pos || l.Val != 2 || !e {
-		t.Logf("PushAssigned 2, value is %s\n", l)
-		t.Logf("val: %d, pol: %d\n", l.Val, l.Pol)
+	if p, e := a.Get(2); p != Pos || !e {
+		t.Logf("PushAssigned 2, value is %s\n", p)
+		t.Logf("val: %d, pol: %d\n", 2, p)
 		t.Fail()
 	}
 
@@ -137,8 +137,8 @@ func TestPushPopAssign(t *testing.T) {
 		t.Log("Depth PopAssigns improperly\n")
 		t.Fail()
 	}
-	if l, e := a.Get(2); l.Pol != Unassigned || l.Val != 2 || !e {
-		t.Logf("PopAssigned value is %s\n", l)
+	if p, e := a.Get(2); p != Unassigned || !e {
+		t.Logf("PopAssigned value is %s\n", p)
 		t.Fail()
 	}
 }

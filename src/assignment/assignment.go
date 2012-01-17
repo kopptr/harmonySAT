@@ -2,14 +2,13 @@ package assignment
 
 import (
 	"log"
-   "cnf"
 )
 
 const (
    Unassigned byte = 0
-   Pos byte = cnf.Pos
-   Neg byte = cnf.Neg
-}
+   Pos byte = 1
+   Neg byte = 2
+)
 
 /* A stack of boolean assignments.
  * Each item on the stack represents a snapshot of the assignment the programmer
@@ -18,8 +17,7 @@ const (
  * state.
  */
 type Assignment struct {
-	// top of the stack of assignmentNodes
-	top *assignmentNode
+	top *assignmentNode // top of the stack of assignmentNodes
 	// Number of nodes on the stack, not counting the empty assignment.
 	// Also |PushAssign| - |PopAssign|
 	depth uint
@@ -46,19 +44,19 @@ func (a *Assignment) Depth() uint {
 }
 
 // Assigns a literal to the top assignment in the stack.
-func (a *Assignment) Assign(l Lit) bool {
+func (a *Assignment) Assign(v uint, pol byte) bool {
 	if a.top == nil {
 		log.Print("Assign() called on uninitialized Assignment")
 		return false
 	}
-	if l.Val < 1 || l.Val > uint(len(a.top.vars)) {
-		log.Printf("Attempted to assign %d (#vars=%d)", l.Val, len(a.top.vars))
+	if v < 1 || v > uint(len(a.top.vars)) {
+		log.Printf("Attempted to assign %d (#vars=%d)", v, len(a.top.vars))
 		return false
 	}
-	if a.top.vars[l.Val-1] == Unassigned {
+	if a.top.vars[v-1] == Unassigned {
 		a.top.assigned++
 	}
-	a.top.vars[l.Val-1] = l.Pol
+	a.top.vars[v-1] = pol
 	return true
 }
 
@@ -74,13 +72,13 @@ func (a *Assignment) Get(i uint) (byte, bool) {
 	return a.top.vars[i-1], true
 }
 
-func (a *Assignment) PushAssign(l Lit) bool {
-	if l.Pol == Unassigned {
+func (a *Assignment) PushAssign(v uint, pol byte) bool {
+	if pol == Unassigned {
 		log.Print("Attempted to PushAssign an unassigned literal\n")
 		return false
 	}
-	if r, e := a.Get(l.Val); r.Pol != Unassigned && e {
-		log.Printf("Attempted to PushAssign a previously assigned %s\n", l)
+	if p, e := a.Get(v); p != Unassigned && e {
+		log.Printf("Attempted to PushAssign a previously assigned %s\n", v)
 		return false
 	}
 
@@ -93,7 +91,7 @@ func (a *Assignment) PushAssign(l Lit) bool {
 
 	a.top = newNode
 	a.depth++
-	return a.Assign(l)
+	return a.Assign(v, pol)
 }
 
 func (a *Assignment) PopAssign() bool {

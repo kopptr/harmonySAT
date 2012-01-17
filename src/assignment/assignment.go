@@ -1,8 +1,15 @@
-package sat
+package assignment
 
 import (
 	"log"
+   "cnf"
 )
+
+const (
+   Unassigned byte = 0
+   Pos byte = cnf.Pos
+   Neg byte = cnf.Neg
+}
 
 /* A stack of boolean assignments.
  * Each item on the stack represents a snapshot of the assignment the programmer
@@ -55,16 +62,16 @@ func (a *Assignment) Assign(l Lit) bool {
 	return true
 }
 
-func (a *Assignment) Get(i uint) (Lit, bool) {
+func (a *Assignment) Get(i uint) (byte, bool) {
 	if a.top == nil {
 		log.Print("Get() called on uninitialized Assignment")
-		return Lit{}, false
+		return Unassigned, false
 	}
 	if i < 1 || i > uint(len(a.top.vars)) {
 		log.Printf("Attempted to get %d (#vars=%d)", i, len(a.top.vars))
-		return Lit{}, false
+		return Unassigned, false
 	}
-	return Lit{i, a.top.vars[i-1]}, true
+	return a.top.vars[i-1], true
 }
 
 func (a *Assignment) PushAssign(l Lit) bool {

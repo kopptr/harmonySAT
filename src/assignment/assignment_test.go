@@ -1,4 +1,4 @@
-package sat
+package assignment
 
 import (
 	"testing"

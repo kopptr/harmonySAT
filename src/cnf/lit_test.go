@@ -19,7 +19,7 @@ func TestComposite(t *testing.T) {
 	}
 }
 
-func TestNew(t *testing.T) {
+func TestNewLit(t *testing.T) {
 	var l1 Lit = NewLit(2)
 	if l1.Val != 2 || l1.Pol != Pos {
 		t.Logf("l1 expected: 2\n")

@@ -11,7 +11,7 @@ type Lit struct {
 	Pol byte
 }
 
-// Possible Values for Lit.Pol
+// Possible values for Lit.Pol
 const (
 	Pos byte = 1
 	Neg byte = 2

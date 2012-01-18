@@ -87,16 +87,16 @@ func (c *Clause) String() string {
 }
 
 // These functions provide access to the statistical properties of the Clause
-func (c *Clause) isBinary() bool {
+func (c *Clause) IsBinary() bool {
 	return c.binary
 }
-func (c *Clause) isTernary() bool {
+func (c *Clause) IsTernary() bool {
 	return c.ternary
 }
-func (c *Clause) isHorn() bool {
+func (c *Clause) IsHorn() bool {
 	return c.horn
 }
-func (c *Clause) isDefinite() bool {
+func (c *Clause) IsDefinite() bool {
 	return c.definite
 }
 

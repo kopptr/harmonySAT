@@ -19,8 +19,8 @@ type Entry struct {
 func NewEntry(vars []int) (e *Entry) {
    e = new(Entry)
    e.Clause = cnf.NewClause(vars)
-   e.Watches[0].New()
-   e.Watches[1].New()
+   e.Watches[0] = *NewWatch()
+   e.Watches[1] = *NewWatch()
    e.Next = nil
    e.Prev = nil
    return

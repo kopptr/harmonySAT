@@ -10,13 +10,15 @@ type Watch struct {
    Watching cnf.Lit
 }
 
-func (w *Watch) New() {
-   w.Next = w
-   w.Prev = w
+func NewWatch() (w *Watch) {
+   w = new(Watch)
    w.Watching.Val = 0
    w.Watching.Pol = 0
+   w.Next = w
+   w.Prev = w
+   return
 }
 
-func (w *Watch) isDummy() bool {
+func (w *Watch) IsDummy() bool {
    return w.Watching.Val == 0
 }

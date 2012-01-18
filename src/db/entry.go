@@ -10,6 +10,8 @@ import (
 type Entry struct {
    *cnf.Clause
    Watches [2]Watch
+   Next *Entry
+   Prev *Entry
 }
 
 // Creates a new Entry. Initializes the clause data and allocates the watches.
@@ -19,6 +21,8 @@ func NewEntry(vars []int) (e *Entry) {
    e.Clause = cnf.NewClause(vars)
    e.Watches[0].New()
    e.Watches[1].New()
+   e.Next = nil
+   e.Prev = nil
    return
 }
 

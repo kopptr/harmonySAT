@@ -2,7 +2,7 @@ package db
 
 import (
    "testing"
-   "fmt"
+//   "fmt"
 )
 
 func TestNewDB(t *testing.T) {
@@ -88,25 +88,76 @@ func TestAddEntry(t *testing.T) {
    }
    //fmt.Printf("%s\n", db.String() )
 
-   // TODO check the stats
+   // check the stats
+   if db.Binary != 0 {
+      t.Logf("Binary incorrectly tallied\n")
+      t.Fail()
+   }
+   if db.Ternary != 1 {
+      t.Logf("Ternary incorrectly tallied\n")
+      t.Fail()
+   }
+   if db.Horn != 1 {
+      t.Logf("Horn incorrectly tallied\n")
+      t.Fail()
+   }
+   if db.Definite != 1 {
+      t.Logf("Definite incorrectly tallied\n")
+      t.Fail()
+   }
 }
 
 func TestDelEntry(t *testing.T) {
    db := NewDB(10)
-   db.AddEntry([]int{-1,3,-5})
+   db.AddEntry([]int{-9,4,-3,6,1})
    db.AddEntry([]int{-10,4,-5,6,1})
    db.AddEntry([]int{-9,4,-5,6,1})
    db.StartLearning()
    db.AddEntry([]int{-9,-4,-5,6,1})
-   db.AddEntry([]int{-9,4,-3,6,1})
+   db.AddEntry([]int{-1,3,-5})
    db.AddEntry([]int{-9,4,-5,2,1})
 
-   fmt.Printf("%s\n", db.String() )
+//   fmt.Printf("%s\n", db.String() )
 
+   e := db.Learned.Next
+   db.DelEntry(e)
+//   fmt.Printf("%s\n", db.String() )
+   if db.NLearned() != 2 || db.NGiven() != 3 {
+      t.Logf("counts not updated correctly\n")
+      t.Fail()
+   }
 
+   e = db.Learned.Next
+   db.DelEntry(e)
+//   fmt.Printf("%s\n", db.String() )
+   if db.NLearned() != 1 || db.NGiven() != 3 {
+      t.Logf("counts not updated correctly\n")
+      t.Fail()
+   }
 
+   e = db.Learned
+   db.DelEntry(e)
+//   fmt.Printf("%s\n", db.String() )
+   if db.NLearned() != 0 || db.NGiven() != 3 {
+      t.Logf("counts not updated correctly\n")
+      t.Fail()
+   }
 
-
-
-
+   // check stats
+   if db.Binary != 0 {
+      t.Logf("Binary incorrectly tallied\n")
+      t.Fail()
+   }
+   if db.Ternary != 0 {
+      t.Logf("Ternary incorrectly tallied\n")
+      t.Fail()
+   }
+   if db.Horn != 0 {
+      t.Logf("Horn incorrectly tallied\n")
+      t.Fail()
+   }
+   if db.Definite != 0 {
+      t.Logf("Definite incorrectly tallied\n")
+      t.Fail()
+   }
 }

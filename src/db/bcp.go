@@ -3,20 +3,16 @@ package db
 import (
    "guess"
    "cnf"
-   "fmt"
 )
 
 func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit) bool {
 
-   fmt.Printf("0")
    lq := newLitQ() // queue of literals to be assigned
 
    lq.PushBack(lit)
 
-   fmt.Printf("1")
    // For each new literal in the queue
    for l,ok := lq.PopFront(); ok; l,ok = lq.PopFront() {
-      fmt.Printf("2")
       g.Set(l.Val, l.Pol)
       // Each clause watching the literal was just satisfied.
       // For each clause watching the reverse polarity of the literal
@@ -24,7 +20,6 @@ func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit) bool {
       reverse.Flip()
       wl := db.GetWatchList(reverse)
       for wl.First(); wl.Current() != nil; wl.Next() {
-   fmt.Printf("3")
          // We need to watch something else iff the other watch is unsatisfied
          // Check if it's satisfied
          otherWatch := wl.Current().Other()

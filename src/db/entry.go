@@ -9,7 +9,7 @@ import (
  */
 type Entry struct {
    *cnf.Clause
-   Watches [2]Watch
+   Watches [2]*Watch
    Next *Entry
    Prev *Entry
 }
@@ -19,8 +19,8 @@ type Entry struct {
 func NewEntry(vars []int) (e *Entry) {
    e = new(Entry)
    e.Clause = cnf.NewClause(vars)
-   e.Watches[0] = *NewWatch()
-   e.Watches[1] = *NewWatch()
+   e.Watches[0] = NewWatch()
+   e.Watches[1] = NewWatch()
    e.Next = nil
    e.Prev = nil
    return

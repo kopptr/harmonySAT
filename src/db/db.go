@@ -21,7 +21,7 @@ type DB struct {
    Learned *Entry
    nGiven uint
    nLearned uint
-   WatchRings []*Watch
+   WatchLists []*WatchList
    learning bool
 }
 
@@ -37,10 +37,9 @@ func NewDB(nVars int) (db *DB) {
    db.Binary, db.Ternary, db.Horn, db.Definite = 0,0,0,0
    db.Learned, db.Given = nil, nil
    db.nLearned, db.nGiven = 0,0
-   db.WatchRings = make([]*Watch, 2*nVars)
-   for i := range db.WatchRings {
-      db.WatchRings[i] = NewWatch()
-//      db.WatchRings[i].Init()
+   db.WatchLists = make([]*WatchList, 2*nVars)
+   for i := range db.WatchLists {
+      db.WatchLists[i] = NewWatchList()
    }
    return
 }
@@ -88,20 +87,11 @@ func (db *DB) AddEntry(vars []int) {
 
    // Add to watches
    for i := range e.Watches {
-      var indx uint
-      if e.Lits[i].Pol == cnf.Neg {
-         indx = e.Lits[i].Val
-      } else {
-         indx = e.Lits[i].Val + uint((len(db.WatchRings)/2))
-      }
-
-      watch := db.WatchRings[indx]
+      wl := db.GetWatchList(e.Lits[i])
+      e.Watches[i].E = e
       e.Watches[i].Watching.Val = e.Lits[i].Val
-      e.Watches[i].Watching.Pol = e.Lits[i].Pol
-      e.Watches[i].Next = watch.Next
-      e.Watches[i].Prev = watch
-      watch.Next.Prev = &e.Watches[i]
-      watch.Next = &e.Watches[i]
+      e.Watches[i].Watching.Pol= e.Lits[i].Pol
+      wl.Add(e.Watches[i])
    }
 
    // Update DB stats
@@ -124,8 +114,8 @@ func (db *DB) DelEntry(e *Entry) {
    db.nLearned--
    // Remove from watches
    for i := range e.Watches {
-      e.Watches[i].Prev.Next = e.Watches[i].Next
-      e.Watches[i].Next.Prev = e.Watches[i].Prev
+      // TODO this will break HARD, must fix first, last, and pointers
+      e.Watches[i].Pluck()
    }
    // Remove from List
    if e.Next != nil {
@@ -151,6 +141,14 @@ func (db *DB) DelEntry(e *Entry) {
    // i.e. set e = nil, then the gc should get it.
 }
 
+func (db *DB) GetWatchList(l cnf.Lit) *WatchList {
+   i := int(l.Val - 1)
+   if l.Pol == cnf.Pos {
+      i += len(db.WatchLists) / 2
+   }
+   return db.WatchLists[i]
+}
+
 
 func (db *DB) StartLearning() {
    db.learning = true
@@ -163,9 +161,22 @@ func (db *DB) String() string {
       if e == db.Learned && db.learning {
          fmt.Fprintf(buffer, "Learned:\n")
       }
-		fmt.Fprintf(buffer, "%s", e.Clause)
+		fmt.Fprintf(buffer, "%s\n", e.Clause)
 	}
-	fmt.Fprintf(buffer, "\n")
+   fmt.Fprintf(buffer, "Watches:\n")
+   watchNum := -1
+   for _, wl := range db.WatchLists {
+      fmt.Fprintf(buffer, "Watching %d:\n", watchNum)
+      fmt.Fprintf(buffer, "%s", wl)
+      if watchNum < 0 {
+         watchNum--
+      } else {
+         watchNum++
+      }
+      if watchNum < (len(db.WatchLists)/2*-1) {
+         watchNum = 1
+      }
+   }
 	return string(buffer.Bytes())
 }
 

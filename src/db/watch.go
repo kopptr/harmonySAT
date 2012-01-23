@@ -36,7 +36,8 @@ type WatchList struct {
 }
 
 // Returns a new empty WatchList
-func NewWatchList() (wr WatchList) {
+func NewWatchList() (wr *WatchList) {
+   wr = new(WatchList)
    wr.first = nil
    wr.last = nil
    wr.current = nil
@@ -51,6 +52,7 @@ func (wr *WatchList) Add(w *Watch) {
       wr.current = w
    } else {
       w.Prev = wr.last
+      w.Next = nil
       wr.last.Next = w
       wr.last = w
    }
@@ -76,6 +78,18 @@ func (wr *WatchList) Remove() (w *Watch) {
       w.Prev = nil
    }
    return
+}
+
+// DO NOT USE
+func (w *Watch) Pluck() {
+   if w.Prev != nil {
+      w.Prev.Next = w.Next
+   }
+   if w.Next != nil {
+      w.Next.Prev = w.Prev
+   }
+   w.Next = nil
+   w.Prev = nil
 }
 
 // Removes all watches from the list
@@ -129,9 +143,8 @@ func (wr WatchList) String() string {
    }
 	buffer := bytes.NewBufferString("")
    for w := wr.first; w != nil; w = w.Next {
-		fmt.Fprintf(buffer, "%s", w.E.Clause.String())
+		fmt.Fprintf(buffer, "%s\n", w.E.Clause.String())
 	}
-	fmt.Fprintf(buffer, "\n")
 	return string(buffer.Bytes())
 }
 

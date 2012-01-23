@@ -2,6 +2,7 @@ package db
 
 import (
    "testing"
+   //"fmt"
 )
 
 func TestNewWatch(t *testing.T) {
@@ -38,14 +39,23 @@ func TestNewWatchListAdd(t *testing.T) {
       t.Logf("Watch.first is wrong after first Add()\n")
       t.Fail()
    }
+   if wr.first.Prev != nil {
+      t.Logf("Watch.first.prev is non-nil after first Add()\n")
+      t.Fail()
+   }
    if wr.last != w1 {
       t.Logf("Watch.last is wrong after first Add()\n")
+      t.Fail()
+   }
+   if wr.last.Next != nil {
+      t.Logf("Watch.last.next is non-nil after first Add()\n")
       t.Fail()
    }
    if wr.current != w1 {
       t.Logf("Watch.current is wrong after first Add()\n")
       t.Fail()
    }
+   //fmt.Printf("%s\n", wr)
    w2 := NewWatch()
    e2 := NewEntry([]int{2,3,4})
    w2.E = e2
@@ -54,30 +64,48 @@ func TestNewWatchListAdd(t *testing.T) {
       t.Logf("Watch.first is wrong after second Add()\n")
       t.Fail()
    }
+   if wr.first.Prev != nil {
+      t.Logf("Watch.first.prev is non-nil after first Add()\n")
+      t.Fail()
+   }
    if wr.last != w2 {
       t.Logf("Watch.last is wrong after second Add()\n")
+      t.Fail()
+   }
+   if wr.last.Next != nil {
+      t.Logf("Watch.last.next is non-nil after first Add()\n")
       t.Fail()
    }
    if wr.current != w1 {
       t.Logf("Watch.current is wrong after second Add()\n")
       t.Fail()
    }
+   //fmt.Printf("%s\n", wr)
    w3 := NewWatch()
-   e3 := NewEntry([]int{3,4,5})
+   e3 := NewEntry([]int{1,2,5})
    w3.E = e3
    wr.Add(w3)
    if wr.first != w1 {
       t.Logf("Watch.first is wrong after second Add()\n")
       t.Fail()
    }
+   if wr.first.Prev != nil {
+      t.Logf("Watch.first.prev is non-nil after first Add()\n")
+      t.Fail()
+   }
    if wr.last != w3 {
       t.Logf("Watch.last is wrong after second Add()\n")
+      t.Fail()
+   }
+   if wr.last.Next != nil {
+      t.Logf("Watch.last.next is non-nil after first Add()\n")
       t.Fail()
    }
    if wr.current != w1 {
       t.Logf("Watch.current is wrong after second Add()\n")
       t.Fail()
    }
+   //fmt.Printf("%s\n", wr)
 }
 
 

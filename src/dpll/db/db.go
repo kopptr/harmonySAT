@@ -3,7 +3,7 @@ package db
 import (
    "bytes"
    "fmt"
-   "cnf"
+   "dpll/db/cnf"
 )
 
 // Statistics for a database of clauses

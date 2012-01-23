@@ -1,7 +1,7 @@
 package db
 
 import (
-   "cnf"
+   "dpll/db/cnf"
 )
 
 /* An entry in the database. Essentially a clause with metadata about

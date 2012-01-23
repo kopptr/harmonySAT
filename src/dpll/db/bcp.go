@@ -1,8 +1,8 @@
 package db
 
 import (
-   "guess"
-   "cnf"
+   "dpll/assignment/guess"
+   "dpll/db/cnf"
 )
 
 func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit) bool {

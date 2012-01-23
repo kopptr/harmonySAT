@@ -1,7 +1,7 @@
 package db
 
 import (
-   "cnf"
+   "dpll/db/cnf"
    "fmt"
    "bytes"
 )

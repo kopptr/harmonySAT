@@ -2,8 +2,8 @@ package db
 
 import (
    "testing"
-   "guess"
-   "cnf"
+   "dpll/assignment/guess"
+   "dpll/db/cnf"
 //   "fmt"
 )
 

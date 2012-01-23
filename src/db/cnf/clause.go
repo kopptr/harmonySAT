@@ -82,7 +82,6 @@ func (c *Clause) String() string {
 	for _, l := range c.Lits {
 		fmt.Fprintf(buffer, "%s ", l)
 	}
-	fmt.Fprintf(buffer, "\n")
 	return string(buffer.Bytes())
 }
 

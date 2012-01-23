@@ -29,4 +29,24 @@ func (g *Guess) Get(n uint) byte {
    return g.vars[n-1]
 }
 
+func (g *Guess) Vars(flipped bool) (v []int) {
+   v = []int{}
+   for i, n := range g.vars {
+      if n == Pos {
+         if !flipped {
+            v = append(v, i+1)
+         } else {
+            v = append(v, -1*(i+1))
+         }
+      } else if n == Neg {
+         if !flipped {
+            v = append(v, (i+1)*-1)
+         } else {
+            v = append(v, i+1)
+         }
+      }
+   }
+   return
+}
+
 

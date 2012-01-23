@@ -4,6 +4,7 @@ import (
    "testing"
    "guess"
    "cnf"
+//   "fmt"
 )
 
 func TestLitQ(t *testing.T) {
@@ -28,6 +29,7 @@ func TestBcpUnits(t *testing.T) {
    db.AddEntry([]int{-2,-3})
    db.AddEntry([]int{3,4})
    db.AddEntry([]int{-4,5})
+   db.StartLearning()
 
    g := guess.NewGuess(10)
 
@@ -67,6 +69,7 @@ func TestBcpConflict(t *testing.T) {
    db.AddEntry([]int{-2,-3})
    db.AddEntry([]int{3,4})
    db.AddEntry([]int{-4,3})
+   db.StartLearning()
 
    g := guess.NewGuess(10)
 
@@ -91,6 +94,16 @@ func TestBcpConflict(t *testing.T) {
       t.Logf("Bcp does not assign 4 as it should\n")
       t.Fail()
    }
+   if db.NGiven() != 5 {
+      t.Logf("NGiven is after bcp w/ conflict incorrect\n")
+      t.Fail()
+   }
+   if db.NLearned() != 1 {
+      t.Logf("NLearned is after bcp w/ conflict incorrect\n")
+      t.Fail()
+   }
+   //fmt.Printf("%s\n", db.Learned)
+
 }
 
 func TestBcpBoring(t *testing.T) {
@@ -100,6 +113,8 @@ func TestBcpBoring(t *testing.T) {
    db.AddEntry([]int{-2,-3})
    db.AddEntry([]int{3,4})
    db.AddEntry([]int{-4,3})
+   db.StartLearning()
+
    g := guess.NewGuess(10)
 
    result := db.Bcp(g, cnf.Lit{1, guess.Pos})

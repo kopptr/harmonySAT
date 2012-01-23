@@ -56,6 +56,7 @@ func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit) bool {
                lq.PushBack(otherWatch.Watching)
             } else {
                // CONFLICT
+               db.AddConflictEntry(g)
                return false
             }
          }
@@ -63,6 +64,12 @@ func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit) bool {
    }
    return true
 }
+
+
+func (db *DB) AddConflictEntry(g *guess.Guess) {
+   db.AddEntry(g.Vars(true))
+}
+
 
 type litQ struct {
    First *litQNode

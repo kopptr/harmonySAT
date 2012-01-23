@@ -24,7 +24,7 @@ func (g *Guess) Set(n int, v byte) {
 }
 
 // Returns what is assigned to the nth variable.
-func (g *Guess) Get(n int) {
+func (g *Guess) Get(n int) byte {
    return g.vars[n-1]
 }
 

@@ -14,6 +14,7 @@ type Guess struct {
 }
 
 func NewGuess(nVars int) (g *Guess) {
+   g = new(Guess)
    g.vars = make([]byte, nVars)
    return
 }

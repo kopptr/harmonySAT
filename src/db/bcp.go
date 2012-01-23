@@ -3,23 +3,28 @@ package db
 import (
    "guess"
    "cnf"
+   "fmt"
 )
 
 func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit) bool {
 
+   fmt.Printf("0")
    lq := newLitQ() // queue of literals to be assigned
 
    lq.PushBack(lit)
 
+   fmt.Printf("1")
    // For each new literal in the queue
    for l,ok := lq.PopFront(); ok; l,ok = lq.PopFront() {
+      fmt.Printf("2")
       g.Set(l.Val, l.Pol)
       // Each clause watching the literal was just satisfied.
       // For each clause watching the reverse polarity of the literal
-      reverse = l
+      reverse := l
       reverse.Flip()
       wl := db.GetWatchList(reverse)
       for wl.First(); wl.Current() != nil; wl.Next() {
+   fmt.Printf("3")
          // We need to watch something else iff the other watch is unsatisfied
          // Check if it's satisfied
          otherWatch := wl.Current().Other()
@@ -32,16 +37,17 @@ func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit) bool {
          // for each literal in the clause
          for _, newL := range wl.Current().E.Clause.Lits {
             // If the other watch is watching it, this one cannot
-            if otherWatch.Watching.Eq(newL) {
+            if otherWatch.Watching.Eq(&newL) {
                continue
             }
             // If it is assigned in the correct polarity or unassigned
             // Assign it
-            if p := g.Get(newL.Val); p == newL.Pol || p == cnf.Unassigned {
-               w := db.Pluck(wl.Current())
-               w.Watching.Pol = neWL.Pol
-               w.Watching.Val = neWL.Val
-               newWl := db.GetWatchList(newL))
+            if p := g.Get(newL.Val); p == newL.Pol || p == guess.Unassigned {
+               w := wl.Current()
+               db.Pluck(w)
+               w.Watching.Pol = newL.Pol
+               w.Watching.Val = newL.Val
+               newWl := db.GetWatchList(newL)
                newWl.Add(w)
                found = true
             }
@@ -50,7 +56,7 @@ func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit) bool {
          // conflict
          if !found {
             // If unit clause
-            if g.Get(otherWatch.Watching.Val) == cnf.Unassigned {
+            if g.Get(otherWatch.Watching.Val) == guess.Unassigned {
                // Add it to the queue
                lq.PushBack(otherWatch.Watching)
             } else {
@@ -82,12 +88,13 @@ func newLitQNode(l cnf.Lit) (lqn *litQNode) {
 }
 
 func newLitQ() (lq *litQ) {
+   lq = new(litQ)
    lq.First = nil
    lq.Last = nil
    return
 }
 
-func (lq litQ) PushBack(l cnf.Lit) {
+func (lq *litQ) PushBack(l cnf.Lit) {
    lqn := newLitQNode(l)
    if lq.First == nil { // empty
       lq.First = lqn
@@ -98,7 +105,7 @@ func (lq litQ) PushBack(l cnf.Lit) {
    }
 }
 
-func (lq litQ) PopFront() (l cnf.Lit, ok bool) {
+func (lq *litQ) PopFront() (l cnf.Lit, ok bool) {
    if lq.First == nil { // empty
       l = cnf.Lit{0,0}
       ok = false

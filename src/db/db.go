@@ -114,8 +114,7 @@ func (db *DB) DelEntry(e *Entry) {
    db.nLearned--
    // Remove from watches
    for i := range e.Watches {
-      // TODO this will break HARD, must fix first, last, and pointers
-      e.Watches[i].Pluck()
+      db.Pluck(e.Watches[i])
    }
    // Remove from List
    if e.Next != nil {

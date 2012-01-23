@@ -80,13 +80,19 @@ func (wr *WatchList) Remove() (w *Watch) {
    return
 }
 
-// DO NOT USE
-func (w *Watch) Pluck() {
-   if w.Prev != nil {
+// Removes a watch from it's WatchList
+func (db *DB) Pluck(w *Watch) {
+   // Determine the WatchList it's in
+   wl := db.GetWatchList(w.Watching)
+   if w != wl.first {
       w.Prev.Next = w.Next
+   } else {
+      wl.first = w.Next
    }
-   if w.Next != nil {
+   if w != wl.last {
       w.Next.Prev = w.Prev
+   } else {
+      wl.last = w.Prev
    }
    w.Next = nil
    w.Prev = nil

@@ -19,12 +19,12 @@ func NewGuess(nVars int) (g *Guess) {
 }
 
 // Sets the variable n. v must be \in {Unassigned,Pos,Neg}
-func (g *Guess) Set(n int, v byte) {
+func (g *Guess) Set(n uint, v byte) {
    g.vars[n-1] = v
 }
 
 // Returns what is assigned to the nth variable.
-func (g *Guess) Get(n int) byte {
+func (g *Guess) Get(n uint) byte {
    return g.vars[n-1]
 }
 

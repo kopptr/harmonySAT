@@ -5,7 +5,7 @@ import (
    "cnf"
 )
 
-func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit) {
+func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit) bool {
 
    lq := newLitQ() // queue of literals to be assigned
 
@@ -14,12 +14,53 @@ func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit) {
    // For each new literal in the queue
    for l,ok := lq.PopFront(); ok; l,ok = lq.PopFront() {
       g.Set(l.Val, l.Pol)
-      // For each clause watching that literal
-//      wl := db.GetWatchList(l)
-//      for w := wl.First(); w != nil; w = wl.Next() {
-
- //     }
+      // Each clause watching the literal was just satisfied.
+      // For each clause watching the reverse polarity of the literal
+      reverse = l
+      reverse.Flip()
+      wl := db.GetWatchList(reverse)
+      for wl.First(); wl.Current() != nil; wl.Next() {
+         // We need to watch something else iff the other watch is unsatisfied
+         // Check if it's satisfied
+         otherWatch := wl.Current().Other()
+         if g.Get(otherWatch.Watching.Val) == otherWatch.Watching.Pol {
+            // The whole clause is therefore satisfied
+            continue
+         }
+         // We must try to find a new literal to watch
+         found := false // found a new literal to watch
+         // for each literal in the clause
+         for _, newL := range wl.Current().E.Clause.Lits {
+            // If the other watch is watching it, this one cannot
+            if otherWatch.Watching.Eq(newL) {
+               continue
+            }
+            // If it is assigned in the correct polarity or unassigned
+            // Assign it
+            if p := g.Get(newL.Val); p == newL.Pol || p == cnf.Unassigned {
+               w := db.Pluck(wl.Current())
+               w.Watching.Pol = neWL.Pol
+               w.Watching.Val = neWL.Val
+               newWl := db.GetWatchList(newL))
+               newWl.Add(w)
+               found = true
+            }
+         }
+         // If we found nothing new to watch, it's either a new unit clause or a
+         // conflict
+         if !found {
+            // If unit clause
+            if g.Get(otherWatch.Watching.Val) == cnf.Unassigned {
+               // Add it to the queue
+               lq.PushBack(otherWatch.Watching)
+            } else {
+               // CONFLICT
+               return false
+            }
+         }
+      }
    }
+   return true
 }
 
 type litQ struct {

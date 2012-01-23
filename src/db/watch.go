@@ -27,6 +27,16 @@ func NewWatch() (w *Watch) {
    return
 }
 
+// Returns the w.E's _other_ watch
+func (w *Watch) Other() (other *Watch) {
+   if w.E.Watches[0] == w {
+      other = w.E.Watches[1]
+   } else {
+      other = w.E.Watches[0]
+   }
+   return
+}
+
 // A doubly-linked list of Watches
 // The DB will use one Watch Ring per lit per polarity
 type WatchList struct {
@@ -93,6 +103,9 @@ func (db *DB) Pluck(w *Watch) {
       w.Next.Prev = w.Prev
    } else {
       wl.last = w.Prev
+   }
+   if w == wl.current {
+      wl.current = w.Next
    }
    w.Next = nil
    w.Prev = nil

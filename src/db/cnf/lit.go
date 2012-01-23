@@ -48,3 +48,15 @@ func (l Lit) String() (s string) {
 	}
 	return
 }
+
+func (l *Lit) Flip() {
+   if l.Pol == Pos {
+      l.Pol = Neg
+   } else if l.Pol == Neg {
+      l.Pol = Pos
+   }
+}
+
+func (l *Lit) Eq(l1 *Lit) bool {
+   return l.Val == l1.Val && l.Pol == l1.Pol
+}

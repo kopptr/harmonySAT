@@ -1,5 +1,10 @@
 package guess
 
+import (
+   "bytes"
+   "fmt"
+)
+
 const (
    Unassigned byte = 0
    Pos byte = 1
@@ -59,4 +64,15 @@ func (g *Guess) Vars(flipped bool) (v []int) {
    return
 }
 
+func (g Guess) String() string {
+	buffer := bytes.NewBufferString("")
+	for i, l := range g.vars {
+      if l == Pos {
+         fmt.Fprintf(buffer, "%d ", i+1)
+      } else if l == Neg {
+         fmt.Fprintf(buffer, "%d ", -1*(i+1))
+      }
+	}
+	return string(buffer.Bytes())
+}
 

@@ -6,6 +6,7 @@ import (
    "dpll/assignment/guess"
    "dpll/db"
    "dpll/db/cnf"
+   "fmt"
 )
 
 func TestDecide(t *testing.T) {
@@ -30,7 +31,12 @@ func TestDpll(t *testing.T) {
    db.AddEntry([]int{4,5,6})
    db.AddEntry([]int{-1,-2,3})
    db.AddEntry([]int{3,2,7})
+   a := assignment.NewAssignment(10)
 
-
-
+   g := Dpll(db, a)
+   if g == nil {
+      t.Logf("Dpll returned nil\n")
+      t.Fail()
+   }
+   fmt.Printf("%s\n", g)
 }

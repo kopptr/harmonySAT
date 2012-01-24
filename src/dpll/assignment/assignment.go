@@ -16,7 +16,7 @@ type assignmentNode struct {
 	assigned int
 }
 
-// Allocates and returns the empty assignment */
+// Allocates and returns the empty assignment
 func NewAssignment(nVars int) (a *Assignment) {
 	a = new(Assignment)
 	a.top = new(assignmentNode)

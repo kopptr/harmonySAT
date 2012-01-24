@@ -19,9 +19,19 @@ func NewGuess(nVars int) (g *Guess) {
    return
 }
 
+func (g *Guess) Copy() (g1 *Guess) {
+   g1 = NewGuess(g.Len())
+   copy(g1.vars, g.vars[:])
+   return
+}
+
 // Sets the variable n. v must be \in {Unassigned,Pos,Neg}
 func (g *Guess) Set(n uint, v byte) {
    g.vars[n-1] = v
+}
+
+func (g *Guess) Len() int {
+   return len(g.vars)
 }
 
 // Returns what is assigned to the nth variable.

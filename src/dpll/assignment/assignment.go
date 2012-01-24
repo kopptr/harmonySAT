@@ -33,6 +33,10 @@ func (a *Assignment) Get(i uint) byte {
 	return a.top.g.Get(i)
 }
 
+func (a *Assignment) Len() uint {
+   return uint(a.top.g.Len())
+}
+
 func (a *Assignment) PushAssign(v uint, pol byte) {
 	newNode := &assignmentNode{nil, nil, 0}
 	newNode.prev = a.top
@@ -43,6 +47,10 @@ func (a *Assignment) PushAssign(v uint, pol byte) {
 	a.top = newNode
 	a.depth++
 	a.top.g.Set(v, pol)
+}
+
+func (a *Assignment) Guess() *guess.Guess {
+   return a.top.g
 }
 
 func (a *Assignment) PopAssign() {

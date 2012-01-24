@@ -27,10 +27,10 @@ func TestDecide(t *testing.T) {
 
 func TestDpll(t *testing.T) {
    db := db.NewDB(10)
-   db.AddEntry([]int{1,2,3})
-   db.AddEntry([]int{4,5,6})
-   db.AddEntry([]int{-1,-2,3})
-   db.AddEntry([]int{3,2,7})
+   db.AddEntry([]int{1,2,3,-9})
+   db.AddEntry([]int{4,5,6,-9})
+   db.AddEntry([]int{-1,-2,3,-9})
+   db.AddEntry([]int{3,2,7,-9})
    a := assignment.NewAssignment(10)
 
    g := Dpll(db, a)

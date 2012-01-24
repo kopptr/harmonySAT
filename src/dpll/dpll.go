@@ -5,17 +5,23 @@ import (
    "dpll/db/cnf"
    "dpll/assignment"
    "dpll/assignment/guess"
+   "fmt"
 )
 
 func Dpll( db *db.DB, a *assignment.Assignment ) *guess.Guess {
    var g *guess.Guess
 
+   fmt.Printf("0\n")
    l := decide(db, a)
+   fmt.Printf("1\n")
    if l.Eq(&cnf.Lit{0,0}) {
       return a.Guess()
    }
+   fmt.Printf("2\n")
    a.PushAssign(l.Val, l.Pol)
+   fmt.Printf("3\n")
    ok := db.Bcp(a.Guess(), *l)
+   fmt.Printf("4\n")
 
    if ok {
       g = Dpll(db, a)

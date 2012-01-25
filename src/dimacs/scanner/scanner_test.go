@@ -91,7 +91,8 @@ func TestScanner2(t *testing.T) {
 
                 c := 0
                 for sc.HasNextInt() {
-                        fmt.Printf("int:#%d#\n", sc.NextInt())
+                        //fmt.Printf("int:#%d#\n", sc.NextInt())
+                        sc.NextInt()
                         c++
                 }
 
@@ -102,14 +103,19 @@ func TestScanner2(t *testing.T) {
         {
                 sc := NewScannerString(input)
 
-                fmt.Printf("uint:#%d#\n", sc.NextUint())
-                fmt.Printf("uint:#%d#\n", sc.NextUint())
-                fmt.Printf("uint:#%d#\n", sc.NextUint())
-                fmt.Printf("uint:#%d#\n", sc.NextUint())
+                //fmt.Printf("uint:#%d#\n", sc.NextUint())
+                //fmt.Printf("uint:#%d#\n", sc.NextUint())
+                //fmt.Printf("uint:#%d#\n", sc.NextUint())
+                //fmt.Printf("uint:#%d#\n", sc.NextUint())
+                sc.NextUint()
+                sc.NextUint()
+                sc.NextUint()
+                sc.NextUint()
 
                 c := 0
                 for sc.HasNextLine() {
-                        fmt.Println("line:#" + sc.NextLine() + "#")
+                        //fmt.Println("line:#" + sc.NextLine() + "#")
+                        sc.NextLine()
                         c++
                 }
 
@@ -123,7 +129,7 @@ func TestScanner2(t *testing.T) {
                 c := 0
                 for sc.HasNext() {
                         x := sc.Next()
-                        fmt.Println("token:#" + x + "#")
+                        //fmt.Println("token:#" + x + "#")
                         if x != strings.TrimSpace(x) {
                                 t.Errorf("should not have leading/trailing spaces")
                         }

@@ -12,7 +12,8 @@ import (
 )
 
 var (
-   seed = flag.Int64("seed", time.Nanoseconds(), "seed for random number generator")
+   seed = flag.Int64("seed", time.Nanoseconds(), "random number generator seed")
+   file = flag.String("file", "", "dimacs file containing formula")
 )
 
 func main() {
@@ -20,21 +21,27 @@ func main() {
    flag.Parse()
    rand.Seed(*seed)
 
-   f, err := os.Open("dimacs/test/1.cnf")
+   f, err := os.Open(*file)
    if err != nil {
       fmt.Printf("Error opening file\n")
+      return
    }
 
    db, nVars, ok := dimacs.DimacsToDb(f)
    if db == nil || !ok {
       fmt.Printf("Failed to parse input correctly.\n")
    }
-   fmt.Printf("Given: %d\nLearned: %d\n", db.NGiven(), db.NLearned())
+   fmt.Printf("s read in %d clauses\n", db.NGiven())
+
    db.StartLearning()
-   fmt.Printf("%s\n", db)
 
    a := assignment.NewAssignment(nVars)
    g := dpll.Dpll(db, a)
-   fmt.Printf("%s\n", g)
+   if g == nil {
+      fmt.Printf("s UNSAT\n")
+   } else {
+      fmt.Printf("s SAT\n")
+      fmt.Printf("%s\n", g)
+   }
    return
 }

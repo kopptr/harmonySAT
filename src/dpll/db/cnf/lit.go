@@ -42,21 +42,21 @@ func (l *Lit) Int() (x int) {
 // Returns the string representation of a Lit
 func (l Lit) String() (s string) {
 	if l.Pol == Pos {
-		s = strconv.Uitoa(l.Val)
+		s = strconv.FormatUint(uint64(l.Val), 10)
 	} else if l.Pol == Neg {
-		s = "-" + strconv.Uitoa(l.Val)
+		s = "-" + strconv.FormatUint(uint64(l.Val), 10)
 	}
 	return
 }
 
 func (l *Lit) Flip() {
-   if l.Pol == Pos {
-      l.Pol = Neg
-   } else if l.Pol == Neg {
-      l.Pol = Pos
-   }
+	if l.Pol == Pos {
+		l.Pol = Neg
+	} else if l.Pol == Neg {
+		l.Pol = Pos
+	}
 }
 
 func (l *Lit) Eq(l1 *Lit) bool {
-   return l.Val == l1.Val && l.Pol == l1.Pol
+	return l.Val == l1.Val && l.Pol == l1.Pol
 }

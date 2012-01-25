@@ -5,6 +5,7 @@ import (
    "dpll/db/cnf"
    "dpll/assignment"
    "dpll/assignment/guess"
+   "fmt"
 )
 
 func Dpll( db *db.DB, a *assignment.Assignment ) *guess.Guess {

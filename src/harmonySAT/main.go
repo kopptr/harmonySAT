@@ -29,7 +29,9 @@ func main() {
    if db == nil || !ok {
       fmt.Printf("Failed to parse input correctly.\n")
    }
+   fmt.Printf("Given: %d\nLearned: %d\n", db.NGiven(), db.NLearned())
    db.StartLearning()
+   fmt.Printf("%s\n", db)
 
    a := assignment.NewAssignment(nVars)
    g := dpll.Dpll(db, a)

@@ -14,9 +14,6 @@ const (
    tLit
 )
 
-
-
-
 func DimacsToDb(r io.Reader) (clauseDB *db.DB, nVar int, ok bool) {
    s := scanner.NewScanner(r)
 

@@ -57,14 +57,15 @@ func (db *DB) AddEntry(vars []int) {
       if db.nGiven == 0 {
          db.Learned = e
          db.Given = e
-      }
-      // Insert given clauses at front
-      e.Prev = nil
-      if db.nGiven != 0 {
+         e.Next = nil
+         e.Prev = nil
+      } else {
+         // Insert given clauses at front
+         e.Prev = nil
          e.Next = db.Given
+         db.Given.Prev = e
+         db.Given = e
       }
-      db.Given.Prev = e
-      db.Given = e
       db.nGiven++
    } else {
       if db.nLearned == 0 {
@@ -157,7 +158,7 @@ func (db *DB) String() string {
 	buffer := bytes.NewBufferString("")
    fmt.Fprintf(buffer, "Given:\n")
    for e := db.Given; e != nil; e = e.Next {
-      if e == db.Learned && db.learning {
+      if e == db.Learned && db.nLearned > 0 {
          fmt.Fprintf(buffer, "Learned:\n")
       }
 		fmt.Fprintf(buffer, "%s\n", e.Clause)

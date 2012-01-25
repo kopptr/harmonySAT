@@ -16,7 +16,7 @@ func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit) bool {
       g.Set(l.Val, l.Pol)
       // Each clause watching the literal was just satisfied.
       // For each clause watching the reverse polarity of the literal
-      reverse := l
+      reverse := cnf.Lit{l.Val,l.Pol}
       reverse.Flip()
       wl := db.GetWatchList(reverse)
       for wl.First(); wl.Current() != nil; wl.Next() {
@@ -36,7 +36,7 @@ func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit) bool {
                continue
             }
             // If it is assigned in the correct polarity or unassigned
-            // Assign it
+            // Watch it
             if p := g.Get(newL.Val); p == newL.Pol || p == guess.Unassigned {
                w := wl.Current()
                db.Pluck(w)

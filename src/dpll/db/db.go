@@ -4,6 +4,7 @@ import (
    "bytes"
    "fmt"
    "dpll/db/cnf"
+   "dpll/assignment/guess"
 )
 
 // Statistics for a database of clauses
@@ -180,3 +181,16 @@ func (db *DB) String() string {
 	return string(buffer.Bytes())
 }
 
+// Returns true iff the Guess satisfies the DB
+func (db *DB) Verify(g *guess.Guess) bool {
+   for e := db.Given; e != db.Learned; e = e.Next {
+      for _,l := range e.Lits {
+         if g.Get(l.Val) == l.Pol {
+            goto found
+         }
+      }
+      return false
+found:
+   }
+   return true
+}

@@ -23,15 +23,16 @@ func main() {
 
    f, err := os.Open(*file)
    if err != nil {
-      fmt.Printf("Error opening file\n")
+      fmt.Printf("%s\n", err)
       return
    }
 
    db, nVars, ok := dimacs.DimacsToDb(f)
    if db == nil || !ok {
       fmt.Printf("Failed to parse input correctly.\n")
+      return
    }
-   fmt.Printf("s read in %d clauses\n", db.NGiven())
+   fmt.Printf("c read in %d clauses\n", db.NGiven())
 
    db.StartLearning()
 
@@ -40,6 +41,12 @@ func main() {
    if g == nil {
       fmt.Printf("s UNSAT\n")
    } else {
+      ok := db.Verify(g)
+      if ok {
+         fmt.Printf("c Solution verified\n")
+      } else {
+         fmt.Printf("ERROR: Solution could not be verified\n")
+      }
       fmt.Printf("s SAT\n")
       fmt.Printf("%s\n", g)
    }

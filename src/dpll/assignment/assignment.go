@@ -38,6 +38,9 @@ func (a *Assignment) Len() uint {
 }
 
 func (a *Assignment) PushAssign(v uint, pol byte) {
+   if a.top.g.Get(v) != guess.Unassigned {
+      panic("Tried to pushassign an assigned literal")
+   }
 	newNode := &assignmentNode{nil, nil, 0}
 	newNode.prev = a.top
 

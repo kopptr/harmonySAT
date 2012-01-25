@@ -37,4 +37,34 @@ func TestDpll(t *testing.T) {
       t.Logf("Dpll returned nil\n")
       t.Fail()
    }
+   if !db.Verify(g) {
+      t.Logf("Dpll returned incorrect solution\n")
+      t.Fail()
+   }
 }
+
+func TestDpll2(t *testing.T) {
+   db := db.NewDB(5)
+   db.AddEntry([]int{4, -2, -5})
+   db.AddEntry([]int{3, 1, -5})
+   db.AddEntry([]int{-5, -4, 3})
+   db.AddEntry([]int{-3, 4, -2})
+   db.AddEntry([]int{1, 4, -3})
+   db.AddEntry([]int{-2, 1, 5})
+   db.AddEntry([]int{-1, 5, 3})
+   db.AddEntry([]int{-4, 2, 5})
+   db.AddEntry([]int{-2, -3, -4})
+   db.AddEntry([]int{4, -5, 3})
+   a := assignment.NewAssignment(5)
+
+   g := Dpll(db, a)
+   if g == nil {
+      t.Logf("Dpll returned nil\n")
+      t.Fail()
+   }
+   if !db.Verify(g) {
+      t.Logf("Dpll returned incorrect solution\n")
+      t.Fail()
+   }
+}
+

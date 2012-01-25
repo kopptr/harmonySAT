@@ -6,7 +6,6 @@ import (
    "dpll/assignment/guess"
    "dpll/db"
    "dpll/db/cnf"
-   "fmt"
 )
 
 func TestDecide(t *testing.T) {
@@ -38,5 +37,4 @@ func TestDpll(t *testing.T) {
       t.Logf("Dpll returned nil\n")
       t.Fail()
    }
-   fmt.Printf("%s\n", g)
 }

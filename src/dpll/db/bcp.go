@@ -45,6 +45,7 @@ func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit) bool {
                newWl := db.GetWatchList(newL)
                newWl.Add(w)
                found = true
+               break
             }
          }
          // If we found nothing new to watch, it's either a new unit clause or a

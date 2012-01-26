@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	seed = flag.Int64("seed", time.Now(), "random number generator seed")
+	seed = flag.Int64("seed", time.Now().Unix(), "random number generator seed")
 	file = flag.String("file", "", "dimacs file containing formula")
 )
 

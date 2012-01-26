@@ -47,7 +47,7 @@ func (this *Scanner) nextToken() (s string, delim int, err error) {
 		if c, _, e := this.in.ReadRune(); e == nil {
 			if unicode.IsSpace(c) {
 				s = buf.String()
-				delim = c
+				delim = int(c)
 				return // (token, delim, nil)
 			} else {
 				buf.WriteString(string(c))

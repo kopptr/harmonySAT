@@ -1,8 +1,8 @@
 package assignment
 
 import (
+	"dpll/assignment/guess"
 	"testing"
-   "dpll/assignment/guess"
 )
 
 func TestPushPopAssign(t *testing.T) {

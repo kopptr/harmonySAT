@@ -1,9 +1,9 @@
 package cnf
 
 import (
-	"sort"
 	"bytes"
 	"fmt"
+	"sort"
 )
 
 // Potential attributes of a clause
@@ -108,10 +108,12 @@ func (c *Clause) IsDefinite() bool {
 func (c Clause) Len() int {
 	return len(c.Lits)
 }
+
 // Compares the literals' values, disregards polarity
 func (c Clause) Less(i, j int) bool {
 	return c.Lits[i].Val < c.Lits[j].Val
 }
+
 // Swaps two literals
 func (c Clause) Swap(i, j int) {
 	tmp := Lit{c.Lits[i].Val, c.Lits[i].Pol}

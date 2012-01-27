@@ -1,12 +1,12 @@
 package assignment
 
 import (
-   "dpll/assignment/guess"
-   "errors"
+	"dpll/assignment/guess"
+	"errors"
 )
 
 type Assignment struct {
-	top *assignmentNode
+	top   *assignmentNode
 	depth uint
 }
 
@@ -35,14 +35,14 @@ func (a *Assignment) Get(i uint) (byte, error) {
 }
 
 func (a *Assignment) Len() uint {
-   return uint(a.top.g.Len())
+	return uint(a.top.g.Len())
 }
 
 func (a *Assignment) PushAssign(v uint, pol byte) error {
 
-   if check, err := a.top.g.Get(v); check != guess.Unassigned || err != nil {
-      return err
-   }
+	if check, err := a.top.g.Get(v); check != guess.Unassigned || err != nil {
+		return err
+	}
 	newNode := &assignmentNode{nil, nil, 0}
 	newNode.prev = a.top
 
@@ -52,18 +52,18 @@ func (a *Assignment) PushAssign(v uint, pol byte) error {
 	a.top = newNode
 	a.depth++
 	a.top.g.Set(v, pol)
-   return nil
+	return nil
 }
 
 func (a *Assignment) Guess() *guess.Guess {
-   return a.top.g
+	return a.top.g
 }
 
 func (a *Assignment) PopAssign() error {
-   if a.top == nil {
-      return errors.New("Tried to Assignment.PopAssign() empty assignment")
-   }
+	if a.top == nil {
+		return errors.New("Tried to Assignment.PopAssign() empty assignment")
+	}
 	a.top = a.top.prev
 	a.depth--
-   return nil
+	return nil
 }

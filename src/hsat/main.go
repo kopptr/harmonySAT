@@ -12,10 +12,10 @@ import (
 )
 
 var (
-	seed = flag.Int64("seed", time.Now().Unix(), "random number generator seed")
-	file = flag.String("file", "", "dimacs file containing formula")
+	seed  = flag.Int64("seed", time.Now().Unix(), "random number generator seed")
+	file  = flag.String("file", "", "dimacs file containing formula")
 	quiet = flag.Bool("q", false,
-      "True for quiet output. States \"SAT\" or \"UNSAT\"")
+		"True for quiet output. States \"SAT\" or \"UNSAT\"")
 )
 
 func main() {
@@ -31,7 +31,7 @@ func main() {
 
 	db, nVars, err := dimacs.DimacsToDb(f)
 	if err != nil {
-      fmt.Printf("Failed to parse input correctly: %s\n", err.Error())
+		fmt.Printf("Failed to parse input correctly: %s\n", err.Error())
 		return
 	}
 	db.StartLearning()
@@ -39,30 +39,30 @@ func main() {
 	a := assignment.NewAssignment(nVars)
 	g := dpll.Dpll(db, a)
 	if g == nil {
-      if *quiet {
-         fmt.Printf("UNSAT\n")
-      } else {
-         fmt.Printf("s UNSAT\n")
-      }
+		if *quiet {
+			fmt.Printf("UNSAT\n")
+		} else {
+			fmt.Printf("s UNSAT\n")
+		}
 	} else {
 		ok := db.Verify(g)
 		if ok {
-         if *quiet {
-            fmt.Printf("SAT\n")
-         } else {
-            fmt.Printf("c Solution verified\n")
-         }
+			if *quiet {
+				fmt.Printf("SAT\n")
+			} else {
+				fmt.Printf("c Solution verified\n")
+			}
 		} else {
-         if *quiet {
-            fmt.Printf("UNSAT\n")
-         } else {
-            fmt.Printf("ERROR: Solution could not be verified\n")
-         }
+			if *quiet {
+				fmt.Printf("UNSAT\n")
+			} else {
+				fmt.Printf("ERROR: Solution could not be verified\n")
+			}
 		}
-      if !*quiet {
-         fmt.Printf("s SAT\n")
-         fmt.Printf("%s\n", g)
-      }
+		if !*quiet {
+			fmt.Printf("s SAT\n")
+			fmt.Printf("%s\n", g)
+		}
 	}
 	return
 }

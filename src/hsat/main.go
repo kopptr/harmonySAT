@@ -29,9 +29,9 @@ func main() {
 		return
 	}
 
-	db, nVars, ok := dimacs.DimacsToDb(f)
-	if db == nil || !ok {
-		fmt.Printf("Failed to parse input correctly.\n")
+	db, nVars, err := dimacs.DimacsToDb(f)
+	if err != nil {
+      fmt.Printf("Failed to parse input correctly: %s\n", err.Error())
 		return
 	}
 	db.StartLearning()

@@ -4,38 +4,34 @@ import (
    "io"
    "dpll/db"
    "dimacs/scanner"
+   "fmt"
+   "errors"
 )
 
-type tType int
-const (
-   tErr tType = iota
-   tComment
-   tClause
-   tLit
-)
-
-func DimacsToDb(r io.Reader) (clauseDB *db.DB, nVar int, ok bool) {
+func DimacsToDb(r io.Reader) (clauseDB *db.DB, nVar int, err error) {
    s := scanner.NewScanner(r)
 
-   ok = eatDimacsComments(s)
-   if !ok {
-      return nil, 0, false
+   err = matchDimacsComments(s)
+   if err != nil {
+      return nil, 0, nil
    }
-   nVar, nClauses, ok := eatFormulaInfo(s)
-   if !ok {
-
-      return nil, 0, false
+   nVar, nClauses, err := matchFormulaInfo(s)
+   if err != nil {
+      return nil, 0, err
    }
    clauseDB = db.NewDB(nVar)
-   n, ok := eatClauses(s, clauseDB)
-   if !ok || n != nClauses {
-      return nil, 0, false
+   n, err := matchClauses(s, clauseDB)
+   if err != nil {
+      return nil, 0, err
+   } else if n != nClauses {
+      return nil, 0, errors.New(fmt.Sprintf("Read %d/%d clauses.",n,nClauses))
    }
 
    return
 }
 
-func eatClauses(r *scanner.Scanner, clauseDB *db.DB) (n int, ok bool) {
+// Matches all of the clauses in the database, and inserts them.
+func matchClauses(r *scanner.Scanner, clauseDB *db.DB) (n int, err error) {
    for n = 0; r.HasNextLine(); n++ {
       clause := []int{}
       for i := r.NextInt(); i != 0; i = r.NextInt() {
@@ -43,45 +39,44 @@ func eatClauses(r *scanner.Scanner, clauseDB *db.DB) (n int, ok bool) {
       }
       clauseDB.AddEntry(clause)
    }
-   return n, true
+   return n, nil
 }
 
-func eatFormulaInfo(r *scanner.Scanner) (nVar int, nClauses int, ok bool) {
+// Matches and returns the formula info.
+func matchFormulaInfo(r *scanner.Scanner) (nVar int, nClauses int, err error) {
    // cnf
    c := r.Next()
    if c != "cnf" {
-      panic("p line did not have cnf string\n")
-      return -1, -1, false
+      return -1, -1, errors.New("p line did not have cnf string\n")
    }
 
    // nVar
    nVar = r.NextInt()
    if nVar <= 0 {
-      return -1, -1, false
+      return -1, -1, errors.New("Invalid or incorrectly formatted nVar field")
    }
 
    // nClauses
    nClauses = r.NextInt()
    if nClauses <= 0 {
-      return -1, -1, false
+      return -1, -1, errors.New("Invalid or incorrectly formatted nClauses field")
    }
 
-   return nVar, nClauses, true
+   return nVar, nClauses, nil
 }
 
-func eatDimacsComments(r *scanner.Scanner) bool {
+// Consumes the comment lines at the beginning of the dimacs Reader, if any.
+func matchDimacsComments(r *scanner.Scanner) error {
    for {
       c := r.Next()
       if c != "c" {
          if c != "p" {
-            panic("First non-comment line does not begine with a p\n")
-            return false
+            return errors.New("First non-comment line does not begine with a p\n")
          } else {
-            return true
+            return nil
          }
       }
       _ = r.NextLine()
    }
-   // Should never get here
-   return false
+   panic("Should never get here")
 }

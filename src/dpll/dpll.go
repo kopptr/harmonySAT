@@ -12,12 +12,19 @@ func Dpll(db *db.DB, a *assignment.Assignment) *guess.Guess {
 	var g *guess.Guess
 
 	l := decide(db, a)
+        // Assignment is full
 	if l.Eq(&cnf.Lit{0, 0}) {
-		return a.Guess()
+                if db.Verify(a.Guess()) {
+                        // Done
+                        return a.Guess()
+                } else {
+                        // Backtrack
+                        return nil
+                }
 	}
 	a.PushAssign(l.Val, l.Pol)
 	log.Printf("%sPUSH: %s\n", indent(a), l)
-	ok := db.Bcp(a.Guess(), *l)
+	ok := db.Bcp(a.Guess(), *l, indent(a))
         log.Printf("Guess: %s%s\n", indent(a), a.Guess())
 
 	if ok {
@@ -35,7 +42,7 @@ func Dpll(db *db.DB, a *assignment.Assignment) *guess.Guess {
 	a.PushAssign(l.Val, l.Pol)
 	log.Printf("%sPUSH: %s\n", indent(a), l)
         log.Printf("Guess: %s%s\n", indent(a), a.Guess())
-	ok = db.Bcp(a.Guess(), *l)
+	ok = db.Bcp(a.Guess(), *l, indent(a))
 	if ok {
 		g = Dpll(db, a)
 		if g != nil {

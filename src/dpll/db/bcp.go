@@ -8,8 +8,7 @@ import (
 
 // Performs BCP on the clause database until no unit clauses remain.
 // Returns false iff the formula is conflicted.
-func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit) bool {
-        indent:= ""
+func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit, indent string) bool {
 	lq := newLitQ() // queue of literals to be assigned
 
 	lq.PushBack(lit)

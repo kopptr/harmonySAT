@@ -3,8 +3,10 @@ package guess
 import (
    "bytes"
    "fmt"
+   "errors"
 )
 
+// TODO make this a real type
 const (
    Unassigned byte = 0
    Pos byte = 1
@@ -31,19 +33,29 @@ func (g *Guess) Copy() (g1 *Guess) {
 }
 
 // Sets the variable n. v must be \in {Unassigned,Pos,Neg}
-func (g *Guess) Set(n uint, v byte) {
+func (g *Guess) Set(n uint, v byte) error {
+   if n < 1 || n > uint(g.Len()) || (v != Pos && v != Neg && v != Unassigned) {
+      return errors.New(
+         fmt.Sprintf("Guess.Set() given invalid index %d or assignment %d", n, v))
+   }
    g.vars[n-1] = v
+   return nil
 }
 
+// Returns the number of variables that can be assigned
 func (g *Guess) Len() int {
    return len(g.vars)
 }
 
 // Returns what is assigned to the nth variable.
-func (g *Guess) Get(n uint) byte {
-   return g.vars[n-1]
+func (g *Guess) Get(n uint) (byte, error) {
+   if n < 1 || n > uint(g.Len()) {
+      return Unassigned, errors.New("Guess.Get() index out of bounds")
+   }
+   return g.vars[n-1], nil
 }
 
+// Returns an array of ints representing the assigned variables.
 func (g *Guess) Vars(flipped bool) (v []int) {
    v = []int{}
    for i, n := range g.vars {
@@ -64,6 +76,7 @@ func (g *Guess) Vars(flipped bool) (v []int) {
    return
 }
 
+// String representation
 func (g Guess) String() string {
 	buffer := bytes.NewBufferString("")
 	for i, l := range g.vars {

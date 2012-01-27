@@ -7,10 +7,16 @@ import (
 func TestGuess(t *testing.T) {
    g := NewGuess(10)
 
-   g.Set(4,Neg)
+   if err := g.Set(4,Neg); err != nil {
+      t.Logf("Setting -4 failed: %s\n", err.Error())
+      t.FailNow()
+   }
 
-   if g.Get(4) != Neg {
-      t.Logf("It are broken\n")
+   if p, err := g.Get(4); p != Neg || err != nil {
+      if err != nil {
+         t.Logf("error: %s\n", err.Error())
+      }
+      t.Logf("Get returns %d, should return %d\n", p, Neg)
       t.Fail()
    }
 }

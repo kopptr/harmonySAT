@@ -6,11 +6,14 @@ import (
    "dpll/assignment/guess"
    "dpll/db"
    "dpll/db/cnf"
+   "fmt"
 )
 
 func TestDecide(t *testing.T) {
+   fmt.Printf("foz\n")
    a := assignment.NewAssignment(10)
    l := decide(nil, a)
+   fmt.Printf("faz\n")
    if ! l.Eq(&cnf.Lit{1,cnf.Pos}) {
       t.Logf("Decide didn't pick 1, it picked \n", l)
       t.Fail()
@@ -22,6 +25,7 @@ func TestDecide(t *testing.T) {
       t.Logf("Decide didn't pick 3, it picked \n", l)
       t.Fail()
    }
+   fmt.Printf("foo\n")
 }
 
 func TestDpll(t *testing.T) {
@@ -41,6 +45,7 @@ func TestDpll(t *testing.T) {
       t.Logf("Dpll returned incorrect solution\n")
       t.Fail()
    }
+   fmt.Printf("bar\n")
 }
 
 func TestDpll2(t *testing.T) {
@@ -66,5 +71,6 @@ func TestDpll2(t *testing.T) {
       t.Logf("Dpll returned incorrect solution\n")
       t.Fail()
    }
+   fmt.Printf("baz\n")
 }
 

@@ -185,7 +185,7 @@ func (db *DB) String() string {
 func (db *DB) Verify(g *guess.Guess) bool {
    for e := db.Given; e != db.Learned; e = e.Next {
       for _,l := range e.Lits {
-         if g.Get(l.Val) == l.Pol {
+         if p,_ := g.Get(l.Val); p == l.Pol {
             goto found
          }
       }

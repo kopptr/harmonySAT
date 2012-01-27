@@ -2,6 +2,7 @@ package assignment
 
 import (
    "dpll/assignment/guess"
+   "errors"
 )
 
 type Assignment struct {
@@ -29,7 +30,7 @@ func (a *Assignment) Depth() uint {
 	return a.depth
 }
 
-func (a *Assignment) Get(i uint) byte {
+func (a *Assignment) Get(i uint) (byte, error) {
 	return a.top.g.Get(i)
 }
 
@@ -37,9 +38,10 @@ func (a *Assignment) Len() uint {
    return uint(a.top.g.Len())
 }
 
-func (a *Assignment) PushAssign(v uint, pol byte) {
-   if a.top.g.Get(v) != guess.Unassigned {
-      panic("Tried to pushassign an assigned literal")
+func (a *Assignment) PushAssign(v uint, pol byte) error {
+
+   if check, err := a.top.g.Get(v); check != guess.Unassigned || err != nil {
+      return err
    }
 	newNode := &assignmentNode{nil, nil, 0}
 	newNode.prev = a.top
@@ -50,13 +52,18 @@ func (a *Assignment) PushAssign(v uint, pol byte) {
 	a.top = newNode
 	a.depth++
 	a.top.g.Set(v, pol)
+   return nil
 }
 
 func (a *Assignment) Guess() *guess.Guess {
    return a.top.g
 }
 
-func (a *Assignment) PopAssign() {
+func (a *Assignment) PopAssign() error {
+   if a.top == nil {
+      return errors.New("Tried to Assignment.PopAssign() empty assignment")
+   }
 	a.top = a.top.prev
 	a.depth--
+   return nil
 }

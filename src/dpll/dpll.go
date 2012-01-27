@@ -49,9 +49,9 @@ func Dpll( db *db.DB, a *assignment.Assignment ) *guess.Guess {
 
 func decide(db *db.DB, a *assignment.Assignment) (l *cnf.Lit) {
    // find the first in-order unassigned literal
-   for i := a.Depth(); i < a.Len(); i++ {
-      if a.Get(i+1) == guess.Unassigned {
-         return &cnf.Lit{i+1, cnf.Pos}
+   for i := uint(1); i <= a.Len(); i++ {
+      if p,_ := a.Get(i); p == guess.Unassigned {
+         return &cnf.Lit{i, cnf.Pos}
       }
    }
    return &cnf.Lit{0,0}

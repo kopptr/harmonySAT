@@ -23,7 +23,7 @@ func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit) bool {
          // We need to watch something else iff the other watch is unsatisfied
          // Check if it's satisfied
          otherWatch := wl.Current().Other()
-         if g.Get(otherWatch.Watching.Val) == otherWatch.Watching.Pol {
+         if p,_ := g.Get(otherWatch.Watching.Val); p == otherWatch.Watching.Pol {
             // The whole clause is therefore satisfied
             continue
          }
@@ -37,7 +37,7 @@ func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit) bool {
             }
             // If it is assigned in the correct polarity or unassigned
             // Watch it
-            if p := g.Get(newL.Val); p == newL.Pol || p == guess.Unassigned {
+            if p, _ := g.Get(newL.Val); p == newL.Pol || p == guess.Unassigned {
                w := wl.Current()
                db.Pluck(w)
                w.Watching.Pol = newL.Pol
@@ -52,7 +52,7 @@ func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit) bool {
          // conflict
          if !found {
             // If unit clause
-            if g.Get(otherWatch.Watching.Val) == guess.Unassigned {
+            if p,_ := g.Get(otherWatch.Watching.Val); p == guess.Unassigned {
                // Add it to the queue
                lq.PushBack(otherWatch.Watching)
             } else {

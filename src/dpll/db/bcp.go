@@ -3,13 +3,13 @@ package db
 import (
 	"dpll/assignment/guess"
 	"dpll/db/cnf"
-	"fmt"
+        "log"
 )
 
 // Performs BCP on the clause database until no unit clauses remain.
 // Returns false iff the formula is conflicted.
 func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit) bool {
-
+        indent:= ""
 	lq := newLitQ() // queue of literals to be assigned
 
 	lq.PushBack(lit)
@@ -58,7 +58,7 @@ func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit) bool {
 					// Add it to the queue
 					lq.PushBack(otherWatch.Watching)
 					g.Set(otherWatch.Watching.Val, otherWatch.Watching.Pol)
-					fmt.Printf("BCP: %s\n", otherWatch.Watching)
+					log.Printf("%sBCP: %s\n", indent, otherWatch.Watching)
 				} else {
 					// CONFLICT
 					db.AddConflictEntry(g)

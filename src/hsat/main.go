@@ -9,11 +9,13 @@ import (
 	"math/rand"
 	"os"
 	"time"
+	"log"
 )
 
 var (
 	seed  = flag.Int64("seed", time.Now().Unix(), "random number generator seed")
 	file  = flag.String("file", "", "dimacs file containing formula")
+        logFile = flag.String("log", "hsat.log", "Log output file")
 	quiet = flag.Bool("q", false,
 		"True for quiet output. States \"SAT\" or \"UNSAT\"")
 )
@@ -22,6 +24,12 @@ func main() {
 
 	flag.Parse()
 	rand.Seed(*seed)
+
+        err := initLogging()
+        if err != nil {
+                fmt.Printf("Failed to open log file: %s\n", err.Error())
+                return
+        }
 
 	f, err := os.Open(*file)
 	if err != nil {
@@ -65,4 +73,16 @@ func main() {
 		}
 	}
 	return
+}
+
+func initLogging() error {
+        // No prefix to logged strings
+        log.SetFlags(0);
+        log.SetPrefix("");
+        lf, err := os.Create(*logFile)
+        if err != nil {
+                return err
+        }
+        log.SetOutput(lf)
+        return nil
 }

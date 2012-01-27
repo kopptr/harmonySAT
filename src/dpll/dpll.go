@@ -5,14 +5,10 @@ import (
    "dpll/db/cnf"
    "dpll/assignment"
    "dpll/assignment/guess"
-   "fmt"
 )
 
 func Dpll( db *db.DB, a *assignment.Assignment ) *guess.Guess {
    var g *guess.Guess
-   fmt.Printf("Top of Dpll. have pushed %d so far\n", a.Depth())
-   fmt.Printf("Assignment:\n%s\n", a.Guess())
-   fmt.Printf("DB:\n%s\n", db)
 
    l := decide(db, a)
    if l.Eq(&cnf.Lit{0,0}) {
@@ -30,11 +26,6 @@ func Dpll( db *db.DB, a *assignment.Assignment ) *guess.Guess {
 
    // try the reverse polarity
    a.PopAssign()
-
-   fmt.Printf("Middle of Dpll. have pushed %d so far\n", a.Depth())
-   fmt.Printf("Assignment:\n%s\n", a.Guess())
-   fmt.Printf("DB:\n%s\n", db)
-
    l.Flip()
    a.PushAssign(l.Val, l.Pol)
    ok = db.Bcp(a.Guess(), *l)

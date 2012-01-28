@@ -12,31 +12,39 @@ import (
 	"log"
 )
 
+// flags
 var (
-	seed  = flag.Int64("seed", time.Now().Unix(), "random number generator seed")
-	file  = flag.String("file", "", "dimacs file containing formula")
-        logFile = flag.String("log", "hsat.log", "Log output file")
-	quiet = flag.Bool("q", false,
-		"True for quiet output. States \"SAT\" or \"UNSAT\"")
+	seed  int64
+	file  string
+   logFile string
+	quiet bool
+   branch *dpll.Brancher = dpll.NewBrancher()
 )
+
 
 func main() {
 
+   flag.Int64Var(&seed, "seed", time.Now().Unix(), "random number generator seed")
+   flag.StringVar(&file, "file", "", "dimacs file containing formula")
+   flag.StringVar(&logFile, "log", "hsat.log", "Log output file")
+	flag.BoolVar(&quiet, "q", false, "True for quiet output. States \"SAT\" or \"UNSAT\"")
+   flag.Var(branch, "branch", "DPLL branching rule")
 	flag.Parse()
-	rand.Seed(*seed)
+	rand.Seed(seed)
 
-        err := initLogging()
-        if err != nil {
-                fmt.Printf("Failed to open log file: %s\n", err.Error())
-                return
-        }
+   err := initLogging()
+   if err != nil {
+          fmt.Printf("Failed to open log file: %s\n", err.Error())
+          return
+   }
 
-	f, err := os.Open(*file)
+	f, err := os.Open(file)
 	if err != nil {
 		fmt.Printf("%s\n", err)
 		return
 	}
 
+   // Initialize the db
 	db, nVars, err := dimacs.DimacsToDb(f)
 	if err != nil {
 		fmt.Printf("Failed to parse input correctly: %s\n", err.Error())
@@ -44,10 +52,13 @@ func main() {
 	}
 	db.StartLearning()
 
+   // Initialize the assignment
 	a := assignment.NewAssignment(nVars)
-	g := dpll.Dpll(db, a)
+
+   // DPLL!
+	g := dpll.Dpll(db, a, branch)
 	if g == nil {
-		if *quiet {
+		if quiet {
 			fmt.Printf("UNSAT\n")
 		} else {
 			fmt.Printf("s UNSAT\n")
@@ -55,19 +66,19 @@ func main() {
 	} else {
 		ok := db.Verify(g)
 		if ok {
-			if *quiet {
+			if quiet {
 				fmt.Printf("SAT\n")
 			} else {
 				fmt.Printf("c Solution verified\n")
 			}
 		} else {
-			if *quiet {
+			if quiet {
 				fmt.Printf("UNSAT\n")
 			} else {
 				fmt.Printf("ERROR: Solution could not be verified\n")
 			}
 		}
-		if !*quiet {
+		if !quiet {
 			fmt.Printf("s SAT\n")
 			fmt.Printf("%s\n", g)
 		}
@@ -79,7 +90,7 @@ func initLogging() error {
         // No prefix to logged strings
         log.SetFlags(0);
         log.SetPrefix("");
-        lf, err := os.Create(*logFile)
+        lf, err := os.Create(logFile)
         if err != nil {
                 return err
         }

@@ -8,10 +8,10 @@ import (
 	"log"
 )
 
-func Dpll(db *db.DB, a *assignment.Assignment) *guess.Guess {
+func Dpll(db *db.DB, a *assignment.Assignment, b *Brancher) *guess.Guess {
 	var g *guess.Guess
 
-	l := decide(db, a)
+	l := b.Decide(db, a)
         // Assignment is full
 	if l.Eq(&cnf.Lit{0, 0}) {
                 if db.Verify(a.Guess()) {
@@ -28,7 +28,7 @@ func Dpll(db *db.DB, a *assignment.Assignment) *guess.Guess {
         log.Printf("Guess: %s%s\n", indent(a), a.Guess())
 
 	if ok {
-		g = Dpll(db, a)
+		g = Dpll(db, a, b)
 		if g != nil {
 			return g
 		}
@@ -44,7 +44,7 @@ func Dpll(db *db.DB, a *assignment.Assignment) *guess.Guess {
         log.Printf("Guess: %s%s\n", indent(a), a.Guess())
 	ok = db.Bcp(a.Guess(), *l, indent(a))
 	if ok {
-		g = Dpll(db, a)
+		g = Dpll(db, a, b)
 		if g != nil {
 			return g
 		}
@@ -64,12 +64,3 @@ func indent(a *assignment.Assignment) string {
         return s
 }
 
-func decide(db *db.DB, a *assignment.Assignment) (l *cnf.Lit) {
-	// find the first in-order unassigned literal
-	for i := uint(1); i <= a.Len(); i++ {
-		if p, _ := a.Get(i); p == guess.Unassigned {
-			return &cnf.Lit{i, cnf.Pos}
-		}
-	}
-	return &cnf.Lit{0, 0}
-}

@@ -60,7 +60,8 @@ func random(db *db.DB, a *assignment.Assignment) (l *cnf.Lit) {
 }
 
 func vsids(db *db.DB, a *assignment.Assignment) (l *cnf.Lit) {
-   return db.Counts.Max(a.Guess())
+        l = db.Counts.Max(a.Guess())
+   return
 }
 
 

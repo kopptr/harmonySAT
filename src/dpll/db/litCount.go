@@ -46,30 +46,29 @@ func (lc *LitCounts) Max(g *guess.Guess) *cnf.Lit {
       bestI int
       bestV int
    )
-   fmt.Printf("At top of LitCounts.Max\nGuess:\n%s\n", g)
 
    bestV = -1
    for i,v := range lc.counts {
-      if v > bestV {
+      if int(v) > bestV {
          if i < len(lc.counts)/2 { // negative polarity
             if p, _ := g.Get(uint(i+1)); p == guess.Unassigned {
-               bestV = v
+               bestV = int(v)
                bestI = i
             }
          } else { // positive polarity
             if p,_ := g.Get(uint(i-(len(lc.counts)/2)+1)); p == guess.Unassigned {
-                  bestV = v
+                  bestV = int(v)
                   bestI = i
             }
          }
       }
    }
-   if bestI < len(lc.counts)/2 {
-      fmt.Printf("Returning %s\n", cnf.Lit{uint(bestI+1),guess.Neg})
+   if bestV == -1 {
+           return &cnf.Lit{0,0}
+   } else if bestI < len(lc.counts)/2 {
       return &cnf.Lit{uint(bestI+1),guess.Neg}
    } else {
-      fmt.Printf("Returning %s\n", cnf.Lit{uint(bestI+1-(len(lc.counts)/2)),guess.Pos})
-      return &cnf.Lit{uint(bestI+1),guess.Pos}
+      return &cnf.Lit{uint(bestI+1-(len(lc.counts)/2)),guess.Pos}
    }
    panic("LitCount.Max is horribly broken\n")
 }

@@ -14,9 +14,10 @@ type BranchRule byte
 const (
    Ordered BranchRule = iota
    Random
+   Vsids
 )
 
-var branchFuncs = [...]func(*db.DB, *assignment.Assignment) *cnf.Lit { ordered, random }
+var branchFuncs = [...]func(*db.DB, *assignment.Assignment) *cnf.Lit { ordered, random, vsids }
 
 type Brancher struct {
    Decide func(*db.DB, *assignment.Assignment) *cnf.Lit
@@ -58,6 +59,11 @@ func random(db *db.DB, a *assignment.Assignment) (l *cnf.Lit) {
    return &cnf.Lit{0,0}
 }
 
+func vsids(db *db.DB, a *assignment.Assignment) (l *cnf.Lit) {
+   return db.Counts.Max(a.Guess())
+}
+
+
 // Brancher needs to satisfy the flag.Value interface
 func (b Brancher) String() string {
    return ""
@@ -68,6 +74,7 @@ func (b *Brancher) Set(s string) error {
    case "": return nil
    case "ordered": b.SetRule(Ordered)
    case "random": b.SetRule(Random)
+   case "vsids": b.SetRule(Vsids)
    default: return errors.New(fmt.Sprintf("\"Set\" given invalid value: %s", s))
    }
    return nil

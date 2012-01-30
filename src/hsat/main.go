@@ -3,6 +3,7 @@ package main
 import (
 	"dimacs"
 	"dpll"
+	"dpll/db"
 	"dpll/assignment"
 	"flag"
 	"fmt"
@@ -19,7 +20,7 @@ var (
    logFile string
 	quiet bool
    branch *dpll.Brancher = dpll.NewBrancher()
-   manage *dpll.Manager = dpll.NewManager()
+   manage *db.Manager = db.NewManager()
 )
 
 
@@ -58,7 +59,7 @@ func main() {
 	a := assignment.NewAssignment(nVars)
 
         // Set the proper max db size
-        manage.MaxLearned = 3*db.NGiven()
+        manage.MaxLearned = 0//3*db.NGiven()
 
    // DPLL!
 	g := dpll.Dpll(db, a, branch, manage)

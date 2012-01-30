@@ -124,6 +124,9 @@ func (db *DB) DelEntry(e *Entry) {
 		db.Pluck(e.Watches[i])
 	}
 	// Remove from List
+   if e == db.Learned {
+      db.Learned = e.Next
+   }
 	if e.Next != nil {
 		e.Next.Prev = e.Prev
 	}

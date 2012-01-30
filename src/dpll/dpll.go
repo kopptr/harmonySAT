@@ -3,12 +3,12 @@ package dpll
 import (
 	"dpll/assignment"
 	"dpll/assignment/guess"
-	"dpll/db"
 	"dpll/db/cnf"
+	"dpll/db"
 	"log"
 )
 
-func Dpll(db *db.DB, a *assignment.Assignment, b *Brancher, m *Manager) *guess.Guess {
+func Dpll(db *db.DB, a *assignment.Assignment, b *Brancher, m *db.Manager) *guess.Guess {
 	var g *guess.Guess
 
 	l := b.Decide(db, a)
@@ -24,7 +24,7 @@ func Dpll(db *db.DB, a *assignment.Assignment, b *Brancher, m *Manager) *guess.G
 	}
 	a.PushAssign(l.Val, l.Pol)
 	log.Printf("%sPUSH: %s\n", indent(a), l)
-	ok := db.Bcp(a.Guess(), *l, indent(a))
+	ok := db.Bcp(a.Guess(), *l, indent(a), m)
         log.Printf("Guess: %s%s\n", indent(a), a.Guess())
 
 	if ok {
@@ -42,7 +42,7 @@ func Dpll(db *db.DB, a *assignment.Assignment, b *Brancher, m *Manager) *guess.G
 	a.PushAssign(l.Val, l.Pol)
 	log.Printf("%sPUSH: %s\n", indent(a), l)
         log.Printf("Guess: %s%s\n", indent(a), a.Guess())
-	ok = db.Bcp(a.Guess(), *l, indent(a))
+	ok = db.Bcp(a.Guess(), *l, indent(a), m)
 	if ok {
 		g = Dpll(db, a, b, m)
 		if g != nil {

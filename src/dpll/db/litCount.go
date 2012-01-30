@@ -41,6 +41,12 @@ func (lc *LitCounts) Add(vars []int) {
    }
 }
 
+func (lc *LitCounts) DivCounts(divisor uint) {
+   for i := range lc.counts {
+      lc.counts[i] /= divisor
+   }
+}
+
 func (lc *LitCounts) Max(g *guess.Guess) *cnf.Lit {
    var (
       bestI int

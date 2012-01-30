@@ -1,8 +1,7 @@
-package dpll
+package db
 
 import (
-   "dpll/assignment"
-   "dpll/db"
+   "dpll/assignment/guess"
    "errors"
    "fmt"
 )
@@ -13,10 +12,10 @@ const (
         Queue
 )
 
-var manageFuncs = [...]func(*db.DB, *assignment.Assignment, *Manager) {none, queue}
+var manageFuncs = [...]func(*DB, *guess.Guess, *Manager) {none, queue}
 
 type Manager struct {
-        Manage func(*db.DB, *assignment.Assignment, *Manager)
+        Manage func(*DB, *guess.Guess, *Manager)
         MaxLearned uint
 }
 
@@ -30,11 +29,19 @@ func (m *Manager) SetStrat(d ClauseDBMS) {
         m.Manage = manageFuncs[d]
 }
 
-func none(*db.DB, *assignment.Assignment, *Manager) {
+// Performs the basic management that is not specific to any particular
+// strategy, for instance, dividing the counts in the VSIDS counter
+func (m *Manager) basic(db *DB, g *guess.Guess) {
+   db.Counts.DivCounts(uint(3))
+}
+
+func none(db *DB, g *guess.Guess, m *Manager) {
+   m.basic(db, g)
         return
 }
 
-func queue(db *db.DB, a *assignment.Assignment, m *Manager) {
+func queue(db *DB, g *guess.Guess, m *Manager) {
+   m.basic(db, g)
         for db.NLearned() > m.MaxLearned {
                 db.DelEntry(db.Learned)
         }

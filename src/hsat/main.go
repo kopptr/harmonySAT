@@ -19,6 +19,7 @@ var (
    logFile string
 	quiet bool
    branch *dpll.Brancher = dpll.NewBrancher()
+   manage *dpll.Manager = dpll.NewManager()
 )
 
 
@@ -29,6 +30,7 @@ func main() {
    flag.StringVar(&logFile, "log", "hsat.log", "Log output file")
 	flag.BoolVar(&quiet, "q", false, "True for quiet output. States \"SAT\" or \"UNSAT\"")
    flag.Var(branch, "branch", "DPLL branching rule")
+   flag.Var(manage, "dbms", "DPLL clause database management strategy")
 	flag.Parse()
 	rand.Seed(seed)
 
@@ -55,8 +57,11 @@ func main() {
    // Initialize the assignment
 	a := assignment.NewAssignment(nVars)
 
+        // Set the proper max db size
+        manage.MaxLearned = 3*db.NGiven()
+
    // DPLL!
-	g := dpll.Dpll(db, a, branch)
+	g := dpll.Dpll(db, a, branch, manage)
 	if g == nil {
 		if quiet {
 			fmt.Printf("UNSAT\n")

@@ -8,7 +8,7 @@ import (
 	"log"
 )
 
-func Dpll(db *db.DB, a *assignment.Assignment, b *Brancher) *guess.Guess {
+func Dpll(db *db.DB, a *assignment.Assignment, b *Brancher, m *Manager) *guess.Guess {
 	var g *guess.Guess
 
 	l := b.Decide(db, a)
@@ -28,7 +28,7 @@ func Dpll(db *db.DB, a *assignment.Assignment, b *Brancher) *guess.Guess {
         log.Printf("Guess: %s%s\n", indent(a), a.Guess())
 
 	if ok {
-		g = Dpll(db, a, b)
+		g = Dpll(db, a, b, m)
 		if g != nil {
 			return g
 		}
@@ -44,7 +44,7 @@ func Dpll(db *db.DB, a *assignment.Assignment, b *Brancher) *guess.Guess {
         log.Printf("Guess: %s%s\n", indent(a), a.Guess())
 	ok = db.Bcp(a.Guess(), *l, indent(a))
 	if ok {
-		g = Dpll(db, a, b)
+		g = Dpll(db, a, b, m)
 		if g != nil {
 			return g
 		}

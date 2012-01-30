@@ -3,43 +3,42 @@ package main
 import (
 	"dimacs"
 	"dpll"
-	"dpll/db"
 	"dpll/assignment"
+	"dpll/db"
 	"flag"
 	"fmt"
+	"log"
 	"math/rand"
 	"os"
 	"time"
-	"log"
 )
 
 // flags
 var (
-	seed  int64
-	file  string
-   logFile string
-	quiet bool
-   branch *dpll.Brancher = dpll.NewBrancher()
-   manage *db.Manager = db.NewManager()
+	seed    int64
+	file    string
+	logFile string
+	quiet   bool
+	branch  *dpll.Brancher = dpll.NewBrancher()
+	manage  *db.Manager    = db.NewManager()
 )
-
 
 func main() {
 
-   flag.Int64Var(&seed, "seed", time.Now().Unix(), "random number generator seed")
-   flag.StringVar(&file, "file", "", "dimacs file containing formula")
-   flag.StringVar(&logFile, "log", "hsat.log", "Log output file")
+	flag.Int64Var(&seed, "seed", time.Now().Unix(), "random number generator seed")
+	flag.StringVar(&file, "file", "", "dimacs file containing formula")
+	flag.StringVar(&logFile, "log", "hsat.log", "Log output file")
 	flag.BoolVar(&quiet, "q", false, "True for quiet output. States \"SAT\" or \"UNSAT\"")
-   flag.Var(branch, "branch", "DPLL branching rule")
-   flag.Var(manage, "dbms", "DPLL clause database management strategy")
+	flag.Var(branch, "branch", "DPLL branching rule")
+	flag.Var(manage, "dbms", "DPLL clause database management strategy")
 	flag.Parse()
 	rand.Seed(seed)
 
-   err := initLogging()
-   if err != nil {
-          fmt.Printf("Failed to open log file: %s\n", err.Error())
-          return
-   }
+	err := initLogging()
+	if err != nil {
+		fmt.Printf("Failed to open log file: %s\n", err.Error())
+		return
+	}
 
 	f, err := os.Open(file)
 	if err != nil {
@@ -47,7 +46,7 @@ func main() {
 		return
 	}
 
-   // Initialize the db
+	// Initialize the db
 	db, nVars, err := dimacs.DimacsToDb(f)
 	if err != nil {
 		fmt.Printf("Failed to parse input correctly: %s\n", err.Error())
@@ -55,13 +54,13 @@ func main() {
 	}
 	db.StartLearning()
 
-   // Initialize the assignment
+	// Initialize the assignment
 	a := assignment.NewAssignment(nVars)
 
-        // Set the proper max db size
-        manage.MaxLearned = 0//3*db.NGiven()
+	// Set the proper max db size
+	manage.MaxLearned = 3 * db.NGiven()
 
-   // DPLL!
+	// DPLL!
 	g := dpll.Dpll(db, a, branch, manage)
 	if g == nil {
 		if quiet {
@@ -93,13 +92,13 @@ func main() {
 }
 
 func initLogging() error {
-        // No prefix to logged strings
-        log.SetFlags(0);
-        log.SetPrefix("");
-        lf, err := os.Create(logFile)
-        if err != nil {
-                return err
-        }
-        log.SetOutput(lf)
-        return nil
+	// No prefix to logged strings
+	log.SetFlags(0)
+	log.SetPrefix("")
+	lf, err := os.Create(logFile)
+	if err != nil {
+		return err
+	}
+	log.SetOutput(lf)
+	return nil
 }

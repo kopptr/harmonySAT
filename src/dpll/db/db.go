@@ -18,7 +18,7 @@ type Stats struct {
 // A database of clauses.
 type DB struct {
 	Stats
-   Counts     *LitCounts
+	Counts     *LitCounts
 	Given      *Entry
 	Learned    *Entry
 	nGiven     uint
@@ -43,7 +43,7 @@ func NewDB(nVars int) (db *DB) {
 	for i := range db.WatchLists {
 		db.WatchLists[i] = NewWatchList()
 	}
-   db.Counts = NewLitCounts(nVars)
+	db.Counts = NewLitCounts(nVars)
 	return
 }
 
@@ -112,8 +112,8 @@ func (db *DB) AddEntry(vars []int) {
 		db.Definite++
 	}
 
-   // Update Lit Counts
-   db.Counts.Add(vars)
+	// Update Lit Counts
+	db.Counts.Add(vars)
 }
 
 func (db *DB) DelEntry(e *Entry) {
@@ -124,9 +124,9 @@ func (db *DB) DelEntry(e *Entry) {
 		db.Pluck(e.Watches[i])
 	}
 	// Remove from List
-   if e == db.Learned {
-      db.Learned = e.Next
-   }
+	if e == db.Learned {
+		db.Learned = e.Next
+	}
 	if e.Next != nil {
 		e.Next.Prev = e.Prev
 	}

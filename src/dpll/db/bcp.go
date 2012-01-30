@@ -3,7 +3,7 @@ package db
 import (
 	"dpll/assignment/guess"
 	"dpll/db/cnf"
-        "log"
+	"log"
 )
 
 // Performs BCP on the clause database until no unit clauses remain.
@@ -61,7 +61,7 @@ func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit, indent string, m *Manager) bool {
 				} else {
 					// CONFLICT
 					db.AddConflictEntry(g)
-               m.Manage(db, g, m)
+					m.Manage(db, g, m)
 					return false
 				}
 			}

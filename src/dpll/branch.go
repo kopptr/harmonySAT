@@ -44,7 +44,7 @@ func ordered(db *db.DB, a *assignment.Assignment) (l *cnf.Lit) {
 }
 
 func random(db *db.DB, a *assignment.Assignment) (l *cnf.Lit) {
-   sign := byte(rand.Int() % 2)
+   sign := byte((rand.Int() % 2)+1)
    val := uint((rand.Int() % int(a.Len()))+1)
    for i := val; i <= a.Len(); i++ {
       if v,_ := a.Get(i); v == guess.Unassigned {

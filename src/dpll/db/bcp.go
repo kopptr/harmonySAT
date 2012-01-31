@@ -5,9 +5,16 @@ import (
 	"dpll/db/cnf"
 )
 
+type BcpReturn int
+const (
+   Okay BcpReturn = iota
+   Conflict
+   Sat
+)
+
 // Performs BCP on the clause database until no unit clauses remain.
 // Returns false iff the formula is conflicted.
-func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit, indent string, m *Manager) bool {
+func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit, indent string, m *Manager) BcpReturn {
 	lq := newLitQ() // queue of literals to be assigned
 
 	lq.PushBack(lit)
@@ -60,12 +67,19 @@ func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit, indent string, m *Manager) bool {
 					// CONFLICT
 					db.AddConflictEntry(g)
 					m.Manage(db, g, m)
-					return false
+					return Conflict
 				}
 			}
 		}
 	}
-	return true
+   if g.NAssigned() == g.Len() {
+      if db.Verify(g) {
+         return Sat
+      } else {
+         return Conflict
+      }
+   }
+	return Okay
 }
 
 func (db *DB) AddConflictEntry(g *guess.Guess) {

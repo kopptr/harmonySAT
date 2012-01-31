@@ -65,7 +65,9 @@ func main() {
 	}
 
 	db.StartLearning()
-	fmt.Printf("c Loaded %d clauses into the database\n", db.NGiven())
+   if !quiet {
+      fmt.Printf("c Loaded %d clauses into the database\n", db.NGiven())
+   }
 
 	// Initialize the assignment
 	a := assignment.NewAssignment(nVars)

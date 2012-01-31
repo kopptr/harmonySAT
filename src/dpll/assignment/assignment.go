@@ -14,7 +14,6 @@ type Assignment struct {
 type assignmentNode struct {
 	prev     *assignmentNode
 	g        *guess.Guess
-	assigned int
 }
 
 // Allocates and returns the empty assignment
@@ -43,10 +42,9 @@ func (a *Assignment) PushAssign(v uint, pol byte) error {
 	if check, err := a.top.g.Get(v); check != guess.Unassigned || err != nil {
 		return err
 	}
-	newNode := &assignmentNode{nil, nil, 0}
+	newNode := &assignmentNode{nil, nil}
 	newNode.prev = a.top
 
-	newNode.assigned = a.top.assigned
 	newNode.g = a.top.g.Copy()
 
 	a.top = newNode

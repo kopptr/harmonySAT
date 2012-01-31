@@ -18,6 +18,7 @@ const (
 // subtracting 1. Silly, but I'm okay with it.
 type Guess struct {
 	vars []byte
+   nAssigned int
 }
 
 func NewGuess(nVars int) (g *Guess) {
@@ -29,6 +30,7 @@ func NewGuess(nVars int) (g *Guess) {
 func (g *Guess) Copy() (g1 *Guess) {
 	g1 = NewGuess(g.Len())
 	copy(g1.vars, g.vars[:])
+   g1.nAssigned = g.nAssigned
 	return
 }
 
@@ -38,8 +40,17 @@ func (g *Guess) Set(n uint, v byte) error {
 		return errors.New(
 			fmt.Sprintf("Guess.Set() given invalid index %d or assignment %d", n, v))
 	}
+   if g.vars[n-1] == Unassigned && v != Unassigned {
+      g.nAssigned++
+   } else if g.vars[n-1] != Unassigned && v == Unassigned {
+      g.nAssigned--
+   }
 	g.vars[n-1] = v
 	return nil
+}
+
+func (g *Guess) NAssigned() int {
+   return g.nAssigned
 }
 
 // Returns the number of variables that can be assigned

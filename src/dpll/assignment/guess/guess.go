@@ -68,19 +68,24 @@ func (g *Guess) Get(n uint) (byte, error) {
 
 // Returns an array of ints representing the assigned variables.
 func (g *Guess) Vars(flipped bool) (v []int) {
-	v = []int{}
+	v = make([]int, g.nAssigned)
+   index := 0
 	for i, n := range g.vars {
 		if n == Pos {
 			if !flipped {
-				v = append(v, i+1)
+				v[index] = i+1
+            index++
 			} else {
-				v = append(v, -1*(i+1))
+				v[index] = -1*(i+1)
+            index++
 			}
 		} else if n == Neg {
 			if !flipped {
-				v = append(v, (i+1)*-1)
+				v[index] = (i+1)*-1
+            index++
 			} else {
-				v = append(v, i+1)
+				v[index] = i+1
+            index++
 			}
 		}
 	}

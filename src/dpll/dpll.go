@@ -67,7 +67,7 @@ func Dpll(cdb *db.DB, a *assignment.Assignment, b *Brancher, m *db.Manager) *gue
       a.PushAssign(aStack[top].l.Val, aStack[top].l.Pol)
 
       for {
-         status := cdb.Bcp(a.Guess(), *aStack[top].l, indent(a), m)
+         status := cdb.Bcp(a.Guess(), *aStack[top].l, m)
          if status == db.Conflict {
             // BackTrack
             for aStack[top].Flipped == true {
@@ -90,13 +90,4 @@ func Dpll(cdb *db.DB, a *assignment.Assignment, b *Brancher, m *db.Manager) *gue
       }
    }
    panic("Dpll is broken")
-}
-
-
-func indent(a *assignment.Assignment) string {
-	s := ""
-	for i := uint(0); i < a.Depth(); i++ {
-		s += "\t"
-	}
-	return s
 }

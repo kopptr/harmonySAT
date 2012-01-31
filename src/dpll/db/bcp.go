@@ -14,7 +14,7 @@ const (
 
 // Performs BCP on the clause database until no unit clauses remain.
 // Returns false iff the formula is conflicted.
-func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit, indent string, m *Manager) BcpReturn {
+func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit, m *Manager) BcpReturn {
 	lq := newLitQ() // queue of literals to be assigned
 
 	lq.PushBack(lit)

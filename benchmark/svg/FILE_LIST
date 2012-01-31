@@ -1,0 +1,6 @@
+This directory contains the outputs of gopprof for hsat during the process of
+optimization.
+
+recursive -- 01/31/2012 -- original dpll implemented recursively.
+iterative -- 01/31/2012 -- dpll reimplemented iteratively.
+no-indent-fn -- 01/31/2012 -- removed a function "indent" that was only used for debugging

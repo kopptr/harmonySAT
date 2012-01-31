@@ -5,7 +5,6 @@ import (
 	"dpll/assignment/guess"
 	"dpll/db"
 	"dpll/db/cnf"
-	"log"
 )
 
 func Dpll(db *db.DB, a *assignment.Assignment, b *Brancher, m *db.Manager) *guess.Guess {
@@ -23,9 +22,7 @@ func Dpll(db *db.DB, a *assignment.Assignment, b *Brancher, m *db.Manager) *gues
 		}
 	}
 	a.PushAssign(l.Val, l.Pol)
-	log.Printf("%sPUSH: %s\n", indent(a), l)
 	ok := db.Bcp(a.Guess(), *l, indent(a), m)
-	log.Printf("Guess: %s%s\n", indent(a), a.Guess())
 
 	if ok {
 		g = Dpll(db, a, b, m)
@@ -36,12 +33,8 @@ func Dpll(db *db.DB, a *assignment.Assignment, b *Brancher, m *db.Manager) *gues
 
 	// try the reverse polarity
 	a.PopAssign()
-	log.Printf("%sPOP: %s\n", indent(a), l)
-	log.Printf("Guess: %s%s\n", indent(a), a.Guess())
 	l.Flip()
 	a.PushAssign(l.Val, l.Pol)
-	log.Printf("%sPUSH: %s\n", indent(a), l)
-	log.Printf("Guess: %s%s\n", indent(a), a.Guess())
 	ok = db.Bcp(a.Guess(), *l, indent(a), m)
 	if ok {
 		g = Dpll(db, a, b, m)
@@ -51,8 +44,6 @@ func Dpll(db *db.DB, a *assignment.Assignment, b *Brancher, m *db.Manager) *gues
 	}
 
 	a.PopAssign()
-	log.Printf("%sPOP: %s\n", indent(a), l)
-	log.Printf("Guess: %s%s\n", indent(a), a.Guess())
 	return nil
 }
 

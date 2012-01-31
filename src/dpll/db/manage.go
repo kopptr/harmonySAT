@@ -44,7 +44,7 @@ func none(db *DB, g *guess.Guess, m *Manager) {
 func queue(db *DB, g *guess.Guess, m *Manager) {
 	m.basic(db, g)
 	for db.NLearned() > m.MaxLearned {
-		db.DelEntry(db.Learned)
+		db.DelEntry(db.End)
 	}
 }
 

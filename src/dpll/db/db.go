@@ -21,6 +21,7 @@ type DB struct {
 	Counts     *LitCounts
 	Given      *Entry
 	Learned    *Entry
+   End        *Entry
 	nGiven     uint
 	nLearned   uint
 	WatchLists []*WatchList
@@ -30,6 +31,7 @@ type DB struct {
 func (db *DB) NLearned() uint {
 	return db.nLearned
 }
+
 func (db *DB) NGiven() uint {
 	return db.nGiven
 }
@@ -78,6 +80,7 @@ func (db *DB) AddEntry(vars []int) {
 			e.Next = nil
 			db.Learned.Next = e
 			db.Learned = e
+         db.End = e
 		} else {
 			// Otherwise insert at the back of the given/front of the learned.
 			e.Next = db.Learned
@@ -124,9 +127,18 @@ func (db *DB) DelEntry(e *Entry) {
 		db.Pluck(e.Watches[i])
 	}
 	// Remove from List
+   if e == db.End {
+      if e == db.Learned {
+         db.End = nil
+      } else {
+         db.End = e.Prev
+      }
+   }
+
 	if e == db.Learned {
 		db.Learned = e.Next
 	}
+
 	if e.Next != nil {
 		e.Next.Prev = e.Prev
 	}

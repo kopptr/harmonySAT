@@ -34,11 +34,11 @@ func main() {
 	flag.Parse()
 	rand.Seed(seed)
 
-	err := initLogging()
+	/*err := initLogging()
 	if err != nil {
 		fmt.Printf("Failed to open log file: %s\n", err.Error())
 		return
-	}
+	}*/
 
 	f, err := os.Open(file)
 	if err != nil {
@@ -53,12 +53,13 @@ func main() {
 		return
 	}
 	db.StartLearning()
+   fmt.Printf("c Loaded %d clauses into the database\n", db.NGiven())
 
 	// Initialize the assignment
 	a := assignment.NewAssignment(nVars)
 
 	// Set the proper max db size
-	manage.MaxLearned = 3 * db.NGiven()
+	manage.MaxLearned = db.NGiven() / 3
 
 	// DPLL!
 	g := dpll.Dpll(db, a, branch, manage)

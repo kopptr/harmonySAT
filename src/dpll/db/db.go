@@ -52,8 +52,8 @@ func NewDB(nVars int) (db *DB) {
 // Adds an entry to the database. If called before the call to StartLearning(),
 // it adds it to the section of given clauses. If added after, it adds it to the
 // set of learned clauses.
-func (db *DB) AddEntry(vars []int) {
-	e := NewEntry(vars)
+func (db *DB) AddEntry(vars []int, shouldSort bool) {
+	e := NewEntry(vars, shouldSort)
 
 	// Insert into list
 	if !db.learning {

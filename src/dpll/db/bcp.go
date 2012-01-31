@@ -83,7 +83,7 @@ func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit, m *Manager) BcpReturn {
 }
 
 func (db *DB) AddConflictEntry(g *guess.Guess) {
-	db.AddEntry(g.Vars(true))
+	db.AddEntry(g.Vars(true), false)
 }
 
 type litQ struct {

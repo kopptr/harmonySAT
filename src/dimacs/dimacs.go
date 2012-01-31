@@ -37,7 +37,7 @@ func matchClauses(r *scanner.Scanner, clauseDB *db.DB) (n int, err error) {
 		for i := r.NextInt(); i != 0; i = r.NextInt() {
 			clause = append(clause, i)
 		}
-		clauseDB.AddEntry(clause)
+		clauseDB.AddEntry(clause, true)
 	}
 	return n, nil
 }

@@ -11,9 +11,10 @@ type ClauseDBMS byte
 const (
 	None ClauseDBMS = iota
 	Queue
+   BerkMin
 )
 
-var manageFuncs = [...]func(*DB, *guess.Guess, *Manager){none, queue}
+var manageFuncs = [...]func(*DB, *guess.Guess, *Manager){none, queue, berkmin}
 
 type Manager struct {
 	Manage     func(*DB, *guess.Guess, *Manager)
@@ -48,6 +49,11 @@ func queue(db *DB, g *guess.Guess, m *Manager) {
 	}
 }
 
+func berkmin(db *DB, g *guess.Guess, m *Manager) {
+
+
+}
+
 // Manager needs to satisfy the flag.Value interface
 func (m Manager) String() string {
 	return ""
@@ -60,6 +66,8 @@ func (m *Manager) Set(s string) error {
 		m.SetStrat(None)
 	case "queue":
 		m.SetStrat(Queue)
+	case "berkmin":
+		m.SetStrat(BerkMin)
 	default:
 		return errors.New(fmt.Sprintf("\"Set\" given invalid value: %s", s))
 	}

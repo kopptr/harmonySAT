@@ -17,8 +17,8 @@ const (
 // that it's just a simple array. This way, the user doesn't need to worry about
 // subtracting 1. Silly, but I'm okay with it.
 type Guess struct {
-	vars []byte
-   nAssigned int
+	vars      []byte
+	nAssigned int
 }
 
 func NewGuess(nVars int) (g *Guess) {
@@ -30,7 +30,7 @@ func NewGuess(nVars int) (g *Guess) {
 func (g *Guess) Copy() (g1 *Guess) {
 	g1 = NewGuess(g.Len())
 	copy(g1.vars, g.vars[:])
-   g1.nAssigned = g.nAssigned
+	g1.nAssigned = g.nAssigned
 	return
 }
 
@@ -40,17 +40,17 @@ func (g *Guess) Set(n uint, v byte) error {
 		return errors.New(
 			fmt.Sprintf("Guess.Set() given invalid index %d or assignment %d", n, v))
 	}
-   if g.vars[n-1] == Unassigned && v != Unassigned {
-      g.nAssigned++
-   } else if g.vars[n-1] != Unassigned && v == Unassigned {
-      g.nAssigned--
-   }
+	if g.vars[n-1] == Unassigned && v != Unassigned {
+		g.nAssigned++
+	} else if g.vars[n-1] != Unassigned && v == Unassigned {
+		g.nAssigned--
+	}
 	g.vars[n-1] = v
 	return nil
 }
 
 func (g *Guess) NAssigned() int {
-   return g.nAssigned
+	return g.nAssigned
 }
 
 // Returns the number of variables that can be assigned
@@ -69,23 +69,23 @@ func (g *Guess) Get(n uint) (byte, error) {
 // Returns an array of ints representing the assigned variables.
 func (g *Guess) Vars(flipped bool) (v []int) {
 	v = make([]int, g.nAssigned)
-   index := 0
+	index := 0
 	for i, n := range g.vars {
 		if n == Pos {
 			if !flipped {
-				v[index] = i+1
-            index++
+				v[index] = i + 1
+				index++
 			} else {
-				v[index] = -1*(i+1)
-            index++
+				v[index] = -1 * (i + 1)
+				index++
 			}
 		} else if n == Neg {
 			if !flipped {
-				v[index] = (i+1)*-1
-            index++
+				v[index] = (i + 1) * -1
+				index++
 			} else {
-				v[index] = i+1
-            index++
+				v[index] = i + 1
+				index++
 			}
 		}
 	}

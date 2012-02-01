@@ -21,7 +21,7 @@ var (
 	logFile string
 	cpuprof string
 	quiet   bool
-	analyze   bool
+	analyze bool
 	branch  *dpll.Brancher = dpll.NewBrancher()
 	manage  *db.Manager    = db.NewManager()
 )
@@ -66,15 +66,15 @@ func main() {
 		log.Fatal("Failed to parse input correctly: %s\n", err.Error())
 	}
 
-   if analyze {
-      fmt.Printf("%s", db.AnalyzeTexString())
-      return
-   }
+	if analyze {
+		fmt.Printf("%s", db.AnalyzeTexString())
+		return
+	}
 
 	db.StartLearning()
-   if !quiet {
-      fmt.Printf("c Loaded %d clauses into the database\n", db.NGiven())
-   }
+	if !quiet {
+		fmt.Printf("c Loaded %d clauses into the database\n", db.NGiven())
+	}
 
 	// Initialize the assignment
 	a := assignment.NewAssignment(nVars)

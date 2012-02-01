@@ -11,7 +11,7 @@ type ClauseDBMS byte
 const (
 	None ClauseDBMS = iota
 	Queue
-   BerkMin
+	BerkMin
 )
 
 var manageFuncs = [...]func(*DB, *guess.Guess, *Manager){none, queue, berkmin}
@@ -55,27 +55,27 @@ func queue(db *DB, g *guess.Guess, m *Manager) {
 // activity in order to do it properly. We'd also need restarts.
 // Call it a TODO
 func berkmin(cdb *DB, g *guess.Guess, m *Manager) {
-   var (
-      beginning = (g.NAssigned()/16)*15
-      count = 0
-      tmp *Entry
-   )
-   for e := cdb.Learned; e != nil; e = e.Next {
-      count++
-      if count > beginning {
-         if len(e.Clause.Lits) > 8 {
-            tmp = e.Prev
-            cdb.DelEntry(e)
-            e = tmp
-         }
-      } else {
-         if len(e.Clause.Lits) > 42 {
-            tmp = e.Prev
-            cdb.DelEntry(e)
-            e = tmp
-         }
-      }
-   }
+	var (
+		beginning = (g.NAssigned() / 16) * 15
+		count     = 0
+		tmp       *Entry
+	)
+	for e := cdb.Learned; e != nil; e = e.Next {
+		count++
+		if count > beginning {
+			if len(e.Clause.Lits) > 8 {
+				tmp = e.Prev
+				cdb.DelEntry(e)
+				e = tmp
+			}
+		} else {
+			if len(e.Clause.Lits) > 42 {
+				tmp = e.Prev
+				cdb.DelEntry(e)
+				e = tmp
+			}
+		}
+	}
 }
 
 // Manager needs to satisfy the flag.Value interface

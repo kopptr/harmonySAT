@@ -4,7 +4,7 @@
 
 LIST=`ls test/*.cnf`
 BRANCH_RULES="ordered random vsids moms"
-CDBMS="none queue"
+CDBMS="none queue berkmin"
 PASS=true
 
 for file in ${LIST}; do

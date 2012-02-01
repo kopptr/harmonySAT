@@ -76,7 +76,7 @@ func (db *DB) AddEntry(vars []int, shouldSort bool) {
 		if db.nLearned == 0 {
 			// If this is the first learned clause, db.Learned points to the last
 			// given clause in the List.
-			e.Prev = db.Learned
+         e.Prev = db.Learned
 			e.Next = nil
 			db.Learned.Next = e
 			db.Learned = e
@@ -138,6 +138,11 @@ func (db *DB) DelEntry(e *Entry) {
 	if e == db.Learned {
 		db.Learned = e.Next
 	}
+
+   if db.nLearned == 0 {
+      db.Learned = e.Prev
+      db.End = nil
+   }
 
 	if e.Next != nil {
 		e.Next.Prev = e.Prev

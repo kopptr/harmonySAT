@@ -21,6 +21,7 @@ var (
 	logFile string
 	cpuprof string
 	quiet   bool
+	analyze   bool
 	branch  *dpll.Brancher = dpll.NewBrancher()
 	manage  *db.Manager    = db.NewManager()
 )
@@ -32,6 +33,7 @@ func main() {
 	flag.StringVar(&logFile, "log", "", "Log output file")
 	flag.StringVar(&cpuprof, "cpuprofile", "", "write cpu profile to file")
 	flag.BoolVar(&quiet, "q", false, "True for quiet output. States \"SAT\" or \"UNSAT\"")
+	flag.BoolVar(&analyze, "a", false, "True for analysis output. If true, will not actually run solver.")
 	flag.Var(branch, "branch", "DPLL branching rule")
 	flag.Var(manage, "dbms", "DPLL clause database management strategy")
 	flag.Parse()
@@ -63,6 +65,11 @@ func main() {
 	if err != nil {
 		log.Fatal("Failed to parse input correctly: %s\n", err.Error())
 	}
+
+   if analyze {
+      fmt.Printf("%s", db.AnalyzeTexString())
+      return
+   }
 
 	db.StartLearning()
    if !quiet {

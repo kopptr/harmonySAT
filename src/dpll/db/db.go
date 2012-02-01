@@ -28,6 +28,19 @@ type DB struct {
 	learning   bool
 }
 
+
+func (db *DB) AnalyzeTexString() string {
+   buffer := bytes.NewBufferString("")
+   fmt.Fprintf(buffer, "\\begin{tabular}{|c|c|}\\hline\n")
+   fmt.Fprintf(buffer, "Type & Number\\\\\\hline\\hline\n")
+   fmt.Fprintf(buffer, "Binary & %d\\\\\\hline\n", db.Binary)
+   fmt.Fprintf(buffer, "Ternary & %d\\\\\\hline\n", db.Ternary)
+   fmt.Fprintf(buffer, "Horn & %d\\\\\\hline\n", db.Horn)
+   fmt.Fprintf(buffer, "Definite & %d\\\\\\hline\n", db.Definite)
+   fmt.Fprintf(buffer, "\\end{tabular}\n")
+   return string(buffer.Bytes())
+}
+
 func (db *DB) NLearned() uint {
 	return db.nLearned
 }

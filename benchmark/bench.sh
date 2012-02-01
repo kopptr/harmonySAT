@@ -10,17 +10,23 @@ DBMS="none queue berkmin"
 echo "\\documentclass{article}"
 echo "\\usepackage{geometry}"
 echo "\\usepackage{morefloats}"
+echo "\\usepackage{subfig}"
 echo ""
 echo "\\title{Base Solver Measurements}"
 echo "\\author{Tim Kopp}"
 echo "\\date{`date +%D`}"
 echo ""
 echo "\\begin{document}"
+echo "\\maketitle"
 echo ""
 
 for bench in ${BENCH}; do
    echo "\\begin{table}[ht!]"
    echo "\\centering"
+   echo "\\subfloat[][]{"
+   ./bin/hsat -a -file=${bench}
+   echo "}"
+   echo "\\subfloat[][]{"
    echo "\\begin{tabular}{|c|c||c|}\\hline"
    echo "Branch & DBMS & Time\\\\\\hline\\hline"
    for rule in ${BRANCH}; do
@@ -32,6 +38,7 @@ for bench in ${BENCH}; do
       done
    done
    echo "\\end{tabular}"
+   echo "}"
    echo "\\caption{${bench}}"
    echo "\\label{tab:${bench}}"
    echo "\\end{table}"

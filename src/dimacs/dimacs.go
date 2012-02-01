@@ -1,7 +1,7 @@
 package dimacs
 
 import (
-	"dimacs/scanner"
+	"scanner"
 	"dpll/db"
 	"errors"
 	"fmt"

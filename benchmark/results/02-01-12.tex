@@ -1,0 +1,293 @@
+\documentclass{article}
+\usepackage{geometry}
+\usepackage{morefloats}
+\usepackage{subfig}
+
+\title{Base Solver Measurements}
+\author{Tim Kopp}
+\date{02/01/12}
+
+\begin{document}
+\maketitle
+
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0\\\hline
+Ternary & 600\\\hline
+Horn & 301\\\hline
+Definite & 235\\\hline
+\end{tabular}
+}
+\subfloat[][]{
+\begin{tabular}{|c|c||c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & 0:06.85\\\hline
+ordered & berkmin & 0:06.34\\\hline
+random & queue & 0:05.40\\\hline
+random & berkmin & 0:05.03\\\hline
+vsids & queue & 0:00.77\\\hline
+vsids & berkmin & 0:00.25\\\hline
+moms & queue & 0:25.11\\\hline
+moms & berkmin & 0:04.12\\\hline
+\end{tabular}
+}
+\caption{benchmark/100-600-1.cnf}
+\label{tab:benchmark/100-600-1.cnf}
+\end{table}
+
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0\\\hline
+Ternary & 600\\\hline
+Horn & 311\\\hline
+Definite & 227\\\hline
+\end{tabular}
+}
+\subfloat[][]{
+\begin{tabular}{|c|c||c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & 0:00.36\\\hline
+ordered & berkmin & 0:00.34\\\hline
+random & queue & 0:07.26\\\hline
+random & berkmin & 0:02.44\\\hline
+vsids & queue & 0:02.96\\\hline
+vsids & berkmin & 0:00.18\\\hline
+moms & queue & 0:18.16\\\hline
+moms & berkmin & 0:07.13\\\hline
+\end{tabular}
+}
+\caption{benchmark/100-600-2.cnf}
+\label{tab:benchmark/100-600-2.cnf}
+\end{table}
+
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0\\\hline
+Ternary & 690\\\hline
+Horn & 358\\\hline
+Definite & 270\\\hline
+\end{tabular}
+}
+\subfloat[][]{
+\begin{tabular}{|c|c||c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & 0:33.23\\\hline
+ordered & berkmin & 0:30.41\\\hline
+random & queue & 0:11.99\\\hline
+random & berkmin & 0:08.07\\\hline
+vsids & queue & 0:03.21\\\hline
+vsids & berkmin & 0:02.20\\\hline
+moms & queue & 1:36.71\\\hline
+moms & berkmin & 0:17.98\\\hline
+\end{tabular}
+}
+\caption{benchmark/115-690-1.cnf}
+\label{tab:benchmark/115-690-1.cnf}
+\end{table}
+
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0\\\hline
+Ternary & 690\\\hline
+Horn & 357\\\hline
+Definite & 281\\\hline
+\end{tabular}
+}
+\subfloat[][]{
+\begin{tabular}{|c|c||c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & 2:47.47\\\hline
+ordered & berkmin & 2:33.71\\\hline
+random & queue & 0:04.32\\\hline
+random & berkmin & 0:32.37\\\hline
+vsids & queue & 0:00.88\\\hline
+vsids & berkmin & 0:00.05\\\hline
+moms & queue & 1:36.32\\\hline
+moms & berkmin & 0:53.51\\\hline
+\end{tabular}
+}
+\caption{benchmark/115-690-2.cnf}
+\label{tab:benchmark/115-690-2.cnf}
+\end{table}
+
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0\\\hline
+Ternary & 720\\\hline
+Horn & 329\\\hline
+Definite & 244\\\hline
+\end{tabular}
+}
+\subfloat[][]{
+\begin{tabular}{|c|c||c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & 0:15.60\\\hline
+ordered & berkmin & 0:14.32\\\hline
+random & queue & 0:21.15\\\hline
+random & berkmin & 0:03.15\\\hline
+vsids & queue & 0:13.19\\\hline
+vsids & berkmin & 0:00.16\\\hline
+moms & queue & 4:27.40\\\hline
+moms & berkmin & 0:44.18\\\hline
+\end{tabular}
+}
+\caption{benchmark/120-720-1.cnf}
+\label{tab:benchmark/120-720-1.cnf}
+\end{table}
+
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0\\\hline
+Ternary & 720\\\hline
+Horn & 358\\\hline
+Definite & 258\\\hline
+\end{tabular}
+}
+\subfloat[][]{
+\begin{tabular}{|c|c||c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & 1:07.07\\\hline
+ordered & berkmin & 1:01.69\\\hline
+random & queue & 0:51.80\\\hline
+random & berkmin & 0:41.05\\\hline
+vsids & queue & 1:03.66\\\hline
+vsids & berkmin & 0:16.89\\\hline
+moms & queue & 4:03.52\\\hline
+moms & berkmin & 1:19.67\\\hline
+\end{tabular}
+}
+\caption{benchmark/120-720-2.cnf}
+\label{tab:benchmark/120-720-2.cnf}
+\end{table}
+
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0\\\hline
+Ternary & 780\\\hline
+Horn & 391\\\hline
+Definite & 288\\\hline
+\end{tabular}
+}
+\subfloat[][]{
+\begin{tabular}{|c|c||c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & 2:09.25\\\hline
+ordered & berkmin & 1:58.34\\\hline
+random & queue & 0:06.55\\\hline
+random & berkmin & 2:08.17\\\hline
+vsids & queue & 0:36.53\\\hline
+vsids & berkmin & 0:00.16\\\hline
+moms & queue & 1:56.47\\\hline
+moms & berkmin & 2:00.77\\\hline
+\end{tabular}
+}
+\caption{benchmark/130-780-1.cnf}
+\label{tab:benchmark/130-780-1.cnf}
+\end{table}
+
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0\\\hline
+Ternary & 780\\\hline
+Horn & 396\\\hline
+Definite & 288\\\hline
+\end{tabular}
+}
+\subfloat[][]{
+\begin{tabular}{|c|c||c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & 0:49.94\\\hline
+ordered & berkmin & 0:45.62\\\hline
+random & queue & 1:04.36\\\hline
+random & berkmin & 2:06.59\\\hline
+vsids & queue & 1:22.41\\\hline
+vsids & berkmin & 0:26.69\\\hline
+moms & queue & 3:56.16\\\hline
+moms & berkmin & 2:58.45\\\hline
+\end{tabular}
+}
+\caption{benchmark/130-780-2.cnf}
+\label{tab:benchmark/130-780-2.cnf}
+\end{table}
+
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0\\\hline
+Ternary & 720\\\hline
+Horn & 345\\\hline
+Definite & 246\\\hline
+\end{tabular}
+}
+\subfloat[][]{
+\begin{tabular}{|c|c||c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & 16:50.94\\\hline
+ordered & berkmin & 15:19.09\\\hline
+random & queue & Command terminated by signal 9 19:59.99\\\hline
+random & berkmin & Command terminated by signal 9 19:59.99\\\hline
+vsids & queue & 1:03.19\\\hline
+vsids & berkmin & 1:21.21\\\hline
+moms & queue & Command terminated by signal 9 19:59.99\\\hline
+moms & berkmin & Command terminated by signal 9 19:59.99\\\hline
+\end{tabular}
+}
+\caption{benchmark/140-720-1.cnf}
+\label{tab:benchmark/140-720-1.cnf}
+\end{table}
+
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0\\\hline
+Ternary & 900\\\hline
+Horn & 485\\\hline
+Definite & 343\\\hline
+\end{tabular}
+}
+\subfloat[][]{
+\begin{tabular}{|c|c||c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & Command terminated by signal 9 19:59.99\\\hline
+ordered & berkmin & Command terminated by signal 9 19:59.99\\\hline
+random & queue & 16:59.04\\\hline
+random & berkmin & 9:24.17\\\hline
+vsids & queue & 6:06.88\\\hline
+vsids & berkmin & 0:10.22\\\hline
+moms & queue & 11:55.36\\\hline
+moms & berkmin & Command terminated by signal 9 19:59.99\\\hline
+\end{tabular}
+}
+\caption{benchmark/150-900-1.cnf}
+\label{tab:benchmark/150-900-1.cnf}
+\end{table}
+
+\end{document}

@@ -2,7 +2,7 @@
 
 go install hsat
 
-BENCH=`ls benchmark/*.cnf`
+BENCH=`ls benchmark/in-use/*.cnf`
 #BENCH=`ls test/*.cnf`
 BRANCH="ordered random vsids moms"
 DBMS="queue berkmin" # DO NOT put none. swapping then dead

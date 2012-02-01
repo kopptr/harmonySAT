@@ -16,7 +16,7 @@ const (
 	Ordered BranchRule = iota
 	Random
 	Vsids
-   Moms
+	Moms
 )
 
 var branchFuncs = [...]func(*db.DB, *assignment.Assignment) *cnf.Lit{ordered, random, vsids, moms}
@@ -68,48 +68,48 @@ func vsids(db *db.DB, a *assignment.Assignment) (l *cnf.Lit) {
 
 // We'll use a modified MOMS rule that only looks at binary clauses
 func moms(db *db.DB, a *assignment.Assignment) (l *cnf.Lit) {
-   var (
-      counts = make([]int, a.Guess().Len())
-      eCount int
-      vals [2]uint
-      g = a.Guess()
-      biggest = 0
-      biggestI = -1
-   )
+	var (
+		counts   = make([]int, a.Guess().Len())
+		eCount   int
+		vals     [2]uint
+		g        = a.Guess()
+		biggest  = 0
+		biggestI = -1
+	)
 
-   // Count up the total lits in binary clauses
-   for e := db.Learned; e != nil; e = e.Next {
-      eCount = 0
-      for _, l := range e.Clause.Lits {
-         if v, _ := g.Get(l.Val); v == guess.Unassigned {
-            eCount++
-            if eCount > 2 {
-               break
-            }
-            vals[eCount-1] = l.Val
-         }
-      }
-      if eCount <= 2 {
-         for i := 0; i < eCount; i++ {
-            counts[vals[i]-1]++
-         }
-      }
-   }
+	// Count up the total lits in binary clauses
+	for e := db.Learned; e != nil; e = e.Next {
+		eCount = 0
+		for _, l := range e.Clause.Lits {
+			if v, _ := g.Get(l.Val); v == guess.Unassigned {
+				eCount++
+				if eCount > 2 {
+					break
+				}
+				vals[eCount-1] = l.Val
+			}
+		}
+		if eCount <= 2 {
+			for i := 0; i < eCount; i++ {
+				counts[vals[i]-1]++
+			}
+		}
+	}
 
-   // Search for the biggest
-   for i,v := range counts {
-      if v > biggest {
-         biggest = v
-         biggestI = i
-      }
-   }
+	// Search for the biggest
+	for i, v := range counts {
+		if v > biggest {
+			biggest = v
+			biggestI = i
+		}
+	}
 
-   if biggestI == -1 {
-      return random(db, a)
-   } else {
-      return &cnf.Lit{uint(biggestI+1),byte((rand.Int()%2)+1)}
-   }
-   panic("MOMS is broken")
+	if biggestI == -1 {
+		return random(db, a)
+	} else {
+		return &cnf.Lit{uint(biggestI + 1), byte((rand.Int() % 2) + 1)}
+	}
+	panic("MOMS is broken")
 }
 
 // Brancher needs to satisfy the flag.Value interface
@@ -127,8 +127,8 @@ func (b *Brancher) Set(s string) error {
 		b.SetRule(Random)
 	case "vsids":
 		b.SetRule(Vsids)
-   case "moms":
-      b.SetRule(Moms)
+	case "moms":
+		b.SetRule(Moms)
 	default:
 		return errors.New(fmt.Sprintf("\"Set\" given invalid value: %s", s))
 	}

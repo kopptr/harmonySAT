@@ -6,10 +6,11 @@ import (
 )
 
 type BcpReturn int
+
 const (
-   Okay BcpReturn = iota
-   Conflict
-   Sat
+	Okay BcpReturn = iota
+	Conflict
+	Sat
 )
 
 // Performs BCP on the clause database until no unit clauses remain.
@@ -72,13 +73,13 @@ func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit, m *Manager) BcpReturn {
 			}
 		}
 	}
-   if g.NAssigned() == g.Len() {
-      if db.Verify(g) {
-         return Sat
-      } else {
-         return Conflict
-      }
-   }
+	if g.NAssigned() == g.Len() {
+		if db.Verify(g) {
+			return Sat
+		} else {
+			return Conflict
+		}
+	}
 	return Okay
 }
 

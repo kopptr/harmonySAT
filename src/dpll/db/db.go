@@ -21,24 +21,23 @@ type DB struct {
 	Counts     *LitCounts
 	Given      *Entry
 	Learned    *Entry
-   End        *Entry
+	End        *Entry
 	nGiven     uint
 	nLearned   uint
 	WatchLists []*WatchList
 	learning   bool
 }
 
-
 func (db *DB) AnalyzeTexString() string {
-   buffer := bytes.NewBufferString("")
-   fmt.Fprintf(buffer, "\\begin{tabular}{|c|c|}\\hline\n")
-   fmt.Fprintf(buffer, "Type & Number\\\\\\hline\\hline\n")
-   fmt.Fprintf(buffer, "Binary & %d\\\\\\hline\n", db.Binary)
-   fmt.Fprintf(buffer, "Ternary & %d\\\\\\hline\n", db.Ternary)
-   fmt.Fprintf(buffer, "Horn & %d\\\\\\hline\n", db.Horn)
-   fmt.Fprintf(buffer, "Definite & %d\\\\\\hline\n", db.Definite)
-   fmt.Fprintf(buffer, "\\end{tabular}\n")
-   return string(buffer.Bytes())
+	buffer := bytes.NewBufferString("")
+	fmt.Fprintf(buffer, "\\begin{tabular}{|c|c|}\\hline\n")
+	fmt.Fprintf(buffer, "Type & Number\\\\\\hline\\hline\n")
+	fmt.Fprintf(buffer, "Binary & %d\\\\\\hline\n", db.Binary)
+	fmt.Fprintf(buffer, "Ternary & %d\\\\\\hline\n", db.Ternary)
+	fmt.Fprintf(buffer, "Horn & %d\\\\\\hline\n", db.Horn)
+	fmt.Fprintf(buffer, "Definite & %d\\\\\\hline\n", db.Definite)
+	fmt.Fprintf(buffer, "\\end{tabular}\n")
+	return string(buffer.Bytes())
 }
 
 func (db *DB) NLearned() uint {
@@ -89,11 +88,11 @@ func (db *DB) AddEntry(vars []int, shouldSort bool) {
 		if db.nLearned == 0 {
 			// If this is the first learned clause, db.Learned points to the last
 			// given clause in the List.
-         e.Prev = db.Learned
+			e.Prev = db.Learned
 			e.Next = nil
 			db.Learned.Next = e
 			db.Learned = e
-         db.End = e
+			db.End = e
 		} else {
 			// Otherwise insert at the back of the given/front of the learned.
 			e.Next = db.Learned
@@ -140,22 +139,22 @@ func (db *DB) DelEntry(e *Entry) {
 		db.Pluck(e.Watches[i])
 	}
 	// Remove from List
-   if e == db.End {
-      if e == db.Learned {
-         db.End = nil
-      } else {
-         db.End = e.Prev
-      }
-   }
+	if e == db.End {
+		if e == db.Learned {
+			db.End = nil
+		} else {
+			db.End = e.Prev
+		}
+	}
 
 	if e == db.Learned {
 		db.Learned = e.Next
 	}
 
-   if db.nLearned == 0 {
-      db.Learned = e.Prev
-      db.End = nil
-   }
+	if db.nLearned == 0 {
+		db.Learned = e.Prev
+		db.End = nil
+	}
 
 	if e.Next != nil {
 		e.Next.Prev = e.Prev

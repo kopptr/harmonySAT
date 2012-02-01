@@ -1,11 +1,11 @@
 package dimacs
 
 import (
-	"scanner"
 	"dpll/db"
 	"errors"
 	"fmt"
 	"io"
+	"scanner"
 )
 
 func DimacsToDb(r io.Reader) (clauseDB *db.DB, nVar int, err error) {

@@ -58,9 +58,9 @@ func NewClause(vars []int, shouldSort bool) (c *Clause) {
 	for i, v := range vars {
 		c.Lits[i] = NewLit(v)
 	}
-   if shouldSort {
-      sort.Sort(c)
-   }
+	if shouldSort {
+		sort.Sort(c)
+	}
 	c.SetStats(c.Lits)
 	return
 }

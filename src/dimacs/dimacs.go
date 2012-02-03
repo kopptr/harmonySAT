@@ -13,7 +13,7 @@ func DimacsToDb(r io.Reader) (clauseDB *db.DB, nVar int, err error) {
 
 	err = matchDimacsComments(s)
 	if err != nil {
-		return nil, 0, nil
+		return nil, 0, err
 	}
 	nVar, nClauses, err := matchFormulaInfo(s)
 	if err != nil {

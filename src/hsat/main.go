@@ -4,6 +4,7 @@ import (
 	"dimacs"
 	"dpll"
 	"dpll/assignment"
+	"dpll/assignment/guess"
 	"dpll/db"
 	"flag"
 	"fmt"
@@ -52,57 +53,22 @@ func main() {
 		defer pprof.StopCPUProfile()
 	}
 
-	f, err := os.Open(file)
-	if err != nil {
-		log.Fatal(err)
-	}
+   if analyze
 
-	// Initialize the db
-	db, nVars, err := dimacs.DimacsToDb(f)
-	f.Close()
-	if err != nil {
-		log.Fatal("Failed to parse input correctly: %s\n", err.Error())
-	}
-
-	db.StartLearning()
-   if !quiet {
-      fmt.Printf("c Loaded %d clauses into the database\n", db.NGiven())
+   // Initialize the cdb and assignment
+   db, a, err := initSolver(file)
+   if err != nil {
+      log.Fatal(err)
    }
-
-	// Initialize the assignment
-	a := assignment.NewAssignment(nVars)
 
 	// Set the proper max db size
 	manage.MaxLearned = db.NGiven() / 3
 
 	// DPLL!
 	g := dpll.Dpll(db, a, branch, manage)
-	if g == nil {
-		if quiet {
-			fmt.Printf("UNSAT\n")
-		} else {
-			fmt.Printf("s UNSAT\n")
-		}
-	} else {
-		ok := db.Verify(g)
-		if ok {
-			if quiet {
-				fmt.Printf("SAT\n")
-			} else {
-				fmt.Printf("c Solution verified\n")
-			}
-		} else {
-			if quiet {
-				fmt.Printf("UNSAT\n")
-			} else {
-				fmt.Printf("ERROR: Solution could not be verified\n")
-			}
-		}
-		if !quiet {
-			fmt.Printf("s SAT\n")
-			fmt.Printf("%s\n", g)
-		}
-	}
+
+   printResults(g, db, !quiet)
+
 	return
 }
 
@@ -119,3 +85,61 @@ func initLogging(s string) error {
 	}
 	return nil
 }
+
+func initSolver(file string) (cdb *db.DB, a *assignment.Assignment, err error) {
+	f, err := os.Open(file)
+	if err != nil {
+		return nil,nil,err
+	}
+
+	// Initialize the db
+	cdb, nVars, err := dimacs.DimacsToDb(f)
+	f.Close()
+	if err != nil {
+		return nil,nil,err
+	}
+
+	cdb.StartLearning()
+
+	// Initialize the assignment
+	a = assignment.NewAssignment(nVars)
+   return
+}
+
+func runBaseSolver() {
+
+}
+
+
+func printResults(g *guess.Guess, cdb *db.DB, verbose bool) {
+   if verbose {
+      printVerboseResults(g, cdb)
+   } else {
+      printQuietResults(g, cdb)
+   }
+}
+
+func printQuietResults(g *guess.Guess, cdb *db.DB) {
+   if g == nil {
+      fmt.Printf("UNSAT\n")
+   } else if !cdb.Verify(g) {
+      fmt.Printf("UNKOWN\n")
+   } else {
+      fmt.Printf("SAT\n")
+   }
+}
+
+func printVerboseResults(g *guess.Guess, cdb *db.DB) {
+	if g == nil {
+      fmt.Printf("s UNSAT\n")
+	} else if !cdb.Verify(g) {
+      fmt.Printf("c ERROR: Solution could not be verified\n")
+      fmt.Printf("s UNKNOWN\n")
+      fmt.Printf("%s\n", g)
+   } else {
+      fmt.Printf("c Solution verified\n")
+      fmt.Printf("s SAT\n")
+      fmt.Printf("%s\n", g)
+	}
+}
+

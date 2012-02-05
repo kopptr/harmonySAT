@@ -1,21 +1,20 @@
 package dimacs
 
 import (
-	"dimacs/scanner"
 	"dpll/db"
 	"errors"
 	"fmt"
 	"io"
+	"scanner"
+   "strings"
 )
 
 func DimacsToDb(r io.Reader) (clauseDB *db.DB, nVar int, err error) {
 	s := scanner.NewScanner(r)
 
-	err = matchDimacsComments(s)
-	if err != nil {
-		return nil, 0, nil
-	}
-	nVar, nClauses, err := matchFormulaInfo(s)
+   pLine := matchDimacsComments(s)
+
+	nVar, nClauses, err := matchFormulaInfo(pLine)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -37,15 +36,21 @@ func matchClauses(r *scanner.Scanner, clauseDB *db.DB) (n int, err error) {
 		for i := r.NextInt(); i != 0; i = r.NextInt() {
 			clause = append(clause, i)
 		}
-		clauseDB.AddEntry(clause)
+		clauseDB.AddEntry(clause, true)
 	}
 	return n, nil
 }
 
 // Matches and returns the formula info.
-func matchFormulaInfo(r *scanner.Scanner) (nVar int, nClauses int, err error) {
+func matchFormulaInfo(s string) (nVar int, nClauses int, err error) {
 	// cnf
-	c := r.Next()
+   r := scanner.NewScanner(strings.NewReader(s))
+   c := r.Next()
+   if c != "p" {
+		return -1, -1, errors.New("First non-comment line does not begin with p.\n")
+	}
+
+	c = r.Next()
 	if c != "cnf" {
 		return -1, -1, errors.New("p line did not have cnf string\n")
 	}
@@ -66,17 +71,12 @@ func matchFormulaInfo(r *scanner.Scanner) (nVar int, nClauses int, err error) {
 }
 
 // Consumes the comment lines at the beginning of the dimacs Reader, if any.
-func matchDimacsComments(r *scanner.Scanner) error {
+func matchDimacsComments(r *scanner.Scanner) string {
 	for {
-		c := r.Next()
-		if c != "c" {
-			if c != "p" {
-				return errors.New("First non-comment line does not begine with a p\n")
-			} else {
-				return nil
-			}
+		c := r.NextLine()
+		if c[0] != 'c' {
+         return c
 		}
-		_ = r.NextLine()
 	}
 	panic("Should never get here")
 }

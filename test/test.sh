@@ -3,8 +3,8 @@
 `go install hsat`
 
 LIST=`ls test/*.cnf`
-BRANCH_RULES="ordered random vsids"
-CDBMS="none queue"
+BRANCH_RULES="ordered random vsids moms"
+CDBMS="none queue berkmin"
 PASS=true
 
 for file in ${LIST}; do

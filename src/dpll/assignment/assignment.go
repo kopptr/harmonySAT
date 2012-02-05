@@ -12,8 +12,8 @@ type Assignment struct {
 
 // A node in the assignment stack.
 type assignmentNode struct {
-	prev     *assignmentNode
-	g        *guess.Guess
+	prev *assignmentNode
+	g    *guess.Guess
 }
 
 // Allocates and returns the empty assignment

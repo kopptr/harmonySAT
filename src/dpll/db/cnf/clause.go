@@ -52,13 +52,15 @@ func (cs *ClauseStats) SetStats(lits []Lit) {
 
 // Given a collection of integers, converts them into a sorted clause with
 // statistics.
-func NewClause(vars []int) (c *Clause) {
+func NewClause(vars []int, shouldSort bool) (c *Clause) {
 	c = new(Clause)
 	c.Lits = make([]Lit, len(vars))
 	for i, v := range vars {
 		c.Lits[i] = NewLit(v)
 	}
-	sort.Sort(c)
+	if shouldSort {
+		sort.Sort(c)
+	}
 	c.SetStats(c.Lits)
 	return
 }

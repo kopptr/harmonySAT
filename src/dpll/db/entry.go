@@ -16,9 +16,9 @@ type Entry struct {
 
 // Creates a new Entry. Initializes the clause data and allocates the watches.
 // Does not add the watches to any data structure.
-func NewEntry(vars []int) (e *Entry) {
+func NewEntry(vars []int, shouldSort bool) (e *Entry) {
 	e = new(Entry)
-	e.Clause = cnf.NewClause(vars)
+	e.Clause = cnf.NewClause(vars, shouldSort)
 	e.Watches[0] = NewWatch()
 	e.Watches[1] = NewWatch()
 	e.Next = nil

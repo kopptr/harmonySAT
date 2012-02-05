@@ -1,0 +1,265 @@
+\documentclass{article}
+\usepackage{geometry}
+\usepackage{morefloats}
+\usepackage{subfig}
+
+\title{Base Solver Measurements}
+\author{Tim Kopp}
+\date{02/01/12}
+
+\begin{document}
+\maketitle
+
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0\\\hline
+Ternary & 11\\\hline
+Horn & 97\\\hline
+Definite & 77\\\hline
+\end{tabular}
+}
+\subfloat[][]{
+\begin{tabular}{|c|c||c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & panic: runtime error: index out of range goroutine 1 [running]: dpll.Dpll(0xf840001960, 0xf840080c70, 0xf84001b018, 0xf84000d160, 0x0, ...) /home/kopptr/harmonySAT/src/dpll/dpll.go:31 +0x1db main.main() /home/kopptr/harmonySAT/src/hsat/main.go:86 +0x937 Command exited with non-zero status 2 0:02.24\\\hline
+ordered & berkmin & panic: runtime error: index out of range goroutine 1 [running]: dpll.Dpll(0xf840001960, 0xf840080c70, 0xf84001b018, 0xf84000d160, 0x0, ...) /home/kopptr/harmonySAT/src/dpll/dpll.go:31 +0x1db main.main() /home/kopptr/harmonySAT/src/hsat/main.go:86 +0x937 Command exited with non-zero status 2 0:02.17\\\hline
+random & queue & panic: runtime error: index out of range goroutine 1 [running]: dpll.Dpll(0xf840001960, 0xf840080c70, 0xf84001b018, 0xf84000d160, 0x0, ...) /home/kopptr/harmonySAT/src/dpll/dpll.go:31 +0x1db main.main() /home/kopptr/harmonySAT/src/hsat/main.go:86 +0x937 Command exited with non-zero status 2 0:00.89\\\hline
+random & berkmin & panic: runtime error: index out of range goroutine 1 [running]: dpll.Dpll(0xf840001960, 0xf840080c70, 0xf84001b018, 0xf84000d160, 0x0, ...) /home/kopptr/harmonySAT/src/dpll/dpll.go:31 +0x1db main.main() /home/kopptr/harmonySAT/src/hsat/main.go:86 +0x937 Command exited with non-zero status 2 0:00.92\\\hline
+vsids & queue & panic: runtime error: index out of range goroutine 1 [running]: dpll.Dpll(0xf840001960, 0xf840080c70, 0xf84001b018, 0xf84000d160, 0x0, ...) /home/kopptr/harmonySAT/src/dpll/dpll.go:31 +0x1db main.main() /home/kopptr/harmonySAT/src/hsat/main.go:86 +0x937 Command exited with non-zero status 2 0:02.29\\\hline
+vsids & berkmin & panic: runtime error: index out of range goroutine 1 [running]: dpll.Dpll(0xf840001960, 0xf840080c70, 0xf84001b018, 0xf84000d160, 0x0, ...) /home/kopptr/harmonySAT/src/dpll/dpll.go:31 +0x1db main.main() /home/kopptr/harmonySAT/src/hsat/main.go:86 +0x937 Command exited with non-zero status 2 0:01.65\\\hline
+moms & queue & panic: runtime error: index out of range goroutine 1 [running]: dpll.Dpll(0xf840001960, 0xf840080c70, 0xf84001b018, 0xf84000d160, 0x0, ...) /home/kopptr/harmonySAT/src/dpll/dpll.go:31 +0x1db main.main() /home/kopptr/harmonySAT/src/hsat/main.go:86 +0x937 Command exited with non-zero status 2 0:03.83\\\hline
+moms & berkmin & panic: runtime error: index out of range goroutine 1 [running]: dpll.Dpll(0xf840001960, 0xf840080c70, 0xf84001b018, 0xf84000d160, 0x0, ...) /home/kopptr/harmonySAT/src/dpll/dpll.go:31 +0x1db main.main() /home/kopptr/harmonySAT/src/hsat/main.go:86 +0x937 Command exited with non-zero status 2 0:01.38\\\hline
+\end{tabular}
+}
+\caption{benchmark/in-use/5cnf_3500_3500_30f1.shuffled.cnf}
+\label{tab:benchmark/in-use/5cnf_3500_3500_30f1.shuffled.cnf}
+\end{table}
+
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0\\\hline
+Ternary & 7\\\hline
+Horn & 197\\\hline
+Definite & 167\\\hline
+\end{tabular}
+}
+\subfloat[][]{
+\begin{tabular}{|c|c||c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & Command terminated by signal 9 19:59.99\\\hline
+ordered & berkmin & Command terminated by signal 9 19:59.99\\\hline
+random & queue & Command terminated by signal 9 19:59.99\\\hline
+random & berkmin & Command terminated by signal 9 19:59.99\\\hline
+vsids & queue & Command terminated by signal 9 19:59.99\\\hline
+vsids & berkmin & Command terminated by signal 9 19:59.99\\\hline
+moms & queue & Command terminated by signal 9 19:59.99\\\hline
+moms & berkmin & Command terminated by signal 9 19:59.99\\\hline
+\end{tabular}
+}
+\caption{benchmark/in-use/5cnf_3900_3900_060.shuffled.cnf}
+\label{tab:benchmark/in-use/5cnf_3900_3900_060.shuffled.cnf}
+\end{table}
+
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0\\\hline
+Ternary & 2\\\hline
+Horn & 656\\\hline
+Definite & 555\\\hline
+\end{tabular}
+}
+\subfloat[][]{
+\begin{tabular}{|c|c||c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & Command terminated by signal 9 20:00.16\\\hline
+ordered & berkmin & Command terminated by signal 9 20:00.00\\\hline
+random & queue & Command terminated by signal 9 19:59.99\\\hline
+random & berkmin & Command terminated by signal 9 19:59.99\\\hline
+vsids & queue & Command terminated by signal 9 19:59.99\\\hline
+vsids & berkmin & Command terminated by signal 9 19:59.99\\\hline
+moms & queue & Command terminated by signal 9 19:59.99\\\hline
+moms & berkmin & Command terminated by signal 9 19:59.99\\\hline
+\end{tabular}
+}
+\caption{benchmark/in-use/5cnf_3900_3900_220.shuffled.cnf}
+\label{tab:benchmark/in-use/5cnf_3900_3900_220.shuffled.cnf}
+\end{table}
+
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0\\\hline
+Ternary & 3\\\hline
+Horn & 361\\\hline
+Definite & 287\\\hline
+\end{tabular}
+}
+\subfloat[][]{
+\begin{tabular}{|c|c||c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & Command terminated by signal 9 19:59.99\\\hline
+ordered & berkmin & Command terminated by signal 9 19:59.99\\\hline
+random & queue & Command terminated by signal 9 19:59.99\\\hline
+random & berkmin & Command terminated by signal 9 19:59.99\\\hline
+vsids & queue & Command terminated by signal 9 19:59.99\\\hline
+vsids & berkmin & Command terminated by signal 9 19:59.99\\\hline
+moms & queue & Command terminated by signal 9 19:59.99\\\hline
+moms & berkmin & Command terminated by signal 9 19:59.99\\\hline
+\end{tabular}
+}
+\caption{benchmark/in-use/5cnf_4300_4300_110.shuffled.cnf}
+\label{tab:benchmark/in-use/5cnf_4300_4300_110.shuffled.cnf}
+\end{table}
+
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0\\\hline
+Ternary & 1\\\hline
+Horn & 563\\\hline
+Definite & 450\\\hline
+\end{tabular}
+}
+\subfloat[][]{
+\begin{tabular}{|c|c||c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & Command terminated by signal 9 19:59.99\\\hline
+ordered & berkmin & Command terminated by signal 9 19:59.99\\\hline
+random & queue & Command terminated by signal 9 19:59.99\\\hline
+random & berkmin & Command terminated by signal 9 19:59.99\\\hline
+vsids & queue & Command terminated by signal 9 19:59.99\\\hline
+vsids & berkmin & Command terminated by signal 9 19:59.99\\\hline
+moms & queue & Command terminated by signal 9 19:59.99\\\hline
+moms & berkmin & Command terminated by signal 9 19:59.99\\\hline
+\end{tabular}
+}
+\caption{benchmark/in-use/5cnf_4300_4300_170.shuffled.cnf}
+\label{tab:benchmark/in-use/5cnf_4300_4300_170.shuffled.cnf}
+\end{table}
+
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0\\\hline
+Ternary & 0\\\hline
+Horn & 105\\\hline
+Definite & 92\\\hline
+\end{tabular}
+}
+\subfloat[][]{
+\begin{tabular}{|c|c||c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & 0:00.31\\\hline
+ordered & berkmin & 0:00.31\\\hline
+random & queue & 0:00.11\\\hline
+random & berkmin & 0:00.10\\\hline
+vsids & queue & 0:00.23\\\hline
+vsids & berkmin & 0:00.24\\\hline
+moms & queue & 0:03.83\\\hline
+moms & berkmin & 0:00.23\\\hline
+\end{tabular}
+}
+\caption{benchmark/in-use/7cnf20_90000_90000_7.shuffled.cnf}
+\label{tab:benchmark/in-use/7cnf20_90000_90000_7.shuffled.cnf}
+\end{table}
+
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 1001\\\hline
+Ternary & 0\\\hline
+Horn & 754\\\hline
+Definite & 513\\\hline
+\end{tabular}
+}
+\subfloat[][]{
+\begin{tabular}{|c|c||c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & Command terminated by signal 9 20:00.07\\\hline
+ordered & berkmin & Command terminated by signal 9 19:59.99\\\hline
+random & queue & Command terminated by signal 9 19:59.99\\\hline
+random & berkmin & 1:05.11\\\hline
+vsids & queue & Command terminated by signal 9 19:59.99\\\hline
+vsids & berkmin & Command terminated by signal 9 19:59.99\\\hline
+moms & queue & Command terminated by signal 9 19:59.99\\\hline
+moms & berkmin & Command terminated by signal 9 19:59.99\\\hline
+\end{tabular}
+}
+\caption{benchmark/in-use/bart17.shuffled.cnf}
+\label{tab:benchmark/in-use/bart17.shuffled.cnf}
+\end{table}
+
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 1452\\\hline
+Ternary & 0\\\hline
+Horn & 1093\\\hline
+Definite & 723\\\hline
+\end{tabular}
+}
+\subfloat[][]{
+\begin{tabular}{|c|c||c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & Command terminated by signal 9 19:59.99\\\hline
+ordered & berkmin & Command terminated by signal 9 19:59.99\\\hline
+random & queue & Command terminated by signal 9 19:59.99\\\hline
+random & berkmin & Command terminated by signal 9 19:59.99\\\hline
+vsids & queue & Command terminated by signal 9 19:59.99\\\hline
+vsids & berkmin & Command terminated by signal 9 19:59.99\\\hline
+moms & queue & Command terminated by signal 9 19:59.99\\\hline
+moms & berkmin & Command terminated by signal 9 19:59.99\\\hline
+\end{tabular}
+}
+\caption{benchmark/in-use/homer16.shuffled.cnf}
+\label{tab:benchmark/in-use/homer16.shuffled.cnf}
+\end{table}
+
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0\\\hline
+Ternary & 264\\\hline
+Horn & 132\\\hline
+Definite & 99\\\hline
+\end{tabular}
+}
+\subfloat[][]{
+\begin{tabular}{|c|c||c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & Command terminated by signal 9 19:59.99\\\hline
+ordered & berkmin & Command terminated by signal 9 19:59.99\\\hline
+random & queue & Command terminated by signal 9 19:59.99\\\hline
+random & berkmin & 0:00.01\\\hline
+vsids & queue & Command terminated by signal 9 19:59.99\\\hline
+vsids & berkmin & Command terminated by signal 9 19:59.99\\\hline
+moms & queue & Command terminated by signal 9 19:59.99\\\hline
+moms & berkmin & Command terminated by signal 9 19:59.99\\\hline
+\end{tabular}
+}
+\caption{benchmark/in-use/urquhart3_25bis.shuffled.cnf}
+\label{tab:benchmark/in-use/urquhart3_25bis.shuffled.cnf}
+\end{table}
+
+\end{document}

@@ -68,8 +68,6 @@ func benchmarkFormula(formulaFile string, texFile string, jsonFile string) {
       }
    }
    writeTableFooter(tex, formulaFile)
-   fmt.Printf("best config: %s, %s\n", bestBr, bestDbms)
-   fmt.Printf("time: %s", bestDuration)
 
    // Write the json
    db, _, err := initSolver(file)

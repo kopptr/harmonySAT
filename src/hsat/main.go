@@ -66,10 +66,10 @@ func main() {
       fmt.Printf("%s\n", a)
       return
    } else if benchmark {
-      benchmarkFormula(file, "tex.tex", "gob.gob")
+      benchmarkFormula(file, "output.tex", "analysis.json")
       return
    } else if adaptive {
-      runAdaptiveSolver(file)
+      runAdaptiveSolver(file, quiet)
    } else {
       runNormalSolver(file, branch, manage, quiet)
    }
@@ -107,18 +107,24 @@ func runBench(file string, b dpll.BranchRule, d db.ClauseDBMS, timeout chan bool
    return g
 }
 
-func runAdaptiveSolver(file string) {
+func runAdaptiveSolver(file string, quiet bool) {
    // Initialize the cdb and assignment
-   db, _, err := initSolver(file)
+   db, a, err := initSolver(file)
    if err != nil {
       log.Fatal(err)
    }
 	// Set the proper max db size
 	manage.MaxLearned = db.NGiven() / 3
-   adapt := config.NewAdapter("gob.gob")
+   // Read the data from the file and make the adapter
+   adapt := config.NewAdapter("analysis.json")
+   // Use the adapter to set the initial state
+   b := dpll.NewBrancher()
+   m := db.NewManager()
+   adapt.Reconfigure(db,b,m)
 
-   fmt.Printf("\njunk:\n%s\n", adapt)
+   g := dpll.Dpll(db,a,b,m,adapt)
 
+   printResults(g, db, !quiet)
 }
 
 func runNormalSolver(file string, b *dpll.Brancher, m *db.Manager, quiet bool) {

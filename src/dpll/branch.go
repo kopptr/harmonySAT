@@ -23,6 +23,7 @@ var branchFuncs = [...]func(*db.DB, *assignment.Assignment) *cnf.Lit{ordered, ra
 
 type Brancher struct {
 	Decide func(*db.DB, *assignment.Assignment) *cnf.Lit
+   rule BranchRule
 }
 
 func NewBrancher() (b *Brancher) {
@@ -33,6 +34,7 @@ func NewBrancher() (b *Brancher) {
 
 func (b *Brancher) SetRule(r BranchRule) {
 	b.Decide = branchFuncs[r]
+   b.rule = r
 }
 
 func ordered(db *db.DB, a *assignment.Assignment) (l *cnf.Lit) {
@@ -114,7 +116,18 @@ func moms(db *db.DB, a *assignment.Assignment) (l *cnf.Lit) {
 
 // Brancher needs to satisfy the flag.Value interface
 func (b Brancher) String() string {
-	return ""
+   return b.rule.String()
+}
+
+func (b BranchRule) String() (s string) {
+   switch b {
+   case Ordered: s = "ordered"
+   case Random: s = "random"
+   case Vsids: s = "vsids"
+   case Moms: s = "moms"
+   default: s = "unimplemented"
+   }
+   return
 }
 
 func (b *Brancher) Set(s string) error {

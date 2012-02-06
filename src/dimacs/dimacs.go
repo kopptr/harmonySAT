@@ -2,6 +2,8 @@ package dimacs
 
 import (
 	"dpll/db"
+	"dpll/assignment"
+   "dpll/db/cnf"
 	"errors"
 	"fmt"
 	"io"
@@ -9,34 +11,45 @@ import (
    "strings"
 )
 
-func DimacsToDb(r io.Reader) (clauseDB *db.DB, nVar int, err error) {
+func DimacsToDb(r io.Reader) (clauseDB *db.DB, a *assignment.Assignment, err error) {
 	s := scanner.NewScanner(r)
 
    pLine := matchDimacsComments(s)
 
 	nVar, nClauses, err := matchFormulaInfo(pLine)
 	if err != nil {
-		return nil, 0, err
+		return nil, nil, err
 	}
 	clauseDB = db.NewDB(nVar)
-	n, err := matchClauses(s, clauseDB)
+   a = assignment.NewAssignment(nVar)
+	n, err := matchClauses(s, clauseDB, a)
 	if err != nil {
-		return nil, 0, err
+		return nil, nil, err
 	} else if n != nClauses {
-		return nil, 0, errors.New(fmt.Sprintf("Read %d/%d clauses.", n, nClauses))
+		return nil, nil, errors.New(fmt.Sprintf("Read %d/%d clauses.", n, nClauses))
 	}
 
 	return
 }
 
 // Matches all of the clauses in the database, and inserts them.
-func matchClauses(r *scanner.Scanner, clauseDB *db.DB) (n int, err error) {
+func matchClauses(r *scanner.Scanner, clauseDB *db.DB, a *assignment.Assignment) (n int, err error) {
 	for n = 0; r.HasNextLine(); n++ {
 		clause := []int{}
 		for i := r.NextInt(); i != 0; i = r.NextInt() {
 			clause = append(clause, i)
 		}
-		clauseDB.AddEntry(clause, true)
+      // Add unit clauses directly to assignment
+      if len(clause) == 1 {
+         if clause[0] < 1 {
+            a.Guess().Set(uint((clause[0]*-1)), cnf.Neg)
+         } else {
+            a.Guess().Set(uint(clause[0]), cnf.Pos)
+         }
+         n--
+      } else {
+         clauseDB.AddEntry(clause, true)
+      }
 	}
 	return n, nil
 }

@@ -1,7 +1,6 @@
 package main
 
 import (
-   "config"
 	"dimacs"
 	"dpll"
 	"dpll/assignment"
@@ -84,7 +83,7 @@ func analyzeFormula(file string) string {
       log.Fatal(err)
    }
 
-   return config.AnalyzeTexString(db)
+   return dpll.AnalyzeTexString(db)
 }
 
 
@@ -109,22 +108,22 @@ func runBench(file string, b dpll.BranchRule, d db.ClauseDBMS, timeout chan bool
 
 func runAdaptiveSolver(file string, quiet bool) {
    // Initialize the cdb and assignment
-   db, a, err := initSolver(file)
+   cdb, a, err := initSolver(file)
    if err != nil {
       log.Fatal(err)
    }
 	// Set the proper max db size
-	manage.MaxLearned = db.NGiven() / 3
+	manage.MaxLearned = cdb.NGiven() / 3
    // Read the data from the file and make the adapter
-   adapt := config.NewAdapter("analysis.json")
+   adapt := dpll.NewAdapter("analysis.json")
    // Use the adapter to set the initial state
    b := dpll.NewBrancher()
    m := db.NewManager()
-   adapt.Reconfigure(db,b,m)
+   adapt.Reconfigure(cdb,b,m)
 
-   g := dpll.Dpll(db,a,b,m,adapt)
+   g := dpll.Dpll(cdb,a,b,m,adapt)
 
-   printResults(g, db, !quiet)
+   printResults(g, cdb, !quiet)
 }
 
 func runNormalSolver(file string, b *dpll.Brancher, m *db.Manager, quiet bool) {
@@ -137,7 +136,7 @@ func runNormalSolver(file string, b *dpll.Brancher, m *db.Manager, quiet bool) {
 	manage.MaxLearned = db.NGiven() / 3
 
    // Run the Dpll!
-	g := dpll.Dpll(db, a, b, m)
+	g := dpll.Dpll(db, a, b, m, nil)
 
    printResults(g, db, !quiet)
 }
@@ -163,7 +162,7 @@ func initSolver(file string) (cdb *db.DB, a *assignment.Assignment, err error) {
 	}
 
 	// Initialize the db
-	cdb, nVars, err := dimacs.DimacsToDb(f)
+	cdb, a, err = dimacs.DimacsToDb(f)
 	f.Close()
 	if err != nil {
 		return nil,nil,err
@@ -171,8 +170,6 @@ func initSolver(file string) (cdb *db.DB, a *assignment.Assignment, err error) {
 
 	cdb.StartLearning()
 
-	// Initialize the assignment
-	a = assignment.NewAssignment(nVars)
    return
 }
 

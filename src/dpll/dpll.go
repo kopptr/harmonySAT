@@ -12,7 +12,7 @@ type dpllStackNode struct {
 	Flipped bool
 }
 
-func Dpll(cdb *db.DB, a *assignment.Assignment, b *Brancher, m *db.Manager) *guess.Guess {
+func Dpll(cdb *db.DB, a *assignment.Assignment, b *Brancher, m *db.Manager, adapt *Adapter) *guess.Guess {
 
 	nVar := a.Guess().Len()
 	aStack := make([]dpllStackNode, nVar)
@@ -40,6 +40,11 @@ func Dpll(cdb *db.DB, a *assignment.Assignment, b *Brancher, m *db.Manager) *gue
 				aStack[top].l.Flip()
 				aStack[top].Flipped = true
 				a.PushAssign(aStack[top].l.Val, aStack[top].l.Pol)
+
+            // Reconfigure if neccessary
+            if adapt != nil {
+               adapt.Reconfigure(cdb, b, m)
+            }
 			} else if status == db.Sat {
 				return a.Guess()
 			} else {

@@ -8,7 +8,6 @@ import (
    "fmt"
    "log"
    "encoding/json"
-   "config"
 )
 
 
@@ -17,7 +16,7 @@ func benchmarkFormula(formulaFile string, texFile string, jsonFile string) {
       bestDuration time.Duration
       bestBr dpll.BranchRule
       bestDbms db.ClauseDBMS
-      e config.Entry
+      e dpll.Entry
    )
    branches := [...]dpll.BranchRule{dpll.Ordered, dpll.Random, dpll.Vsids, dpll.Moms}
    dbms := [...]db.ClauseDBMS{db.Queue, db.BerkMin}
@@ -74,7 +73,7 @@ func benchmarkFormula(formulaFile string, texFile string, jsonFile string) {
    if err != nil {
       log.Fatal(err)
    }
-   e.Proportions = *(config.NewProportions(db))
+   e.Proportions = *(dpll.NewProportions(db))
    e.Config.Dbms = bestDbms
    e.Config.Branch = bestBr
    jsonE.Encode(e)

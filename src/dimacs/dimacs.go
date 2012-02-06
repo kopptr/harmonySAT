@@ -1,27 +1,27 @@
 package dimacs
 
 import (
-	"dpll/db"
 	"dpll/assignment"
-   "dpll/db/cnf"
+	"dpll/db"
+	"dpll/db/cnf"
 	"errors"
 	"fmt"
 	"io"
+	"strings"
 	"scanner"
-   "strings"
 )
 
 func DimacsToDb(r io.Reader) (clauseDB *db.DB, a *assignment.Assignment, err error) {
 	s := scanner.NewScanner(r)
 
-   pLine := matchDimacsComments(s)
+	pLine := matchDimacsComments(s)
 
 	nVar, nClauses, err := matchFormulaInfo(pLine)
 	if err != nil {
 		return nil, nil, err
 	}
 	clauseDB = db.NewDB(nVar)
-   a = assignment.NewAssignment(nVar)
+	a = assignment.NewAssignment(nVar)
 	n, err := matchClauses(s, clauseDB, a)
 	if err != nil {
 		return nil, nil, err
@@ -39,17 +39,17 @@ func matchClauses(r *scanner.Scanner, clauseDB *db.DB, a *assignment.Assignment)
 		for i := r.NextInt(); i != 0; i = r.NextInt() {
 			clause = append(clause, i)
 		}
-      // Add unit clauses directly to assignment
-      if len(clause) == 1 {
-         if clause[0] < 1 {
-            a.Guess().Set(uint((clause[0]*-1)), cnf.Neg)
-         } else {
-            a.Guess().Set(uint(clause[0]), cnf.Pos)
-         }
-         n--
-      } else {
-         clauseDB.AddEntry(clause, true)
-      }
+		// Add unit clauses directly to assignment
+		if len(clause) == 1 {
+			if clause[0] < 1 {
+				a.Guess().Set(uint((clause[0] * -1)), cnf.Neg)
+			} else {
+				a.Guess().Set(uint(clause[0]), cnf.Pos)
+			}
+			n--
+		} else {
+			clauseDB.AddEntry(clause, true)
+		}
 	}
 	return n, nil
 }
@@ -57,9 +57,9 @@ func matchClauses(r *scanner.Scanner, clauseDB *db.DB, a *assignment.Assignment)
 // Matches and returns the formula info.
 func matchFormulaInfo(s string) (nVar int, nClauses int, err error) {
 	// cnf
-   r := scanner.NewScanner(strings.NewReader(s))
-   c := r.Next()
-   if c != "p" {
+	r := scanner.NewScanner(strings.NewReader(s))
+	c := r.Next()
+	if c != "p" {
 		return -1, -1, errors.New("First non-comment line does not begin with p.\n")
 	}
 
@@ -88,7 +88,7 @@ func matchDimacsComments(r *scanner.Scanner) string {
 	for {
 		c := r.NextLine()
 		if c[0] != 'c' {
-         return c
+			return c
 		}
 	}
 	panic("Should never get here")

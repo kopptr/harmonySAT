@@ -1,6 +1,7 @@
 package dpll
 
 import (
+   "time"
 	"dpll/assignment"
 	"dpll/assignment/guess"
 	"dpll/db"
@@ -56,18 +57,13 @@ func Dpll(cdb *db.DB, a *assignment.Assignment, b *Brancher, m *db.Manager, adap
 }
 
 
-func DpllTimeout(cdb *db.DB, a *assignment.Assignment, b *Brancher, m *db.Manager, timeout chan bool) *guess.Guess {
+func DpllTimeout(cdb *db.DB, a *assignment.Assignment, b *Brancher, m *db.Manager, timeout <-chan time.Time) *guess.Guess {
 
 	nVar := a.Guess().Len()
 	aStack := make([]dpllStackNode, nVar)
 	top := -1
 
 	for {
-      select {
-      case <-timeout:
-         return nil
-      default:
-      }
 
 		top++
 		aStack[top].l = b.Decide(cdb, a)
@@ -75,6 +71,12 @@ func DpllTimeout(cdb *db.DB, a *assignment.Assignment, b *Brancher, m *db.Manage
 		a.PushAssign(aStack[top].l.Val, aStack[top].l.Pol)
 
 		for {
+         select {
+         case <-timeout:
+            return nil
+         default:
+         }
+
 			status := cdb.Bcp(a.Guess(), *aStack[top].l, m)
 			if status == db.Conflict {
 				// BackTrack

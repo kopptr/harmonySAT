@@ -87,25 +87,6 @@ func analyzeFormula(file string) string {
 }
 
 
-func runBench(file string, b dpll.BranchRule, d db.ClauseDBMS, timeout chan bool) *guess.Guess {
-   // Prepare the specific run
-   br := dpll.NewBrancher()
-   br.SetRule(b)
-   ma := db.NewManager()
-   ma.SetStrat(d)
-
-   // Initialize the cdb and assignment
-   cdb, a, err := initSolver(file)
-   if err != nil {
-      log.Fatal(err)
-   }
-   // Set the proper max db size
-   ma.MaxLearned = cdb.NGiven() / 3
-
-   g := dpll.DpllTimeout(cdb, a, br, ma, timeout)
-   return g
-}
-
 func runAdaptiveSolver(file string, quiet bool) {
    // Initialize the cdb and assignment
    cdb, a, err := initSolver(file)

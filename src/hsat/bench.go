@@ -8,6 +8,8 @@ import (
    "fmt"
    "log"
    "encoding/json"
+   "dpll/assignment/guess"
+   "runtime"
 )
 
 
@@ -40,19 +42,10 @@ func benchmarkFormula(formulaFile string, texFile string, jsonFile string) {
 
    for _,b := range branches {
       for _, m := range dbms {
-         // Start the timeout checker
-         timeout := make(chan bool, 1)
-         go func() {
-            // 20 minutes
-            time.Sleep(1200e9)
-            timeout <- true
-         }()
-
          // Run the bench
          before := time.Now()
-         g := runBench(file, b, m, timeout)
+         g := runBench(file, b, m)
          after := time.Now()
-
          if g == nil {
             fmt.Fprintf(tex, "%s & %s & TO\\\\\\hline\n",b,m)
          } else {
@@ -69,14 +62,16 @@ func benchmarkFormula(formulaFile string, texFile string, jsonFile string) {
    writeTableFooter(tex, formulaFile)
 
    // Write the json
-   db, _, err := initSolver(file)
-   if err != nil {
-      log.Fatal(err)
+   if bestDbms != 0 {
+      db, _, err := initSolver(file)
+      if err != nil {
+         log.Fatal(err)
+      }
+      e.Proportions = *(dpll.NewProportions(db))
+      e.Config.Dbms = bestDbms
+      e.Config.Branch = bestBr
+      jsonE.Encode(e)
    }
-   e.Proportions = *(dpll.NewProportions(db))
-   e.Config.Dbms = bestDbms
-   e.Config.Branch = bestBr
-   jsonE.Encode(e)
 
 }
 
@@ -98,3 +93,27 @@ func writeTableFooter(tex *os.File, fName string) {
    fmt.Fprintf(tex,"\\caption{%s}\n", fName)
    fmt.Fprintf(tex,"\\end{table}\n")
 }
+
+func runBench(file string, b dpll.BranchRule, d db.ClauseDBMS) *guess.Guess {
+
+   runtime.GOMAXPROCS(3)
+   timeout := time.After(20*time.Minute)
+
+   // Prepare the specific run
+   br := dpll.NewBrancher()
+   br.SetRule(b)
+   ma := db.NewManager()
+   ma.SetStrat(d)
+
+   // Initialize the cdb and assignment
+   cdb, a, err := initSolver(file)
+   if err != nil {
+      log.Fatal(err)
+   }
+   // Set the proper max db size
+   ma.MaxLearned = cdb.NGiven() / 3
+
+   g := dpll.DpllTimeout(cdb, a, br, ma, timeout)
+   return g
+}
+

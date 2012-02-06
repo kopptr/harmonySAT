@@ -7,12 +7,12 @@ import (
    "os"
    "fmt"
    "log"
-   "encoding/gob"
+   "encoding/json"
    "config"
 )
 
 
-func benchmarkFormula(formulaFile string, texFile string, gobFile string) {
+func benchmarkFormula(formulaFile string, texFile string, jsonFile string) {
    var (
       bestDuration time.Duration
       bestBr dpll.BranchRule
@@ -26,14 +26,14 @@ func benchmarkFormula(formulaFile string, texFile string, gobFile string) {
    if err != nil {
       log.Fatal(err)
    }
-   gobWriter, err := os.OpenFile(gobFile, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0664)
+   jsonWriter, err := os.OpenFile(jsonFile, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0664)
    if err != nil {
       log.Fatal(err)
    }
-   defer gobWriter.Close()
+   defer jsonWriter.Close()
    defer tex.Close()
 
-   gobE := gob.NewEncoder(gobWriter)
+   jsonE := json.NewEncoder(jsonWriter)
 
    writeTableHeader(tex)
    fmt.Fprintf(tex,analyzeFormula(formulaFile))
@@ -71,7 +71,7 @@ func benchmarkFormula(formulaFile string, texFile string, gobFile string) {
    fmt.Printf("best config: %s, %s\n", bestBr, bestDbms)
    fmt.Printf("time: %s", bestDuration)
 
-   // Write the gob
+   // Write the json
    db, _, err := initSolver(file)
    if err != nil {
       log.Fatal(err)
@@ -79,7 +79,7 @@ func benchmarkFormula(formulaFile string, texFile string, gobFile string) {
    e.Proportions = *(config.NewProportions(db))
    e.Config.Dbms = bestDbms
    e.Config.Branch = bestBr
-   gobE.Encode(e)
+   jsonE.Encode(e)
 
 }
 

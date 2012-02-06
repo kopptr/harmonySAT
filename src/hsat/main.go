@@ -37,8 +37,9 @@ func main() {
 	flag.StringVar(&logFile, "log", "", "Log output file")
 	flag.StringVar(&cpuprof, "cpuprofile", "", "write cpu profile to file")
 	flag.BoolVar(&quiet, "q", false, "True for quiet output. States \"SAT\" or \"UNSAT\"")
-	flag.BoolVar(&analyze, "a", false, "True for analysis output. If true, will not actually run solver.")
+	flag.BoolVar(&analyze, "e", false, "True for examination output. If true, will not actually run solver.")
 	flag.BoolVar(&benchmark, "b", false, "True for benchmark output.")
+	flag.BoolVar(&adaptive, "a", false, "True for benchmark output.")
 	flag.Var(branch, "branch", "DPLL branching rule")
 	flag.Var(manage, "dbms", "DPLL clause database management strategy")
 	flag.Parse()
@@ -114,6 +115,9 @@ func runAdaptiveSolver(file string) {
    }
 	// Set the proper max db size
 	manage.MaxLearned = db.NGiven() / 3
+   adapt := config.NewAdapter("gob.gob")
+
+   fmt.Printf("\njunk:\n%s\n", adapt)
 
 }
 

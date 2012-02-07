@@ -33,6 +33,10 @@ func (m *Manager) SetStrat(d ClauseDBMS) {
    m.strat = d
 }
 
+func (m *Manager) Strat() ClauseDBMS {
+   return m.strat
+}
+
 // Performs the basic management that is not specific to any particular
 // strategy, for instance, dividing the counts in the VSIDS counter
 func (m *Manager) basic(db *DB, g *guess.Guess) {

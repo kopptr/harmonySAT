@@ -19,11 +19,19 @@ type Proportions struct {
 
 func NewProportions(cdb *db.DB) *Proportions {
    p := new(Proportions)
-   total := float64(cdb.NLearned() + cdb.NGiven())
-   p.Binary = float64(cdb.Binary)/total
-   p.Ternary = float64(cdb.Ternary)/total
-   p.Horn = float64(cdb.Horn)/total
-   p.Definite = float64(cdb.Definite)/total
+   if cdb.IsLearning() {
+      total := float64(cdb.NLearned())
+      p.Binary = float64(cdb.LStats.Binary)/total
+      p.Ternary = float64(cdb.LStats.Ternary)/total
+      p.Horn = float64(cdb.LStats.Horn)/total
+      p.Definite = float64(cdb.LStats.Definite)/total
+   } else {
+      total := float64(cdb.NGiven())
+      p.Binary = float64(cdb.GStats.Binary)/total
+      p.Ternary = float64(cdb.GStats.Ternary)/total
+      p.Horn = float64(cdb.GStats.Horn)/total
+      p.Definite = float64(cdb.GStats.Definite)/total
+   }
    return p
 }
 
@@ -39,6 +47,7 @@ type Entry struct {
 
 type Adapter struct {
    entries  []Entry
+   nChanges int
 }
 
 func NewAdapter(jsonFile string) *Adapter {
@@ -57,6 +66,8 @@ func NewAdapter(jsonFile string) *Adapter {
       }
    }
 
+   a.nChanges = -1 // The first choice doesn't count as a change.
+
    return a
 }
 
@@ -67,7 +78,13 @@ func (a *Adapter) Reconfigure(cdb *db.DB, b *Brancher, m *db.Manager) {
       bestI = -1
       bestD = math.Inf(1) // +infty, all distances should be smaller
       d float64
+      originalB = b.Rule()
+      originalM = m.Strat()
    )
+
+   if cdb.NLearned() < 3 {
+      return
+   }
 
    // Find the best match
    for i := range a.entries {
@@ -79,9 +96,17 @@ func (a *Adapter) Reconfigure(cdb *db.DB, b *Brancher, m *db.Manager) {
    }
 
    // Apply it
-   m.SetStrat(a.entries[bestI].Config.Dbms)
-   b.SetRule(a.entries[bestI].Config.Branch)
+   if originalM != a.entries[bestI].Config.Dbms || originalB != a.entries[bestI].Config.Branch {
+      m.SetStrat(a.entries[bestI].Config.Dbms)
+      b.SetRule(a.entries[bestI].Config.Branch)
+      fmt.Printf("Changed rules from {%s,%s} to {%s,%s}\n", originalB,originalM,b.Rule(),m.Strat())
+      a.nChanges++
+   }
    return
+}
+
+func (a *Adapter) NChanges() int {
+   return a.nChanges
 }
 
 
@@ -104,4 +129,10 @@ func AnalyzeTexString(cdb *db.DB) string {
 	fmt.Fprintf(buffer, "Definite & %f\\\\\\hline\n", p.Definite)
 	fmt.Fprintf(buffer, "\\end{tabular}")
 	return string(buffer.Bytes())
+}
+
+func (p Proportions) String() string {
+   buffer := bytes.NewBufferString("")
+   fmt.Fprintf(buffer, "Binary: %f, Ternary: %f, Horn: %f, Definite: %f\n", p.Binary, p.Ternary, p.Horn, p.Definite)
+   return string(buffer.Bytes())
 }

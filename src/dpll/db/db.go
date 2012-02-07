@@ -17,7 +17,8 @@ type Stats struct {
 
 // A database of clauses.
 type DB struct {
-	Stats
+	GStats     Stats
+	LStats     Stats
 	Counts     *LitCounts
 	Given      *Entry
 	Learned    *Entry
@@ -32,10 +33,10 @@ func (db *DB) AnalyzeTexString() string {
 	buffer := bytes.NewBufferString("")
 	fmt.Fprintf(buffer, "\\begin{tabular}{|c|c|}\\hline\n")
 	fmt.Fprintf(buffer, "Type & Number\\\\\\hline\\hline\n")
-	fmt.Fprintf(buffer, "Binary & %d\\\\\\hline\n", db.Binary)
-	fmt.Fprintf(buffer, "Ternary & %d\\\\\\hline\n", db.Ternary)
-	fmt.Fprintf(buffer, "Horn & %d\\\\\\hline\n", db.Horn)
-	fmt.Fprintf(buffer, "Definite & %d\\\\\\hline\n", db.Definite)
+	fmt.Fprintf(buffer, "Binary & %d\\\\\\hline\n", db.GStats.Binary)
+	fmt.Fprintf(buffer, "Ternary & %d\\\\\\hline\n", db.GStats.Ternary)
+	fmt.Fprintf(buffer, "Horn & %d\\\\\\hline\n", db.GStats.Horn)
+	fmt.Fprintf(buffer, "Definite & %d\\\\\\hline\n", db.GStats.Definite)
 	fmt.Fprintf(buffer, "\\end{tabular}\n")
 	return string(buffer.Bytes())
 }
@@ -50,7 +51,8 @@ func (db *DB) NGiven() uint {
 
 func NewDB(nVars int) (db *DB) {
 	db = new(DB)
-	db.Binary, db.Ternary, db.Horn, db.Definite = 0, 0, 0, 0
+	db.GStats.Binary, db.GStats.Ternary, db.GStats.Horn, db.GStats.Definite = 0, 0, 0, 0
+	db.LStats.Binary, db.LStats.Ternary, db.LStats.Horn, db.LStats.Definite = 0, 0, 0, 0
 	db.Learned, db.Given = nil, nil
 	db.nLearned, db.nGiven = 0, 0
 	db.WatchLists = make([]*WatchList, 2*nVars)
@@ -114,18 +116,33 @@ func (db *DB) AddEntry(vars []int, shouldSort bool) {
 	}
 
 	// Update DB stats
-	if e.IsBinary() {
-		db.Binary++
-	}
-	if e.IsTernary() {
-		db.Ternary++
-	}
-	if e.IsHorn() {
-		db.Horn++
-	}
-	if e.IsDefinite() {
-		db.Definite++
-	}
+   if db.learning {
+      if e.IsBinary() {
+         db.LStats.Binary++
+      }
+      if e.IsTernary() {
+         db.LStats.Ternary++
+      }
+      if e.IsHorn() {
+         db.LStats.Horn++
+      }
+      if e.IsDefinite() {
+         db.LStats.Definite++
+      }
+   } else {
+      if e.IsBinary() {
+         db.GStats.Binary++
+      }
+      if e.IsTernary() {
+         db.GStats.Ternary++
+      }
+      if e.IsHorn() {
+         db.GStats.Horn++
+      }
+      if e.IsDefinite() {
+         db.GStats.Definite++
+      }
+   }
 
 	// Update Lit Counts
 	db.Counts.Add(vars)
@@ -164,16 +181,16 @@ func (db *DB) DelEntry(e *Entry) {
 	}
 	// Update stats
 	if e.IsBinary() {
-		db.Binary--
+		db.LStats.Binary--
 	}
 	if e.IsTernary() {
-		db.Ternary--
+		db.LStats.Ternary--
 	}
 	if e.IsHorn() {
-		db.Horn--
+		db.LStats.Horn--
 	}
 	if e.IsDefinite() {
-		db.Definite--
+		db.LStats.Definite--
 	}
 	// The caller just needs to get rid of his reference to the object
 	// i.e. set e = nil, then the gc should get it.
@@ -189,6 +206,10 @@ func (db *DB) GetWatchList(l cnf.Lit) *WatchList {
 
 func (db *DB) StartLearning() {
 	db.learning = true
+}
+
+func (db *DB) IsLearning() bool {
+	return db.learning
 }
 
 func (db *DB) String() string {

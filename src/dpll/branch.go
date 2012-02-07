@@ -37,6 +37,10 @@ func (b *Brancher) SetRule(r BranchRule) {
    b.rule = r
 }
 
+func (b *Brancher) Rule() BranchRule {
+   return b.rule
+}
+
 func ordered(db *db.DB, a *assignment.Assignment) (l *cnf.Lit) {
 	// find the first in-order unassigned literal
 	for i := uint(1); i <= a.Len(); i++ {

@@ -1,0 +1,219 @@
+\documentclass{article}
+\usepackage{geometry}
+\usepackage{morefloats}
+\usepackage{subfig}
+
+\title{Base Solver Measurements}
+\author{Tim Kopp}
+\date{02/06/12}
+
+\begin{document}
+\maketitle
+
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0.910474\\\hline
+Ternary & 0.089526\\\hline
+Horn & 0.910474\\\hline
+Definite & 0.000000\\\hline
+\end{tabular}}
+\subfloat[][]{
+\begin{tabular}{|c|c|c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & 12.575ms\\\hline
+ordered & berkmin & 13.67ms\\\hline
+random & queue & 10.714754s\\\hline
+random & berkmin & 435.832ms\\\hline
+vsids & queue & 13.229ms\\\hline
+vsids & berkmin & 11.91ms\\\hline
+moms & queue & 1.299712s\\\hline
+moms & berkmin & 240.878ms\\\hline
+\end{tabular}
+}
+\caption{benchmark/in-use/flat100-3.cnf}
+\end{table}
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0.910474\\\hline
+Ternary & 0.089526\\\hline
+Horn & 0.910474\\\hline
+Definite & 0.000000\\\hline
+\end{tabular}}
+\subfloat[][]{
+\begin{tabular}{|c|c|c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & 12.585ms\\\hline
+ordered & berkmin & 13.384ms\\\hline
+random & queue & 2.242143s\\\hline
+random & berkmin & 653.616ms\\\hline
+vsids & queue & 3m58.676514s\\\hline
+vsids & berkmin & 23.503ms\\\hline
+moms & queue & 20.203ms\\\hline
+moms & berkmin & 43.049ms\\\hline
+\end{tabular}
+}
+\caption{benchmark/in-use/flat100-56.cnf}
+\end{table}
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0.781742\\\hline
+Ternary & 0.208814\\\hline
+Horn & 0.875131\\\hline
+Definite & 0.195173\\\hline
+\end{tabular}}
+\subfloat[][]{
+\begin{tabular}{|c|c|c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & 10.403ms\\\hline
+ordered & berkmin & 9.819ms\\\hline
+random & queue & 11.171ms\\\hline
+random & berkmin & 10.017ms\\\hline
+vsids & queue & 10.108ms\\\hline
+vsids & berkmin & 9.318ms\\\hline
+moms & queue & 10.476ms\\\hline
+moms & berkmin & 10.85ms\\\hline
+\end{tabular}
+}
+\caption{benchmark/in-use/medium.cnf}
+\end{table}
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0.022089\\\hline
+Ternary & 0.977772\\\hline
+Horn & 0.993760\\\hline
+Definite & 0.921570\\\hline
+\end{tabular}}
+\subfloat[][]{
+\begin{tabular}{|c|c|c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & TO\\\hline
+ordered & berkmin & TO\\\hline
+random & queue & TO\\\hline
+random & berkmin & TO\\\hline
+vsids & queue & TO\\\hline
+vsids & berkmin & TO\\\hline
+moms & queue & TO\\\hline
+moms & berkmin & TO\\\hline
+\end{tabular}
+}
+\caption{benchmark/in-use/rbcl_xits_15_SAT.cnf}
+\end{table}
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0.019645\\\hline
+Ternary & 0.980250\\\hline
+Horn & 0.994376\\\hline
+Definite & 0.929561\\\hline
+\end{tabular}}
+\subfloat[][]{
+\begin{tabular}{|c|c|c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & TO\\\hline
+ordered & berkmin & TO\\\hline
+random & queue & TO\\\hline
+random & berkmin & TO\\\hline
+vsids & queue & TO\\\hline
+vsids & berkmin & TO\\\hline
+moms & queue & TO\\\hline
+moms & berkmin & TO\\\hline
+\end{tabular}
+}
+\caption{benchmark/in-use/rbcl_xits_18_SAT.cnf}
+\end{table}
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0.000000\\\hline
+Ternary & 1.000000\\\hline
+Horn & 0.500000\\\hline
+Definite & 0.365116\\\hline
+\end{tabular}}
+\subfloat[][]{
+\begin{tabular}{|c|c|c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & 10m50.820886s\\\hline
+ordered & berkmin & 10m0.036949s\\\hline
+random & queue & 6m33.990074s\\\hline
+random & berkmin & 9m22.437065s\\\hline
+vsids & queue & 13m56.454541s\\\hline
+vsids & berkmin & 4m26.646434s\\\hline
+moms & queue & TO\\\hline
+moms & berkmin & 16m7.816183s\\\hline
+\end{tabular}
+}
+\caption{benchmark/in-use/uf100-0113.cnf}
+\end{table}
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0.000000\\\hline
+Ternary & 1.000000\\\hline
+Horn & 0.472868\\\hline
+Definite & 0.367442\\\hline
+\end{tabular}}
+\subfloat[][]{
+\begin{tabular}{|c|c|c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & TO\\\hline
+ordered & berkmin & TO\\\hline
+random & queue & TO\\\hline
+random & berkmin & TO\\\hline
+vsids & queue & TO\\\hline
+vsids & berkmin & TO\\\hline
+moms & queue & TO\\\hline
+moms & berkmin & TO\\\hline
+\end{tabular}
+}
+\caption{benchmark/in-use/uf150-056.cnf}
+\end{table}
+\begin{table}[ht!]
+\centering
+\subfloat[][]{
+\begin{tabular}{|c|c|}\hline
+Type & Number\\\hline\hline
+Binary & 0.000000\\\hline
+Ternary & 1.000000\\\hline
+Horn & 0.502326\\\hline
+Definite & 0.386047\\\hline
+\end{tabular}}
+\subfloat[][]{
+\begin{tabular}{|c|c|c|}\hline
+Branch & DBMS & Time\\\hline\hline
+ordered & queue & TO\\\hline
+ordered & berkmin & TO\\\hline
+random & queue & TO\\\hline
+random & berkmin & TO\\\hline
+vsids & queue & TO\\\hline
+vsids & berkmin & TO\\\hline
+moms & queue & TO\\\hline
+moms & berkmin & TO\\\hline
+\end{tabular}
+}
+\caption{benchmark/in-use/uf200-056.cnf}
+\end{table}
+\end{document}

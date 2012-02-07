@@ -1,0 +1,4 @@
+{"Config":{"Dbms":2,"Branch":2},"Proportions":{"Binary":0.9104744852282901,"Ternary":0.08952551477170993,"Horn":0.9104744852282901,"Definite":0}}
+{"Config":{"Dbms":1,"Branch":0},"Proportions":{"Binary":0.9104744852282901,"Ternary":0.08952551477170993,"Horn":0.9104744852282901,"Definite":0}}
+{"Config":{"Dbms":2,"Branch":2},"Proportions":{"Binary":0.7817418677859391,"Ternary":0.2088142707240294,"Horn":0.8751311647429171,"Definite":0.19517313746065057}}
+{"Config":{"Dbms":2,"Branch":2},"Proportions":{"Binary":0,"Ternary":1,"Horn":0.5,"Definite":0.36511627906976746}}

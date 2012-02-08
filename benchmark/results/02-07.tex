@@ -1,0 +1,66 @@
+\documentclass{article}
+\usepackage[landscape]{geometry}
+\usepackage{morefloats}
+\usepackage{subfig}
+\usepackage{fullpage}
+\usepackage{textcomp}
+
+\title{Base Solver Measurements}
+\author{Tim Kopp}
+\date{02/08/12}
+
+\begin{document}
+\maketitle
+
+Stats are given as (Binary,Ternary,Horn,Definite)
+\begin{table}[ht!]
+\centering
+\begin{tabular}{|c|c|}\hline
+O & ordered\\\hline
+R & random\\\hline
+V & Vsids\\\hline
+M & Moms\\\hline\hline
+B & berkmin\\\hline
+Q & queue\\\hline\hline
+A & adaptive\\\hline
+\end{tabular}
+\caption{Legend}
+\end{table}
+
+\begin{table}[ht!]
+\centering
+\begin{tabular}{|c|c||c|c|c|c|c|c|c|c||c|}\hline
+SAT & Stats & \{O,Q\} & \{O,B\} & \{R,Q\} & \{R,B\} & \{V,Q\} & \{V,B\} &
+\{M,Q\} & \{M,B\} & A\\\hline\hline
+
+flat100-3 & (.910, .089, .910, 0) &
+12.575ms & 13.67ms & 10.714754s & 435.832ms & 13.229ms & 11.91ms & 1.299712s &
+240.878ms & $\sim$10ms\\\hline
+
+flat100-56 & (.910, .089, .910, 0) &
+12.585ms & 13.384ms & 2.242s & 653.616ms & 3m58.676s & 23.503ms & 20.203ms
+& 43.049ms & $\sim$20ms\\\hline\hline
+
+medium & (.781, .208, .875, .195) &
+10.403ms & 9.819ms & 11.171ms & 10.017ms & 10.108ms & 9.318ms & 10.476ms &
+10.85ms & $\sim$10ms\\\hline\hline
+
+rbcl\_xits\_15\_SAT & (.022, .977, .993, .921) &
+TO & TO & TO & TO & TO & TO &TO & TO & TO\\\hline
+
+rbcl\_xits\_18\_SAT & (.019, .980, .994, .929) &
+TO & TO & TO & TO & TO & TO &TO & TO & TO\\\hline\hline
+
+uf100-0113 & (0, 1, .500, .365) &
+10m50.82s & 10m0.03s & 6m33.99s & 9m22.43s & 13m56.45s &
+4m26.64s & TO & 16m7.81s & $\sim$4m38s\\\hline
+
+uf150-056 & (0, 1, .472, .367) &
+TO & TO & TO & TO & TO & TO &TO & TO & TO\\\hline
+
+uf200-056 & (0, 1, .502, .386) &
+TO & TO & TO & TO & TO & TO &TO & TO & TO\\\hline
+\end{tabular}
+\end{table}
+
+\end{document}

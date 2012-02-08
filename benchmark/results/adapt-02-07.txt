@@ -1,0 +1,32 @@
+./bin/hsat -file=benchmark/in-use/flat100-3.cnf -a=benchmark/results/analysis-02-07.json
+Changed rules from {ordered,none} to {vsids,berkmin}
+c Solution verified
+c Adaptive solver changed strategies 0 times.
+s SAT
+0.01user 0.00system 0:00.01elapsed 100%CPU (0avgtext+0avgdata 8320maxresident)k
+0inputs+0outputs (0major+596minor)pagefaults 0swaps
+
+./bin/hsat -file=benchmark/in-use/flat100-56.cnf -a=benchmark/results/analysis-02-07.json
+Changed rules from {ordered,none} to {vsids,berkmin}
+c Solution verified
+c Adaptive solver changed strategies 0 times.
+s SAT
+0.02user 0.00system 0:00.02elapsed 103%CPU (0avgtext+0avgdata 10368maxresident)k
+0inputs+0outputs (0major+750minor)pagefaults 0swaps
+
+./bin/hsat -file=benchmark/in-use/medium.cnf -a=benchmark/results/analysis-02-07.json
+Changed rules from {ordered,none} to {vsids,berkmin}
+c Solution verified
+c Adaptive solver changed strategies 0 times.
+s SAT
+0.01user 0.00system 0:00.01elapsed 123%CPU (0avgtext+0avgdata 8112maxresident)k
+0inputs+0outputs (0major+582minor)pagefaults 0swaps
+
+./bin/hsat -file=benchmark/in-use/uf100-0113.cnf -a=benchmark/results/analysis-02-07.json
+Changed rules from {ordered,none} to {vsids,berkmin}
+c Solution verified
+c Adaptive solver changed strategies 0 times.
+s SAT
+278.11user 0.00system 4:38.09elapsed 100%CPU (0avgtext+0avgdata 10688maxresident)k
+0inputs+8outputs (0major+784minor)pagefaults 0swaps
+

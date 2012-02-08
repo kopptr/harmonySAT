@@ -5,7 +5,6 @@ import (
 	"dpll/db"
 	"dpll/db/cnf"
 	"errors"
-	"fmt"
 	"io"
 	"strings"
 	"scanner"
@@ -16,25 +15,29 @@ func DimacsToDb(r io.Reader) (clauseDB *db.DB, a *assignment.Assignment, err err
 
 	pLine := matchDimacsComments(s)
 
-	nVar, nClauses, err := matchFormulaInfo(pLine)
+	nVar, _, err := matchFormulaInfo(pLine)
 	if err != nil {
 		return nil, nil, err
 	}
 	clauseDB = db.NewDB(nVar)
 	a = assignment.NewAssignment(nVar)
-	n, err := matchClauses(s, clauseDB, a)
+	_, err = matchClauses(s, clauseDB, a)
 	if err != nil {
 		return nil, nil, err
-	} else if n != nClauses {
+	}
+/*
+else if n != nClauses {
 		return nil, nil, errors.New(fmt.Sprintf("Read %d/%d clauses.", n, nClauses))
 	}
-
+* This is not an error. Unit clauses are assigned & discarded.
+*/
 	return
 }
 
 // Matches all of the clauses in the database, and inserts them.
 func matchClauses(r *scanner.Scanner, clauseDB *db.DB, a *assignment.Assignment) (n int, err error) {
-	for n = 0; r.HasNextLine(); n++ {
+        n = 0
+	for r.HasNextLine() {
 		clause := []int{}
 		for i := r.NextInt(); i != 0; i = r.NextInt() {
 			clause = append(clause, i)
@@ -46,9 +49,9 @@ func matchClauses(r *scanner.Scanner, clauseDB *db.DB, a *assignment.Assignment)
 			} else {
 				a.Guess().Set(uint(clause[0]), cnf.Pos)
 			}
-			n--
 		} else {
 			clauseDB.AddEntry(clause, true)
+                        n++
 		}
 	}
 	return n, nil

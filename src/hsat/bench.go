@@ -67,7 +67,7 @@ func benchmarkFormula(formulaFile string, texFile string, jsonFile string) {
       if err != nil {
          log.Fatal(err)
       }
-      e.Proportions = *(dpll.NewProportions(db))
+      e.Proportions = *(dpll.NewGProportions(db))
       e.Config.Dbms = bestDbms
       e.Config.Branch = bestBr
       jsonE.Encode(e)

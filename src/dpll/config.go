@@ -17,21 +17,23 @@ type Proportions struct {
 	Definite float64 // Having exactly one positive literal
 }
 
-func NewProportions(cdb *db.DB) *Proportions {
+func NewLProportions(cdb *db.DB) *Proportions {
    p := new(Proportions)
-   if cdb.IsLearning() {
       total := float64(cdb.NLearned())
       p.Binary = float64(cdb.LStats.Binary)/total
       p.Ternary = float64(cdb.LStats.Ternary)/total
       p.Horn = float64(cdb.LStats.Horn)/total
       p.Definite = float64(cdb.LStats.Definite)/total
-   } else {
+   return p
+}
+
+func NewGProportions(cdb *db.DB) *Proportions {
+   p := new(Proportions)
       total := float64(cdb.NGiven())
       p.Binary = float64(cdb.GStats.Binary)/total
       p.Ternary = float64(cdb.GStats.Ternary)/total
       p.Horn = float64(cdb.GStats.Horn)/total
       p.Definite = float64(cdb.GStats.Definite)/total
-   }
    return p
 }
 
@@ -48,6 +50,7 @@ type Entry struct {
 type Adapter struct {
    entries  []Entry
    nChanges int
+   firstCall bool
 }
 
 func NewAdapter(jsonFile string) *Adapter {
@@ -67,6 +70,7 @@ func NewAdapter(jsonFile string) *Adapter {
    }
 
    a.nChanges = -1 // The first choice doesn't count as a change.
+   a.firstCall = true
 
    return a
 }
@@ -74,7 +78,7 @@ func NewAdapter(jsonFile string) *Adapter {
 
 func (a *Adapter) Reconfigure(cdb *db.DB, b *Brancher, m *db.Manager) {
    var (
-      p = NewProportions(cdb)
+      p *Proportions
       bestI = -1
       bestD = math.Inf(1) // +infty, all distances should be smaller
       d float64
@@ -82,8 +86,13 @@ func (a *Adapter) Reconfigure(cdb *db.DB, b *Brancher, m *db.Manager) {
       originalM = m.Strat()
    )
 
-   if cdb.NLearned() < 3 {
-      return
+   if a.firstCall {
+           p = NewGProportions(cdb)
+   } else {
+           p = NewLProportions(cdb)
+           if cdb.NLearned() < 3 && !a.firstCall {
+                   return
+           }
    }
 
    // Find the best match
@@ -102,6 +111,7 @@ func (a *Adapter) Reconfigure(cdb *db.DB, b *Brancher, m *db.Manager) {
       fmt.Printf("Changed rules from {%s,%s} to {%s,%s}\n", originalB,originalM,b.Rule(),m.Strat())
       a.nChanges++
    }
+        a.firstCall = false
    return
 }
 
@@ -119,7 +129,7 @@ func EuclideanDist(p1 *Proportions, p2 *Proportions) float64 {
 
 func AnalyzeTexString(cdb *db.DB) string {
 
-   p := NewProportions(cdb)
+   p := NewGProportions(cdb)
 	buffer := bytes.NewBufferString("")
 	fmt.Fprintf(buffer, "\\begin{tabular}{|c|c|}\\hline\n")
 	fmt.Fprintf(buffer, "Type & Number\\\\\\hline\\hline\n")

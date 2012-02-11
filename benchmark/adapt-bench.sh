@@ -25,7 +25,7 @@ echo "Analysis used: ${JSON}" >> ${TEX}
 echo "" >> ${TEX}
 echo "\\begin{table}[ht!]" >> ${TEX}
 echo "\\centering" >> ${TEX}
-echo "\\begin{tabular}{|c||c|c|c|c||c|c|c|c|c|c|c|c||c|}\\hline" >> ${TEX}
+echo "\\begin{tabular}{|c||c|c|c|c||c|c|c|c|c|c|c|c||c|c|}\\hline" >> ${TEX}
 
 echo -n "FILE & Bin & Tern & Horn & Def " >> ${TEX}
 for b in ${BRANCH}; do
@@ -33,7 +33,7 @@ for b in ${BRANCH}; do
       echo -n "& \{${b},${m}\} " >> ${TEX}
    done
 done
-echo "& A\\\\\\hline\\hline" >> ${TEX}
+echo "& A & \\#\\\\\\hline\\hline" >> ${TEX}
 
 
 for bench in ${BENCH}; do

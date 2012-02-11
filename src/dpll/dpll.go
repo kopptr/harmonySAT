@@ -57,7 +57,7 @@ func Dpll(cdb *db.DB, a *assignment.Assignment, b *Brancher, m *db.Manager, adap
 }
 
 
-func DpllTimeout(cdb *db.DB, a *assignment.Assignment, b *Brancher, m *db.Manager, timeout <-chan time.Time) *guess.Guess {
+func DpllTimeout(cdb *db.DB, a *assignment.Assignment, b *Brancher, m *db.Manager, adapt *Adapter, timeout <-chan time.Time) *guess.Guess {
 
 	nVar := a.Guess().Len()
 	aStack := make([]dpllStackNode, nVar)
@@ -92,6 +92,11 @@ func DpllTimeout(cdb *db.DB, a *assignment.Assignment, b *Brancher, m *db.Manage
 				aStack[top].l.Flip()
 				aStack[top].Flipped = true
 				a.PushAssign(aStack[top].l.Val, aStack[top].l.Pol)
+            // Reconfigure if neccessary
+            if adapt != nil {
+               adapt.Reconfigure(cdb, b, m)
+            }
+
 			} else if status == db.Sat {
 				return a.Guess()
 			} else {

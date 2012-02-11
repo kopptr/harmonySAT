@@ -36,9 +36,7 @@ func benchmarkFormula(formulaFile string, texFile string, jsonFile string) {
 
    jsonE := json.NewEncoder(jsonWriter)
 
-   writeTableHeader(tex)
    fmt.Fprintf(tex,analyzeFormula(formulaFile))
-   writeBetweenTables(tex)
 
    for _,b := range branches {
       for _, m := range dbms {
@@ -47,10 +45,10 @@ func benchmarkFormula(formulaFile string, texFile string, jsonFile string) {
          g := runBench(file, b, m)
          after := time.Now()
          if g == nil {
-            fmt.Fprintf(tex, "%s & %s & TO\\\\\\hline\n",b,m)
+            fmt.Fprintf(tex, "TO & ")
          } else {
             thisRun := after.Sub(before)
-            fmt.Fprintf(tex, "%s & %s & %s\\\\\\hline\n",b,m,thisRun)
+            fmt.Fprintf(tex, "& %s ",thisRun)
             if thisRun.Nanoseconds() < bestDuration.Nanoseconds() || bestDbms == 0 {
                bestDuration = thisRun
                bestBr = b
@@ -59,7 +57,7 @@ func benchmarkFormula(formulaFile string, texFile string, jsonFile string) {
          }
       }
    }
-   writeTableFooter(tex, formulaFile)
+   fmt.Fprintf(tex, "\\\\\\hline")
 
    // Write the json
    if bestDbms != 0 {
@@ -77,7 +75,7 @@ func benchmarkFormula(formulaFile string, texFile string, jsonFile string) {
 
 
 func writeTableHeader(tex *os.File) {
-   fmt.Fprintf(tex,"\\begin{table}[ht!]\n\\centering\n\\subfloat[][]{\n")
+   fmt.Fprintf(tex,"\\begin{table}[ht!]\n\\centering\n\n")
 }
 
 func writeBetweenTables(tex *os.File) {
@@ -113,7 +111,71 @@ func runBench(file string, b dpll.BranchRule, d db.ClauseDBMS) *guess.Guess {
    // Set the proper max db size
    ma.MaxLearned = cdb.NGiven() / 3
 
-   g := dpll.DpllTimeout(cdb, a, br, ma, timeout)
+   g := dpll.DpllTimeout(cdb, a, br, ma, nil, timeout)
    return g
 }
 
+func runAdaptiveBench(file string, jsonFile string) *guess.Guess {
+
+   runtime.GOMAXPROCS(3)
+   timeout := time.After(20*time.Minute)
+
+   // Initialize the cdb and assignment
+   cdb, a, err := initSolver(file)
+   if err != nil {
+      log.Fatal(err)
+   }
+	// Set the proper max db size
+	manage.MaxLearned = cdb.NGiven() / 3
+   // Read the data from the file and make the adapter
+   adapt := dpll.NewAdapter(jsonFile)
+   // Use the adapter to set the initial state
+   b := dpll.NewBrancher()
+   m := db.NewManager()
+   adapt.Reconfigure(cdb,b,m)
+
+   g := dpll.DpllTimeout(cdb, a, b, m, adapt, timeout)
+   return g
+}
+
+func testFormula(formulaFile string, texFile string, jsonFile string) {
+   branches := [...]dpll.BranchRule{dpll.Ordered, dpll.Random, dpll.Vsids, dpll.Moms}
+   dbms := [...]db.ClauseDBMS{db.Queue, db.BerkMin}
+
+   tex,err := os.OpenFile(texFile, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0664)
+   if err != nil {
+      log.Fatal(err)
+   }
+   defer tex.Close()
+
+   fmt.Fprintf(tex,analyzeFormula(formulaFile))
+
+   for _,b := range branches {
+      for _, m := range dbms {
+         // Run the bench
+         before := time.Now()
+         g := runBench(file, b, m)
+         after := time.Now()
+         if g == nil {
+            fmt.Fprintf(tex, "TO & ")
+         } else {
+            thisRun := after.Sub(before)
+            fmt.Fprintf(tex, "& %s ",thisRun)
+         }
+      }
+   }
+
+   // Run the Adaptive bench
+   before := time.Now()
+   g := runAdaptiveBench(file, jsonFile)
+   after := time.Now()
+   if g == nil {
+      fmt.Fprintf(tex, "TO & ")
+   } else {
+      thisRun := after.Sub(before)
+      fmt.Fprintf(tex, "& %s ",thisRun)
+   }
+
+   fmt.Fprintf(tex, "\\\\\\hline")
+
+}

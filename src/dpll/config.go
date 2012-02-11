@@ -108,7 +108,7 @@ func (a *Adapter) Reconfigure(cdb *db.DB, b *Brancher, m *db.Manager) {
    if originalM != a.entries[bestI].Config.Dbms || originalB != a.entries[bestI].Config.Branch {
       m.SetStrat(a.entries[bestI].Config.Dbms)
       b.SetRule(a.entries[bestI].Config.Branch)
-      fmt.Printf("Changed rules from {%s,%s} to {%s,%s}\n", originalB,originalM,b.Rule(),m.Strat())
+      //fmt.Printf("Changed rules from {%s,%s} to {%s,%s}\n", originalB,originalM,b.Rule(),m.Strat())
       a.nChanges++
    }
         a.firstCall = false
@@ -131,13 +131,7 @@ func AnalyzeTexString(cdb *db.DB) string {
 
    p := NewGProportions(cdb)
 	buffer := bytes.NewBufferString("")
-	fmt.Fprintf(buffer, "\\begin{tabular}{|c|c|}\\hline\n")
-	fmt.Fprintf(buffer, "Type & Number\\\\\\hline\\hline\n")
-	fmt.Fprintf(buffer, "Binary & %f\\\\\\hline\n", p.Binary)
-	fmt.Fprintf(buffer, "Ternary & %f\\\\\\hline\n", p.Ternary)
-	fmt.Fprintf(buffer, "Horn & %f\\\\\\hline\n", p.Horn)
-	fmt.Fprintf(buffer, "Definite & %f\\\\\\hline\n", p.Definite)
-	fmt.Fprintf(buffer, "\\end{tabular}")
+   fmt.Fprintf(buffer, "%.0f & %.0f & %.0f & %.0f ", p.Binary*float64(100), p.Ternary*float64(100), p.Horn*float64(100), p.Definite*float64(100))
 	return string(buffer.Bytes())
 }
 

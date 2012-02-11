@@ -60,12 +60,16 @@ func main() {
 	}
 
    // Special switches for training behavior
-   if analyze {
+   if benchmark {
+      if adaptive == "" {
+         benchmarkFormula(file, "output.tex", "analysis.json")
+      } else {
+         testFormula(file, "adapt-output.tex", adaptive)
+      }
+      return
+   } else if analyze {
       a := analyzeFormula(file)
       fmt.Printf("%s\n", a)
-      return
-   } else if benchmark {
-      benchmarkFormula(file, "output.tex", "analysis.json")
       return
    } else if adaptive != "" {
       runAdaptiveSolver(file, adaptive, quiet)

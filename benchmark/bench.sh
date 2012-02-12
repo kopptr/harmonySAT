@@ -2,8 +2,8 @@
 
 go install hsat
 
-#BENCH=`ls benchmark/in-use/*.cnf`
-BENCH=`ls test/*.cnf`
+BENCH=`ls benchmark/analysis/*.cnf`
+#BENCH=`ls test/*.cnf`
 BRANCH="O R V M"
 DBMS="Q B" # DO NOT put none. swapping then dead
 BRANCHL="ordered random vsids moms"

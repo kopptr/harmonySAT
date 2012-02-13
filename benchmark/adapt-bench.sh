@@ -2,7 +2,7 @@
 
 go install hsat
 
-BENCH=`ls benchmark/analysis/*.cnf`
+BENCH=`ls benchmark/test/*.cnf`
 #BENCH=`ls test/*.cnf`
 BRANCH="O R V M"
 DBMS="Q B" # DO NOT put none. swapping then dead

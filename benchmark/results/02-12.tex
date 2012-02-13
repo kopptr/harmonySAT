@@ -1,5 +1,6 @@
 \documentclass{article}
 \usepackage[landscape]{geometry}
+\usepackage{fullpage}
 
 \title{Base Solver Measurements}
 \author{Tim Kopp}
@@ -12,21 +13,20 @@
 \centering
 \begin{tabular}{|c||c|c|c|c||c|c|c|c|c|c|c|c|}\hline
 FILE & Bin & Tern & Horn & Def & \{O,Q\} & \{O,B\} & \{R,Q\} & \{R,B\} & \{V,Q\} & \{V,B\} & \{M,Q\} & \{M,B\} \\\hline\hline
-benchmark/analysis/ais6.cnf & 72 & 26 & 98 & 26 & 7.913ms & 6.994ms & 7.819ms & 9.271ms & 7.817ms & 10.083ms & 9.512ms & 6.385ms \\\hline
-benchmark/analysis/bw_large.b.cnf & 71 & 29 & 85 & 14 & 1m39.838496s & 1m40.542322s TO & & 1m41.947601s TO & TO & TO & TO & \\\hline
-benchmark/analysis/F34-5-23-31.cnf & 0 & 67 & 60 & 58 & 29.741ms & 23.858ms & 11m30.794342s & 19m45.680559s & 58.050535s & 11.257783s & 7m9.269929s & 3m27.89081s \\\hline
-benchmark/analysis/F-5-29-31.cnf & 18 & 45 & 62 & 60 & 7.48ms & 4.713ms & 12.14ms & 12.328ms & 7.216ms & 11.512ms & 6.709ms & 6.358ms \\\hline
-benchmark/analysis/f600.cnf & 0 & 100 & 51 & 39 TO & TO & TO & TO & TO & TO & TO & TO & \\\hline
-benchmark/analysis/F-6-53-61.cnf & 17 & 44 & 61 & 60 & 55.34ms & 49.507ms & 35.135ms & 99.681ms & 16.861ms & 48.864ms & 176.105ms & 356.412ms \\\hline
-benchmark/analysis/flat100-34.cnf & 91 & 9 & 91 & 0 & 13.453ms & 12.435ms & 558.63ms & 202.349ms & 14.321ms & 14.261ms & 300.802ms & 53.291ms \\\hline
-benchmark/analysis/hanoi4.cnf & 52 & 47 & 74 & 19 TO & TO & TO & TO & TO & TO & TO & TO & \\\hline
-benchmark/analysis/huge.cnf & 81 & 19 & 90 & 12 & 218.321ms & 209.036ms & 181.787ms & 131.542ms & 216.736ms & 89.615ms & 2.408064s & 163.815ms \\\hline
-benchmark/analysis/logistics.b.cnf & 55 & 39 & 90 & 37 TO & TO & TO & TO & TO & TO & TO & TO & \\\hline
-benchmark/analysis/medium.cnf & 78 & 21 & 88 & 20 & 10.758ms & 10.329ms & 10.256ms & 10.221ms & 10.333ms & 10.516ms & 10.52ms & 10.011ms \\\hline
-benchmark/analysis/sw100-56.cnf & 97 & 0 & 97 & 0 & 54.781ms & 51.533ms TO & TO & TO & TO & TO & TO & \\\hline
-benchmark/analysis/uf100-0592.cnf & 0 & 100 & 47 & 35 & 17m30.127636s & 15m49.367077s & 8m56.623609s & 1m50.347869s & 4m14.995427s & 44.336926s & 5m1.461975s & 10m15.765006s \\\hline
-benchmark/analysis/uf100-0750.cnf & 0 & 100 & 53 & 39 & 7m51.489063s & 7m9.828592s & 1m49.60053s & 55.779907s & 3m7.804502s & 44.953935s & 5m28.254575s & 3m1.779997s \\\hline
-benchmark/analysis/vda_gr_rcs_w9.shuffled.cnf & 99 & 0 & 74 & 50 TO & TO & TO & TO & TO & TO & TO & TO & \\\hline
+ais6 & 72 & 26 & 98 & 26 & 7.913ms & 6.994ms & 7.819ms & 9.271ms & 7.817ms & 10.083ms & 9.512ms & 6.385ms \\\hline
+bw\_large.b & 71 & 29 & 85 & 14 & 1m39.838s & 1m40.542s & TO & 1m41.947s & TO & TO & TO & TO \\\hline
+F34-5-23-31 & 0 & 67 & 60 & 58 & 29.741ms & 23.858ms & 11m30.794s & 19m45.680s & 58.050s & 11.257s & 7m9.269s & 3m27.890 \\\hline
+F-5-29-31 & 18 & 45 & 62 & 60 & 7.48ms & 4.713ms & 12.14ms & 12.328ms & 7.216ms & 11.512ms & 6.709ms & 6.358ms \\\hline
+f600 & 0 & 100 & 51 & 39 & TO & TO & TO & TO & TO & TO & TO & TO \\\hline
+F-6-53-61 & 17 & 44 & 61 & 60 & 55.34ms & 49.507ms & 35.135ms & 99.681ms & 16.861ms & 48.864ms & 176.105ms & 356.412ms \\\hline
+flat100-34 & 91 & 9 & 91 & 0 & 13.453ms & 12.435ms & 558.63ms & 202.349ms & 14.321ms & 14.261ms & 300.802ms & 53.291ms \\\hline
+hanoi4 & 52 & 47 & 74 & 19 & TO & TO & TO & TO & TO & TO & TO & TO \\\hline
+huge & 81 & 19 & 90 & 12 & 218.321ms & 209.036ms & 181.787ms & 131.542ms & 216.736ms & 89.615ms & 2.408s & 163.815ms \\\hline
+logistics.b & 55 & 39 & 90 & 37 & TO & TO & TO & TO & TO & TO & TO & TO \\\hline
+medium & 78 & 21 & 88 & 20 & 10.758ms & 10.329ms & 10.256ms & 10.221ms & 10.333ms & 10.516ms & 10.52ms & 10.011ms \\\hline
+sw100-56 & 97 & 0 & 97 & 0 & 54.781ms & 51.533ms & TO & TO & TO & TO & TO & TO \\\hline
+uf100-0592 & 0 & 100 & 47 & 35 & 17m30.127s & 15m49.367s & 8m56.623s & 1m50.347s & 4m14.995s & 44.336s & 5m1.461s & 10m15.765s \\\hline
+vda\_gr\_rcs\_w9.shuffled & 99 & 0 & 74 & 50 & TO & TO & TO & TO & TO & TO & TO & TO \\\hline
 \end{tabular}
 \end{table}
 \end{document}

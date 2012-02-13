@@ -1,0 +1,11 @@
+{"Config":{"Dbms":2,"Branch":3},"Proportions":{"Binary":0.7228915662650602,"Ternary":0.25817555938037867,"Horn":0.9810671256454389,"Definite":0.25817555938037867}}
+{"Config":{"Dbms":1,"Branch":0},"Proportions":{"Binary":0.7068690095846646,"Ternary":0.29124310194597736,"Horn":0.8504211443508568,"Definite":0.14326169038629102}}
+{"Config":{"Dbms":2,"Branch":0},"Proportions":{"Binary":0,"Ternary":0.667590027700831,"Horn":0.6011080332409973,"Definite":0.5789473684210527}}
+{"Config":{"Dbms":2,"Branch":0},"Proportions":{"Binary":0.18461538461538463,"Ternary":0.4461538461538462,"Horn":0.6153846153846154,"Definite":0.6}}
+{"Config":{"Dbms":1,"Branch":2},"Proportions":{"Binary":0.17073170731707318,"Ternary":0.43902439024390244,"Horn":0.6097560975609756,"Definite":0.5975609756097561}}
+{"Config":{"Dbms":2,"Branch":0},"Proportions":{"Binary":0.9104744852282901,"Ternary":0.08952551477170993,"Horn":0.9104744852282901,"Definite":0}}
+{"Config":{"Dbms":2,"Branch":2},"Proportions":{"Binary":0.8055004252906153,"Ternary":0.19208959455628014,"Horn":0.900340232492203,"Definite":0.11979018996314147}}
+{"Config":{"Dbms":2,"Branch":3},"Proportions":{"Binary":0.7817418677859391,"Ternary":0.2088142707240294,"Horn":0.8751311647429171,"Definite":0.19517313746065057}}
+{"Config":{"Dbms":2,"Branch":0},"Proportions":{"Binary":0.967741935483871,"Ternary":0,"Horn":0.967741935483871,"Definite":0}}
+{"Config":{"Dbms":2,"Branch":2},"Proportions":{"Binary":0,"Ternary":1,"Horn":0.4720930232558139,"Definite":0.3511627906976744}}
+{"Config":{"Dbms":2,"Branch":2},"Proportions":{"Binary":0,"Ternary":1,"Horn":0.5279069767441861,"Definite":0.3883720930232558}}

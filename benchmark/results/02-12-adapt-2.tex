@@ -1,0 +1,27 @@
+\documentclass{article}
+\usepackage[landscape]{geometry}
+\usepackage{fullpage}
+
+\title{Adaptive Solver Measurements}
+\author{Tim Kopp}
+\date{02/14/12}
+
+\begin{document}
+\maketitle
+
+Analysis used: benchmark/results/analysis-02-12.json
+
+\begin{table}[ht!]
+\centering
+\begin{tabular}{|c||c|c|c|c||c|c|c|c|c|c|c|c||c|c|}\hline
+FILE & Bin & Ter & Hor & Def & \{O,Q\} & \{O,B\} & \{R,Q\} & \{R,B\} & \{V,Q\} & \{V,B\} & \{M,Q\} & \{M,B\} & A & \#\\\hline\hline
+ais10 & 74 & 26 & 99 & 26 & 4.549s & 4.369s & 2.259s & 14.697s & 3.466s & 11.415s & TO & 31.053s & 404.709ms & 0\\\hline
+anomaly & 78 & 21 & 84 & 23 & 3.284ms & 3.147ms & 2.422ms & 3.123ms & 3.061ms & 2.407ms & 3.213ms & 3.045ms & 2.537ms & 0\\\hline
+qg1-07 & 5 & 3 & 100 & 0 & TO & TO & TO & TO & TO & TO & TO & TO & TO & --- \\\hline
+sw100-3 & 97 & 0 & 97 & 0 & 8.939s & 8.501s & TO & TO & TO & TO & TO & TO & 9.430s & 0\\\hline
+uf100-026 & 0 & 100 & 51 & 37 & 4m17.4s & 3m52.8s & 5m52.6s & 1m33.3s & 28.184s & 7.237s & 16m0.65s & 27.313s & 4m21.1s & 0\\\hline
+uf100-0500 & 0 & 100 & 50 & 37 & 7m20.2s & 6m45.2s & 2m32.7s & 4m15.0s & 55.845s & 16.737s & 9.675s & 2m55.96s & 7m30.6s & 0\\\hline
+uf100-0727 & 0 & 100 & 47 & 37 & 49.998s & 46.107s & 2m1.9s & 18.096s & 335.41ms & 94.085ms & 11m24.0s & 6m25.9s & 50.9s & 0\\\hline
+\end{tabular}
+\end{table}
+\end{document}

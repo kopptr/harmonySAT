@@ -1,0 +1,34 @@
+\documentclass{article}
+\usepackage[landscape]{geometry}
+
+\title{Adaptive Solver Measurements}
+\author{Tim Kopp}
+\date{02/13/12}
+
+\begin{document}
+\maketitle
+
+Analysis used: benchmark/results/analysis-02-12.json
+
+\begin{table}[ht!]
+\centering
+\begin{tabular}{|c||c|c|c|c||c|c|c|c|c|c|c|c||c|c|}\hline
+FILE & Bin & Tern & Horn & Def & \{O,Q\} & \{O,B\} & \{R,Q\} & \{R,B\} & \{V,Q\} & \{V,B\} & \{M,Q\} & \{M,B\} & A & \#\\\hline\hline
+bw\_large.a & 71 & 29 & 85 & 18 & 168.651ms & 162.14ms & 441.66ms & 114.84ms & 94.397ms & 63.721ms & 192.673ms & 90.012ms & 171.876ms & 0\\\hline
+bw\_large.c & 74 & 26 & 87 & 11 & TO & TO & TO & TO & TO & TO & TO & TO & TO & --- \\\hline
+comb1.shuffled & 78 & 17 & 68 & 47 & TO & TO & TO & TO & TO & TO & TO & TO & TO & --- \\\hline
+f1000 & 0 & 100 & 51 & 39 & TO & TO & TO & TO & TO & TO & TO & TO & TO & --- \\\hline
+F34-5-23-29 & 0 & 67 & 60 & 58 & 7m30.104s & 6m51.524s & 20.092s & 5m55.379s & 1m26.869s & 9.828s & TO & 8m45.601s & 7m42.461s & 0\\\hline
+F-5-19-29 & 18 & 45 & 62 & 60 & 7.454ms & 6.912ms & 14.066ms & 5.018ms & 6.414ms & 9.246ms & 13.949ms & 6.014ms & 7.05ms & 0\\\hline
+F-6-59-61 & 17 & 44 & 61 & 60 & 21.308ms & 18.566ms & 37.14ms & 31.8ms & 15.608ms & 42.631ms & 26.398ms & 14.35ms & 21.5ms & 0\\\hline
+flat100-56 & 91 & 9 & 91 & 0 & 13.003ms & 12.674ms & 172.831ms & 267.166ms & 4m0.650s & 23.085ms & 243.374ms & 1.383309s & 13.044ms & 0\\\hline
+hanoi5 & 51 & 48 & 74 & 19 & TO & TO & TO & TO & TO & TO & TO & TO & TO & --- \\\hline
+homer14.shuffled & 99 & 0 & 76 & 51 & TO & TO & TO & TO & TO & TO & TO & TO & TO & --- \\\hline
+k2fix\_gr\_rcs\_w8.shuffled & 100 & 0 & 76 & 49 & TO & TO & TO & TO & TO & TO & TO & TO & TO & --- \\\hline
+logistics.a & 49 & 44 & 89 & 42 & TO & TO & TO & TO & TO & TO & TO & TO & TO & --- \\\hline
+sw100-82 & 97 & 0 & 97 & 0 & 38.873ms & 37.92ms & TO & 3.979s & 46.151ms & 11m2.682s & TO & TO & 36.958ms & 0\\\hline
+uf100-0113 & 0 & 100 & 50 & 37 & 10m52.120s & 9m52.383s & 53.639s & 14m13.715s & 13m38.383s & 4m23.542s & 11m40.430s & 4m56.211s & 10m55.646s & 0\\\hline
+uf100-024 & 0 & 100 & 50 & 37 & 23.117s & 21.023s & 1m51.795s & 1m36.895s & 49.175ms & 24.864ms & 240.908ms & 2m21.909s & 23.445s & 0\\\hline
+\end{tabular}
+\end{table}
+\end{document}

@@ -2,6 +2,7 @@ package dimacs
 
 import (
 	"dpll/assignment"
+	"dpll/assignment/guess"
 	"dpll/db"
 	"dpll/db/cnf"
 	"errors"
@@ -21,10 +22,13 @@ func DimacsToDb(r io.Reader) (clauseDB *db.DB, a *assignment.Assignment, err err
 	}
 	clauseDB = db.NewDB(nVar)
 	a = assignment.NewAssignment(nVar)
-	_, err = matchClauses(s, clauseDB, a)
+   n, err := matchClauses(s, clauseDB, a)
 	if err != nil {
 		return nil, nil, err
 	}
+   if n == -1 {
+      return nil, nil, errors.New("s Unsatisfiable")
+   }
 /*
 else if n != nClauses {
 		return nil, nil, errors.New(fmt.Sprintf("Read %d/%d clauses.", n, nClauses))
@@ -36,7 +40,9 @@ else if n != nClauses {
 
 // Matches all of the clauses in the database, and inserts them.
 func matchClauses(r *scanner.Scanner, clauseDB *db.DB, a *assignment.Assignment) (n int, err error) {
+   foundUnit := false
         n = 0
+        lq := new(db.LitQ)
 	for r.HasNextLine() {
 		clause := []int{}
 		for i := r.NextInt(); i != 0; i = r.NextInt() {
@@ -44,16 +50,33 @@ func matchClauses(r *scanner.Scanner, clauseDB *db.DB, a *assignment.Assignment)
 		}
 		// Add unit clauses directly to assignment
 		if len(clause) == 1 {
+         foundUnit = true
 			if clause[0] < 1 {
+            if foo,_ := a.Guess().Get(uint((clause[0] * -1))); foo  != guess.Unassigned {
+               return -1, nil
+            }
 				a.Guess().Set(uint((clause[0] * -1)), cnf.Neg)
+            lq.PushBack(cnf.Lit{uint((clause[0] * -1)), cnf.Neg})
 			} else {
+            if foo,_ := a.Guess().Get(uint(clause[0])); foo != guess.Unassigned {
+               return -1, nil
+            }
 				a.Guess().Set(uint(clause[0]), cnf.Pos)
+            lq.PushBack(cnf.Lit{uint(clause[0]), cnf.Pos})
 			}
 		} else {
 			clauseDB.AddEntry(clause, true)
                         n++
 		}
 	}
+   // If we found unit clauses, we should BCP
+   if foundUnit {
+      if clauseDB.LQBcp(a.Guess(), lq, nil) == db.Conflict {
+         // Unsatisfiable
+         return -1, nil
+      }
+   }
+
 	return n, nil
 }
 

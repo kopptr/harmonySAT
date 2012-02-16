@@ -13,12 +13,15 @@ const (
 	Sat
 )
 
-// Performs BCP on the clause database until no unit clauses remain.
-// Returns false iff the formula is conflicted.
 func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit, m *Manager) BcpReturn {
 	lq := newLitQ() // queue of literals to be assigned
-
 	lq.PushBack(lit)
+   return db.LQBcp(g, lq, m)
+}
+
+// Performs BCP on the clause database until no unit clauses remain.
+// Returns false iff the formula is conflicted.
+func (db *DB) LQBcp(g *guess.Guess, lq *LitQ, m *Manager) BcpReturn {
 
 	// For each new literal in the queue
 	for l, ok := lq.PopFront(); ok; l, ok = lq.PopFront() {
@@ -67,7 +70,9 @@ func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit, m *Manager) BcpReturn {
 				} else {
 					// CONFLICT
 					db.AddConflictEntry(g)
-					m.Manage(db, g, m)
+               if m != nil {
+                  m.Manage(db, g, m)
+               }
 					return Conflict
 				}
 			}
@@ -87,7 +92,7 @@ func (db *DB) AddConflictEntry(g *guess.Guess) {
 	db.AddEntry(g.Vars(true), false)
 }
 
-type litQ struct {
+type LitQ struct {
 	First *litQNode
 	Last  *litQNode
 }
@@ -105,14 +110,14 @@ func newLitQNode(l cnf.Lit) (lqn *litQNode) {
 	return
 }
 
-func newLitQ() (lq *litQ) {
-	lq = new(litQ)
+func newLitQ() (lq *LitQ) {
+	lq = new(LitQ)
 	lq.First = nil
 	lq.Last = nil
 	return
 }
 
-func (lq *litQ) PushBack(l cnf.Lit) {
+func (lq *LitQ) PushBack(l cnf.Lit) {
 	lqn := newLitQNode(l)
 	if lq.First == nil { // empty
 		lq.First = lqn
@@ -123,7 +128,7 @@ func (lq *litQ) PushBack(l cnf.Lit) {
 	}
 }
 
-func (lq *litQ) PopFront() (l cnf.Lit, ok bool) {
+func (lq *LitQ) PopFront() (l cnf.Lit, ok bool) {
 	if lq.First == nil { // empty
 		l = cnf.Lit{0, 0}
 		ok = false

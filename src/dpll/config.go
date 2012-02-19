@@ -15,6 +15,10 @@ type Proportions struct {
 	Ternary  float64 // Having exactly three literals
 	Horn     float64 // Having <= one positive literal
 	Definite float64 // Having exactly one positive literal
+   Lowest float64
+   Low float64
+   High float64
+   Highest float64
 }
 
 func NewLProportions(cdb *db.DB) *Proportions {
@@ -24,6 +28,11 @@ func NewLProportions(cdb *db.DB) *Proportions {
       p.Ternary = float64(cdb.LStats.Ternary)/total
       p.Horn = float64(cdb.LStats.Horn)/total
       p.Definite = float64(cdb.LStats.Definite)/total
+   cs := cdb.GetCountStats()
+   p.Highest = cs.Highest
+   p.High = cs.High
+   p.Low = cs.Low
+   p.Lowest = cs.Lowest
    return p
 }
 
@@ -34,6 +43,11 @@ func NewGProportions(cdb *db.DB) *Proportions {
       p.Ternary = float64(cdb.GStats.Ternary)/total
       p.Horn = float64(cdb.GStats.Horn)/total
       p.Definite = float64(cdb.GStats.Definite)/total
+   cs := cdb.GetCountStats()
+   p.Highest = cs.Highest
+   p.High = cs.High
+   p.Low = cs.Low
+   p.Lowest = cs.Lowest
    return p
 }
 
@@ -121,10 +135,15 @@ func (a *Adapter) NChanges() int {
 
 
 func EuclideanDist(p1 *Proportions, p2 *Proportions) float64 {
-   return math.Abs(math.Sqrt(math.Pow((p1.Binary-p2.Binary), 2.0) +
-   (math.Pow((p1.Ternary-p2.Ternary), 2.0)) +
-   (math.Pow((p1.Horn-p2.Horn), 2.0)) +
-   (math.Pow((p1.Definite-p2.Definite), 2.0))))
+   return math.Abs(math.Sqrt(
+   math.Pow((p1.Binary-p2.Binary), 2.0) +
+   math.Pow((p1.Ternary-p2.Ternary), 2.0) +
+   math.Pow((p1.Horn-p2.Horn), 2.0) +
+   math.Pow((p1.Definite-p2.Definite), 2.0) +
+   math.Pow((p1.Lowest-p2.Lowest), 2.0) +
+   math.Pow((p1.Low-p2.Low), 2.0) +
+   math.Pow((p1.High-p2.High), 2.0) +
+   math.Pow((p1.Highest-p2.Highest), 2.0)))
 }
 
 func AnalyzeTexString(cdb *db.DB) string {
@@ -134,7 +153,7 @@ func AnalyzeTexString(cdb *db.DB) string {
    fmt.Fprintf(buffer, "%.0f & %.0f & %.0f & %.0f & ", p.Binary*float64(100), p.Ternary*float64(100), p.Horn*float64(100), p.Definite*float64(100))
 
    cs := cdb.GetCountStats()
-   fmt.Fprintf(buffer, "%f & %f & %f & %f ", cs.P75to100, cs.P50to74, cs.P25to49, cs.P1to24)
+   fmt.Fprintf(buffer, "%f & %f & %f & %f ", cs.Highest, cs.High, cs.Low, cs.Lowest)
 	return string(buffer.Bytes())
 }
 

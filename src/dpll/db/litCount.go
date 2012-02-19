@@ -8,10 +8,10 @@ import (
 )
 
 type CountStats struct {
-   P75to100 float64
-   P50to74 float64
-   P25to49 float64
-   P1to24 float64
+   Highest float64
+   High float64
+   Low float64
+   Lowest float64
 }
 
 // TODO reimplement as a heap
@@ -46,10 +46,10 @@ func (db *DB) GetCountStats() (cs *CountStats) {
          c1to24++
       }
    }
-   cs.P75to100 = float64(c75to100) / nLits
-   cs.P50to74 = float64(c50to74) / nLits
-   cs.P25to49 = float64(c25to49) / nLits
-   cs.P1to24 = float64(c1to24) / nLits
+   cs.Highest = float64(c75to100) / nLits
+   cs.High = float64(c50to74) / nLits
+   cs.Low = float64(c25to49) / nLits
+   cs.Lowest = float64(c1to24) / nLits
    return
 }
 

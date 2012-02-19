@@ -1,11 +1,11 @@
 package dpll
 
 import (
-   "time"
 	"dpll/assignment"
 	"dpll/assignment/guess"
 	"dpll/db"
 	"dpll/db/cnf"
+	"time"
 )
 
 type dpllStackNode struct {
@@ -42,10 +42,10 @@ func Dpll(cdb *db.DB, a *assignment.Assignment, b *Brancher, m *db.Manager, adap
 				aStack[top].Flipped = true
 				a.PushAssign(aStack[top].l.Val, aStack[top].l.Pol)
 
-            // Reconfigure if neccessary
-            if adapt != nil {
-               adapt.Reconfigure(cdb, b, m)
-            }
+				// Reconfigure if neccessary
+				if adapt != nil {
+					adapt.Reconfigure(cdb, b, m)
+				}
 			} else if status == db.Sat {
 				return a.Guess()
 			} else {
@@ -55,7 +55,6 @@ func Dpll(cdb *db.DB, a *assignment.Assignment, b *Brancher, m *db.Manager, adap
 	}
 	panic("Dpll is broken")
 }
-
 
 func DpllTimeout(cdb *db.DB, a *assignment.Assignment, b *Brancher, m *db.Manager, adapt *Adapter, timeout <-chan time.Time) *guess.Guess {
 
@@ -71,11 +70,11 @@ func DpllTimeout(cdb *db.DB, a *assignment.Assignment, b *Brancher, m *db.Manage
 		a.PushAssign(aStack[top].l.Val, aStack[top].l.Pol)
 
 		for {
-         select {
-         case <-timeout:
-            return nil
-         default:
-         }
+			select {
+			case <-timeout:
+				return nil
+			default:
+			}
 
 			status := cdb.Bcp(a.Guess(), *aStack[top].l, m)
 			if status == db.Conflict {
@@ -92,10 +91,10 @@ func DpllTimeout(cdb *db.DB, a *assignment.Assignment, b *Brancher, m *db.Manage
 				aStack[top].l.Flip()
 				aStack[top].Flipped = true
 				a.PushAssign(aStack[top].l.Val, aStack[top].l.Pol)
-            // Reconfigure if neccessary
-            if adapt != nil {
-               adapt.Reconfigure(cdb, b, m)
-            }
+				// Reconfigure if neccessary
+				if adapt != nil {
+					adapt.Reconfigure(cdb, b, m)
+				}
 
 			} else if status == db.Sat {
 				return a.Guess()

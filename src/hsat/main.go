@@ -17,16 +17,16 @@ import (
 
 // flags
 var (
-	seed    int64
-	file    string
-	logFile string
-	cpuprof string
-	quiet   bool
-	analyze bool
+	seed      int64
+	file      string
+	logFile   string
+	cpuprof   string
+	quiet     bool
+	analyze   bool
 	benchmark bool
-	adaptive string
-	branch  *dpll.Brancher = dpll.NewBrancher()
-	manage  *db.Manager    = db.NewManager()
+	adaptive  string
+	branch    *dpll.Brancher = dpll.NewBrancher()
+	manage    *db.Manager    = db.NewManager()
 )
 
 func main() {
@@ -59,71 +59,70 @@ func main() {
 		defer pprof.StopCPUProfile()
 	}
 
-   // Special switches for training behavior
-   if benchmark {
-      if adaptive == "" {
-         benchmarkFormula(file, "output.tex", "analysis.json")
-      } else {
-         testFormula(file, "adapt-output.tex", adaptive)
-      }
-      return
-   } else if analyze {
-      a := analyzeFormula(file)
-      fmt.Printf("%s\n", a)
-      return
-   } else if adaptive != "" {
-      runAdaptiveSolver(file, adaptive, quiet)
-   } else {
-      runNormalSolver(file, branch, manage, quiet)
-   }
+	// Special switches for training behavior
+	if benchmark {
+		if adaptive == "" {
+			benchmarkFormula(file, "output.tex", "analysis.json")
+		} else {
+			testFormula(file, "adapt-output.tex", adaptive)
+		}
+		return
+	} else if analyze {
+		a := analyzeFormula(file)
+		fmt.Printf("%s\n", a)
+		return
+	} else if adaptive != "" {
+		runAdaptiveSolver(file, adaptive, quiet)
+	} else {
+		runNormalSolver(file, branch, manage, quiet)
+	}
 
 	return
 }
 
 func analyzeFormula(file string) string {
-   // Initialize the cdb and assignment
-   db, _, err := initSolver(file)
-   if err != nil {
-      log.Fatal(err)
-   }
+	// Initialize the cdb and assignment
+	db, _, err := initSolver(file)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-   return dpll.AnalyzeTexString(db)
+	return dpll.AnalyzeTexString(db)
 }
 
-
 func runAdaptiveSolver(file string, json string, quiet bool) {
-   // Initialize the cdb and assignment
-   cdb, a, err := initSolver(file)
-   if err != nil {
-      log.Fatal(err)
-   }
+	// Initialize the cdb and assignment
+	cdb, a, err := initSolver(file)
+	if err != nil {
+		log.Fatal(err)
+	}
 	// Set the proper max db size
 	manage.MaxLearned = cdb.NGiven() / 3
-   // Read the data from the file and make the adapter
-   adapt := dpll.NewAdapter(json)
-   // Use the adapter to set the initial state
-   b := dpll.NewBrancher()
-   m := db.NewManager()
-   adapt.Reconfigure(cdb,b,m)
+	// Read the data from the file and make the adapter
+	adapt := dpll.NewAdapter(json)
+	// Use the adapter to set the initial state
+	b := dpll.NewBrancher()
+	m := db.NewManager()
+	adapt.Reconfigure(cdb, b, m)
 
-   g := dpll.Dpll(cdb,a,b,m,adapt)
+	g := dpll.Dpll(cdb, a, b, m, adapt)
 
-   printResults(g, cdb, adapt, !quiet)
+	printResults(g, cdb, adapt, !quiet)
 }
 
 func runNormalSolver(file string, b *dpll.Brancher, m *db.Manager, quiet bool) {
-   // Initialize the cdb and assignment
-   db, a, err := initSolver(file)
-   if err != nil {
-      log.Fatal(err)
-   }
+	// Initialize the cdb and assignment
+	db, a, err := initSolver(file)
+	if err != nil {
+		log.Fatal(err)
+	}
 	// Set the proper max db size
 	manage.MaxLearned = db.NGiven() / 3
 
-   // Run the Dpll!
+	// Run the Dpll!
 	g := dpll.Dpll(db, a, b, m, nil)
 
-   printResults(g, db, nil, !quiet)
+	printResults(g, db, nil, !quiet)
 }
 
 func initLogging(s string) error {
@@ -143,58 +142,56 @@ func initLogging(s string) error {
 func initSolver(file string) (cdb *db.DB, a *assignment.Assignment, err error) {
 	f, err := os.Open(file)
 	if err != nil {
-		return nil,nil,err
+		return nil, nil, err
 	}
 
 	// Initialize the db
 	cdb, a, err = dimacs.DimacsToDb(f)
 	f.Close()
 	if err != nil {
-		return nil,nil,err
+		return nil, nil, err
 	}
 
 	cdb.StartLearning()
 
-   return
+	return
 }
 
 func runBaseSolver() {
 
 }
 
-
 func printResults(g *guess.Guess, cdb *db.DB, a *dpll.Adapter, verbose bool) {
-   if verbose {
-      printVerboseResults(g, cdb, a)
-   } else {
-      printQuietResults(g, cdb)
-   }
+	if verbose {
+		printVerboseResults(g, cdb, a)
+	} else {
+		printQuietResults(g, cdb)
+	}
 }
 
 func printQuietResults(g *guess.Guess, cdb *db.DB) {
-   if g == nil {
-      fmt.Printf("UNSAT\n")
-   } else if !cdb.Verify(g) {
-      fmt.Printf("UNKNOWN\n")
-   } else {
-      fmt.Printf("SAT\n")
-   }
+	if g == nil {
+		fmt.Printf("UNSAT\n")
+	} else if !cdb.Verify(g) {
+		fmt.Printf("UNKNOWN\n")
+	} else {
+		fmt.Printf("SAT\n")
+	}
 }
 
 func printVerboseResults(g *guess.Guess, cdb *db.DB, a *dpll.Adapter) {
 	if g == nil {
-      fmt.Printf("s UNSAT\n")
+		fmt.Printf("s UNSAT\n")
 	} else if !cdb.Verify(g) {
-      fmt.Printf("c ERROR: Solution could not be verified\n")
-      fmt.Printf("s UNKNOWN\n")
-      fmt.Printf("%s\n", g)
-   } else {
-      fmt.Printf("c Solution verified\n")
-      if adaptive != "" {
-         fmt.Printf("c Adaptive solver changed strategies %d times.\n", a.NChanges())
-      }
-      fmt.Printf("s SAT\n")
-      fmt.Printf("s %s\n", g)
+		fmt.Printf("c ERROR: Solution could not be verified\n")
+		fmt.Printf("s UNKNOWN\n")
+		fmt.Printf("%s\n", g)
+	} else {
+		fmt.Printf("c Solution verified\n")
+		if adaptive != "" {
+			fmt.Printf("c Adaptive solver changed strategies %d times.\n", a.NChanges())
+		}
+		fmt.Printf("s SAT\n")
+		fmt.Printf("s %s\n", g)
 	}
 }
-

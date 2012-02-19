@@ -116,33 +116,33 @@ func (db *DB) AddEntry(vars []int, shouldSort bool) {
 	}
 
 	// Update DB stats
-   if db.learning {
-      if e.IsBinary() {
-         db.LStats.Binary++
-      }
-      if e.IsTernary() {
-         db.LStats.Ternary++
-      }
-      if e.IsHorn() {
-         db.LStats.Horn++
-      }
-      if e.IsDefinite() {
-         db.LStats.Definite++
-      }
-   } else {
-      if e.IsBinary() {
-         db.GStats.Binary++
-      }
-      if e.IsTernary() {
-         db.GStats.Ternary++
-      }
-      if e.IsHorn() {
-         db.GStats.Horn++
-      }
-      if e.IsDefinite() {
-         db.GStats.Definite++
-      }
-   }
+	if db.learning {
+		if e.IsBinary() {
+			db.LStats.Binary++
+		}
+		if e.IsTernary() {
+			db.LStats.Ternary++
+		}
+		if e.IsHorn() {
+			db.LStats.Horn++
+		}
+		if e.IsDefinite() {
+			db.LStats.Definite++
+		}
+	} else {
+		if e.IsBinary() {
+			db.GStats.Binary++
+		}
+		if e.IsTernary() {
+			db.GStats.Ternary++
+		}
+		if e.IsHorn() {
+			db.GStats.Horn++
+		}
+		if e.IsDefinite() {
+			db.GStats.Definite++
+		}
+	}
 
 	// Update Lit Counts
 	db.Counts.Add(vars)

@@ -18,7 +18,7 @@ var manageFuncs = [...]func(*DB, *guess.Guess, *Manager){none, queue, berkmin}
 
 type Manager struct {
 	Manage     func(*DB, *guess.Guess, *Manager)
-   strat ClauseDBMS
+	strat      ClauseDBMS
 	MaxLearned uint
 }
 
@@ -30,11 +30,11 @@ func NewManager() (m *Manager) {
 
 func (m *Manager) SetStrat(d ClauseDBMS) {
 	m.Manage = manageFuncs[d]
-   m.strat = d
+	m.strat = d
 }
 
 func (m *Manager) Strat() ClauseDBMS {
-   return m.strat
+	return m.strat
 }
 
 // Performs the basic management that is not specific to any particular
@@ -86,16 +86,20 @@ func berkmin(cdb *DB, g *guess.Guess, m *Manager) {
 
 // Manager needs to satisfy the flag.Value interface
 func (m Manager) String() (s string) {
-   return m.strat.String()
+	return m.strat.String()
 }
 func (d ClauseDBMS) String() (s string) {
-   switch d {
-   case None: s = "none"
-   case Queue: s = "queue"
-   case BerkMin: s = "berkmin"
-   default: s = "unimplemented"
-   }
-   return
+	switch d {
+	case None:
+		s = "none"
+	case Queue:
+		s = "queue"
+	case BerkMin:
+		s = "berkmin"
+	default:
+		s = "unimplemented"
+	}
+	return
 }
 
 func (m *Manager) Set(s string) error {

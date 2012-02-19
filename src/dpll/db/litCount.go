@@ -8,10 +8,10 @@ import (
 )
 
 type CountStats struct {
-   Highest float64
-   High float64
-   Low float64
-   Lowest float64
+	Highest float64
+	High    float64
+	Low     float64
+	Lowest  float64
 }
 
 // TODO reimplement as a heap
@@ -26,31 +26,31 @@ func NewLitCounts(nVar int) (lc *LitCounts) {
 }
 
 func (db *DB) GetCountStats() (cs *CountStats) {
-   var (
-      percentage float64
-      c75to100, c50to74, c25to49, c1to24 int
-      nClauses = float64(db.nLearned + db.nGiven)
-      nLits = float64(len(db.Counts.counts))
-   )
-   cs = new(CountStats)
+	var (
+		percentage                         float64
+		c75to100, c50to74, c25to49, c1to24 int
+		nClauses                           = float64(db.nLearned + db.nGiven)
+		nLits                              = float64(len(db.Counts.counts))
+	)
+	cs = new(CountStats)
 
-   for _, n := range db.Counts.counts {
-      percentage = float64(n)/nClauses
-      if percentage >= 0.03 {
-         c75to100++
-      } else if percentage >= 0.015 {
-         c50to74++
-      } else if percentage >= 0.0075 {
-         c25to49++
-      } else {
-         c1to24++
-      }
-   }
-   cs.Highest = float64(c75to100) / nLits
-   cs.High = float64(c50to74) / nLits
-   cs.Low = float64(c25to49) / nLits
-   cs.Lowest = float64(c1to24) / nLits
-   return
+	for _, n := range db.Counts.counts {
+		percentage = float64(n) / nClauses
+		if percentage >= 0.03 {
+			c75to100++
+		} else if percentage >= 0.015 {
+			c50to74++
+		} else if percentage >= 0.0075 {
+			c25to49++
+		} else {
+			c1to24++
+		}
+	}
+	cs.Highest = float64(c75to100) / nLits
+	cs.High = float64(c50to74) / nLits
+	cs.Low = float64(c25to49) / nLits
+	cs.Lowest = float64(c1to24) / nLits
+	return
 }
 
 func (lc *LitCounts) Get(l *cnf.Lit) (int, error) {

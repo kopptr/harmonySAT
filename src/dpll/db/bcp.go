@@ -16,7 +16,7 @@ const (
 func (db *DB) Bcp(g *guess.Guess, lit cnf.Lit, m *Manager) BcpReturn {
 	lq := newLitQ() // queue of literals to be assigned
 	lq.PushBack(lit)
-   return db.LQBcp(g, lq, m)
+	return db.LQBcp(g, lq, m)
 }
 
 // Performs BCP on the clause database until no unit clauses remain.
@@ -70,9 +70,9 @@ func (db *DB) LQBcp(g *guess.Guess, lq *LitQ, m *Manager) BcpReturn {
 				} else {
 					// CONFLICT
 					db.AddConflictEntry(g)
-               if m != nil {
-                  m.Manage(db, g, m)
-               }
+					if m != nil {
+						m.Manage(db, g, m)
+					}
 					return Conflict
 				}
 			}

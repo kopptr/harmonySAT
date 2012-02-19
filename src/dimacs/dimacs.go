@@ -6,10 +6,10 @@ import (
 	"dpll/db"
 	"dpll/db/cnf"
 	"errors"
+	"fmt"
 	"io"
 	"scanner"
 	"strings"
-   "fmt"
 )
 
 func DimacsToDb(r io.Reader) (clauseDB *db.DB, a *assignment.Assignment, err error) {
@@ -31,10 +31,10 @@ func DimacsToDb(r io.Reader) (clauseDB *db.DB, a *assignment.Assignment, err err
 		return nil, nil, errors.New("s Unsatisfiable")
 	}
 	/*
-	else if n != nClauses {
-			return nil, nil, errors.New(fmt.Sprintf("Read %d/%d clauses.", n, nClauses))
-		}
-	* This is not an error. Unit clauses are assigned & discarded.
+		else if n != nClauses {
+				return nil, nil, errors.New(fmt.Sprintf("Read %d/%d clauses.", n, nClauses))
+			}
+		* This is not an error. Unit clauses are assigned & discarded.
 	*/
 	return
 }
@@ -54,14 +54,14 @@ func matchClauses(r *scanner.Scanner, clauseDB *db.DB, a *assignment.Assignment)
 			foundUnit = true
 			if clause[0] < 1 {
 				if foo, _ := a.Guess().Get(uint((clause[0] * -1))); foo == guess.Pos {
-               fmt.Printf("Conflicting unit clauses: %d\n", clause[0])
+					fmt.Printf("Conflicting unit clauses: %d\n", clause[0])
 					return -1, nil
 				}
 				a.Guess().Set(uint((clause[0] * -1)), cnf.Neg)
 				lq.PushBack(cnf.Lit{uint((clause[0] * -1)), cnf.Neg})
 			} else {
 				if foo, _ := a.Guess().Get(uint(clause[0])); foo == guess.Neg {
-               fmt.Printf("Conflicting unit clauses: %d\n", clause[0])
+					fmt.Printf("Conflicting unit clauses: %d\n", clause[0])
 					return -1, nil
 				}
 				a.Guess().Set(uint(clause[0]), cnf.Pos)
@@ -75,7 +75,7 @@ func matchClauses(r *scanner.Scanner, clauseDB *db.DB, a *assignment.Assignment)
 	// If we found unit clauses, we should BCP
 	if foundUnit {
 		if clauseDB.LQBcp(a.Guess(), lq, nil) == db.Conflict {
-         fmt.Printf("conflict before dpll\n")
+			fmt.Printf("conflict before dpll\n")
 			// Unsatisfiable
 			return -1, nil
 		}

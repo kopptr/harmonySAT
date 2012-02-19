@@ -40,7 +40,7 @@ func (m *Manager) Strat() ClauseDBMS {
 // Performs the basic management that is not specific to any particular
 // strategy, for instance, dividing the counts in the VSIDS counter
 func (m *Manager) basic(db *DB, g *guess.Guess) {
-	db.Counts.DivCounts(uint(3))
+	db.Counts.DivCounts(3)
 }
 
 func none(db *DB, g *guess.Guess, m *Manager) {

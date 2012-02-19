@@ -22,9 +22,9 @@ echo "\\maketitle" >> ${TEX}
 echo "" >> ${TEX}
 echo "\\begin{table}[ht!]" >> ${TEX}
 echo "\\centering" >> ${TEX}
-echo "\\begin{tabular}{|c||c|c|c|c||c|c|c|c|c|c|c|c|}\\hline" >> ${TEX}
+echo "\\begin{tabular}{|c||c|c|c|c|c|c|c||c|c|c|c|c|c|c|c|}\\hline" >> ${TEX}
 
-echo -n "FILE & Bin & Tern & Horn & Def " >> ${TEX}
+echo -n "FILE & Bin & Tern & Horn & Def & Mean & Med & Mod " >> ${TEX}
 for b in ${BRANCH}; do
    for m in ${DBMS}; do
       echo -n "& \{${b},${m}\} " >> ${TEX}

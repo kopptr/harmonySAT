@@ -131,7 +131,10 @@ func AnalyzeTexString(cdb *db.DB) string {
 
    p := NewGProportions(cdb)
 	buffer := bytes.NewBufferString("")
-   fmt.Fprintf(buffer, "%.0f & %.0f & %.0f & %.0f ", p.Binary*float64(100), p.Ternary*float64(100), p.Horn*float64(100), p.Definite*float64(100))
+   fmt.Fprintf(buffer, "%.0f & %.0f & %.0f & %.0f & ", p.Binary*float64(100), p.Ternary*float64(100), p.Horn*float64(100), p.Definite*float64(100))
+
+   cs := cdb.GetCountStats()
+   fmt.Fprintf(buffer, "%f & %f & %f & %f ", cs.P75to100, cs.P50to74, cs.P25to49, cs.P1to24)
 	return string(buffer.Bytes())
 }
 

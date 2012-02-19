@@ -21,8 +21,8 @@ echo "\\maketitle"
 echo ""
 echo "\\begin{table}[ht!]"
 echo "\\centering"
-echo "\\begin{tabular}{|c||c|c|c|c|}\\hline"
-echo "File & Bin & Tern & Horn & Def\\\\\\hline\\hline"
+echo "\\begin{tabular}{|c||c|c|c|c||c|c|c|c|}\\hline"
+echo "File & Bin & Tern & Horn & Def & 75--100 & 50--74 & 25--49 & 1--24 \\\\\\hline\\hline"
 
 for bench in ${BENCH}; do
    echo -n "${bench} & "

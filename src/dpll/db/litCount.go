@@ -7,18 +7,53 @@ import (
 	"fmt"
 )
 
+type CountStats struct {
+   P75to100 float64
+   P50to74 float64
+   P25to49 float64
+   P1to24 float64
+}
+
 // TODO reimplement as a heap
 type LitCounts struct {
-	counts []uint
+	counts []int
 }
 
 func NewLitCounts(nVar int) (lc *LitCounts) {
 	lc = new(LitCounts)
-	lc.counts = make([]uint, nVar*2)
+	lc.counts = make([]int, nVar*2)
 	return
 }
 
-func (lc *LitCounts) Get(l *cnf.Lit) (uint, error) {
+func (db *DB) GetCountStats() (cs *CountStats) {
+   var (
+      percentage float64
+      c75to100, c50to74, c25to49, c1to24 int
+      nClauses = float64(db.nLearned + db.nGiven)
+      nLits = float64(len(db.Counts.counts))
+   )
+   cs = new(CountStats)
+
+   for _, n := range db.Counts.counts {
+      percentage = float64(n)/nClauses
+      if percentage >= 0.03 {
+         c75to100++
+      } else if percentage >= 0.015 {
+         c50to74++
+      } else if percentage >= 0.0075 {
+         c25to49++
+      } else {
+         c1to24++
+      }
+   }
+   cs.P75to100 = float64(c75to100) / nLits
+   cs.P50to74 = float64(c50to74) / nLits
+   cs.P25to49 = float64(c25to49) / nLits
+   cs.P1to24 = float64(c1to24) / nLits
+   return
+}
+
+func (lc *LitCounts) Get(l *cnf.Lit) (int, error) {
 	if l.Val > uint(len(lc.counts)/2) || l.Val < 1 || (l.Pol != cnf.Pos && l.Pol != cnf.Neg) {
 		return 0, errors.New(fmt.Sprintf("Called LitCounts.Get with %s", l))
 	}
@@ -40,7 +75,7 @@ func (lc *LitCounts) Add(vars []int) {
 	}
 }
 
-func (lc *LitCounts) DivCounts(divisor uint) {
+func (lc *LitCounts) DivCounts(divisor int) {
 	for i := range lc.counts {
 		lc.counts[i] /= divisor
 	}

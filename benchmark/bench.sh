@@ -12,6 +12,7 @@ TEX="output.tex"
 
 echo "\\documentclass{article}" > ${TEX}
 echo "\\usepackage[landscape]{geometry}" >> ${TEX}
+echo "\\usepackage{fullpage}" >> ${TEX}
 echo "" >> ${TEX}
 echo "\\title{Base Solver Measurements}" >> ${TEX}
 echo "\\author{Tim Kopp}" >> ${TEX}
@@ -22,9 +23,9 @@ echo "\\maketitle" >> ${TEX}
 echo "" >> ${TEX}
 echo "\\begin{table}[ht!]" >> ${TEX}
 echo "\\centering" >> ${TEX}
-echo "\\begin{tabular}{|c||c|c|c|c|c|c|c||c|c|c|c|c|c|c|c|}\\hline" >> ${TEX}
+echo "\\begin{tabular}{|c||c|c|c|c|c|c|c|c||c|c|c|c|c|c|c|c|}\\hline" >> ${TEX}
 
-echo -n "FILE & Bin & Tern & Horn & Def & Mean & Med & Mod " >> ${TEX}
+echo -n "FILE & Bin & Tern & Horn & Def & HI & hi & lo & LO " >> ${TEX}
 for b in ${BRANCH}; do
    for m in ${DBMS}; do
       echo -n "& \{${b},${m}\} " >> ${TEX}

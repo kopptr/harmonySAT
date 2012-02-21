@@ -70,7 +70,7 @@ type Adapter struct {
 func NewAdapter(jsonFile string) *Adapter {
 	var e error
 	a := new(Adapter)
-	a.entries = make([]Entry, 2)
+	a.entries = make([]Entry, 17)
 	jsonReader, err := os.Open(jsonFile)
 	if err != nil {
 		log.Fatal(err)
@@ -99,6 +99,13 @@ func (a *Adapter) Reconfigure(cdb *db.DB, b *Brancher, m *db.Manager) {
 		originalM = m.Strat()
 	)
 
+   if a.countDown == 0 {
+      a.countDown = 10
+   } else {
+      a.countDown--
+      return
+   }
+
 	if a.firstCall {
 		p = NewGProportions(cdb)
 	} else {
@@ -121,7 +128,7 @@ func (a *Adapter) Reconfigure(cdb *db.DB, b *Brancher, m *db.Manager) {
 	if originalM != a.entries[bestI].Config.Dbms || originalB != a.entries[bestI].Config.Branch {
 		m.SetStrat(a.entries[bestI].Config.Dbms)
 		b.SetRule(a.entries[bestI].Config.Branch)
-		//fmt.Printf("Changed rules from {%s,%s} to {%s,%s}\n", originalB,originalM,b.Rule(),m.Strat())
+		//log.Printf("Changed rules from {%s,%s} to {%s,%s}\n", originalB,originalM,b.Rule(),m.Strat())
 		a.nChanges++
 	}
 	a.firstCall = false

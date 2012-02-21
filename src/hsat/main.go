@@ -102,10 +102,9 @@ func runAdaptiveSolver(file string, json string, quiet bool) {
 	adapt := dpll.NewAdapter(json)
 	// Use the adapter to set the initial state
 	b := dpll.NewBrancher()
-	m := db.NewManager()
-	adapt.Reconfigure(cdb, b, m)
+	adapt.Reconfigure(cdb, b, manage)
 
-	g := dpll.Dpll(cdb, a, b, m, adapt)
+	g := dpll.Dpll(cdb, a, b, manage, adapt)
 
 	printResults(g, cdb, adapt, !quiet)
 }
@@ -117,7 +116,7 @@ func runNormalSolver(file string, b *dpll.Brancher, m *db.Manager, quiet bool) {
 		log.Fatal(err)
 	}
 	// Set the proper max db size
-	manage.MaxLearned = db.NGiven() / 3
+	m.MaxLearned = db.NGiven() / 3
 
 	// Run the Dpll!
 	g := dpll.Dpll(db, a, b, m, nil)

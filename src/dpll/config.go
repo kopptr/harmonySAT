@@ -65,6 +65,7 @@ type Adapter struct {
 	entries   []Entry
 	nChanges  int
 	firstCall bool
+   countDown int
 }
 
 func NewAdapter(jsonFile string) *Adapter {
@@ -100,7 +101,7 @@ func (a *Adapter) Reconfigure(cdb *db.DB, b *Brancher, m *db.Manager) {
 	)
 
    if a.countDown == 0 {
-      a.countDown = 10
+      a.countDown = 30
    } else {
       a.countDown--
       return

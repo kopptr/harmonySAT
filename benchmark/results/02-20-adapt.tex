@@ -1,5 +1,5 @@
 \documentclass{article}
-\usepackage[landscape]{geometry}
+\usepackage[paperheight=8.5in, paperwidth=15in]{geometry}
 
 \title{Adaptive Solver Measurements}
 \author{Tim Kopp}
@@ -12,8 +12,8 @@ Analysis used: benchmark/results/analysis-02-20.json
 
 \begin{table}[ht!]
 \centering
-\begin{tabular}{|c||c|c|c|c||c|c|c|c|c|c|c|c||c|c|}\hline
-FILE & Bin & Tern & Horn & Def & \{O,Q\} & \{O,B\} & \{R,Q\} & \{R,B\} & \{V,Q\} & \{V,B\} & \{M,Q\} & \{M,B\} & A & \#\\\hline\hline
+\begin{tabular}{|c||c|c|c|c|c|c|c|c||c|c|c|c|c|c|c|c||c|c|}\hline
+FILE & Bin & Tern & Horn & Def & LO & lo & hi & HI & \{O,Q\} & \{O,B\} & \{R,Q\} & \{R,B\} & \{V,Q\} & \{V,B\} & \{M,Q\} & \{M,B\} & A & \#\\\hline\hline
 ais10 & 74 & 26 & 99 & 26 & 0 & 0 & 0.5 & 0.5 & 4.587s & 4.32s & 37.52s & 10.382s & 3.521s & 11.224s & TO & 12.232s & 168.86ms & 0\\\hline
 anomaly & 78 & 21 & 84 & 23 & 0.322 & 0.385 & 0.229 & 0.062 & 3.283ms & 3ms & 2.51ms & 3.169ms & 3.099ms & 2.462ms & 3.091ms & 3.109ms & 3.358ms & 0\\\hline
 qg1-07 & 5 & 3 & 100 & 0 & 0 & 0 & 0.5 & 0.5 & 2.324s & 2.191s & 3.698s & 1.949s & 1.378s & 1.439s & 2m13.89s & 2.29s & 1.90s & 0\\\hline
@@ -21,10 +21,10 @@ sw3 & 97 & 0 & 97 & 0 & 0 & 0 & 0 & 1 & 9.012s & 8.410s & TO & TO & TO & TO & TO
 uf26 & 0 & 100 & 51 & 37 & 0.01 & 0.485 & 0.365 & 0.14 & 4m15.55s & 3m52.52s & 58.41s & 2m11.50s & 28.32s & 7.21s & 1m20.65s & 4m56.36s & 39.11s & 2\\\hline
 uf500 & 0 & 100 & 50 & 37 & 0 & 0.445 & 0.44 & 0.115 & 7m15.32s & 6m46.39s & 5m58.23s & 12m44.22s & 56.80s & 16.44s & 5m35.71s & 1m23.96s & 39.54s & 1\\\hline
 uf727 & 0 & 100 & 47 & 37 & 0.015 & 0.415 & 0.46 & 0.11 & 49.25s & 45.99 & 43.24s & 1.06s & 335.608ms & 92.87ms & 15m13.15s & 34.92s & 11.356s & 0\\\hline
-dekker.used-as.sat04-989 & 67 & 33 & 72 & 36 & 0 & 0 & 0 & 1 & TO & TO & TO & TO & TO & TO & TO & TO & TO & --- \\\hline
+dekker & 67 & 33 & 72 & 36 & 0 & 0 & 0 & 1 & TO & TO & TO & TO & TO & TO & TO & TO & TO & --- \\\hline
 F51929 & 18 & 45 & 62 & 60 & 0.106 & 0.76 & 0.066 & 0.066 & 7.279ms & 6.908ms & 7.804ms & 11.139ms & 7.13ms & 9.78ms & 7.232ms & 12.95ms & 7.703ms & 0\\\hline
 F8137241 & 16 & 43 & 60 & 59 & 0 & 0 & 0.867 & 0.132 & 2.328s & 2.119s & 1m41.44s & 51.44s & 444.06ms & 2.59s & 1m2.97s & 7m31.92s & 2.15s & 0\\\hline
-sw13 & 97 & 0 & 97 & 0 & 0 & 0 & 0 & 1 & 37.472ms & 35.983ms TO & TO & TO & TO & TO & TO & & 35.154ms & 0\\\hline
+sw13 & 97 & 0 & 97 & 0 & 0 & 0 & 0 & 1 & 37.472ms & 35.983ms & TO & TO & TO & TO & TO & TO & 35.154ms & 0\\\hline
 sw9 & 97 & 0 & 97 & 0 & 0 & 0 & 0 & 1 & 37.053ms & 36.858ms & TO & TO & 11.41s & TO & 1m51.57s & TO & 36.93ms & 0\\\hline
 uf113 & 0 & 100 & 50 & 37 & 0.005 & 0.48 & 0.39 & 0.125 & 10m46.39s & 9m50.40s & 34.42s & 1m16.99s & 13m53.73s & 4m26.99s & TO & 10m12.46s & 7m35.99s & 2\\\hline
 uf691 & 0 & 100 & 53 & 39 & 0.025 & 0.43 & 0.425 & 0.12 & 18m38.60s & 17m12.72s & 2m33.29s & 3m44.79s & 5m42.08s & 2m16.47s & TO & 5m38.499472s & 2m41.106947s & 2\\\hline

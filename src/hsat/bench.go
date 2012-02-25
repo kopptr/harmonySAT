@@ -177,10 +177,18 @@ func testFormula(formulaFile string, texFile string, jsonFile string) {
 		g, a := runAdaptiveBench(file, jsonFile, chooseOnce, extraStats)
 		after := time.Now()
 		if g == nil {
-			fmt.Fprintf(tex, "& TO & --- ")
+         if chooseOnce {
+            fmt.Fprintf(tex, "& TO ")
+         } else {
+            fmt.Fprintf(tex, "& TO & --- ")
+         }
 		} else {
 			thisRun := after.Sub(before)
+         if chooseOnce {
 			fmt.Fprintf(tex, "& %s & %d", thisRun, a.NChanges())
+         } else {
+			fmt.Fprintf(tex, "& %s ", thisRun)
+         }
 		}
 	}
 	fmt.Fprintf(tex, "\\\\\\hline")

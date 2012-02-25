@@ -62,12 +62,12 @@ type Entry struct {
 }
 
 type Adapter struct {
-	entries   []Entry
-	nChanges  int
-	firstCall bool
-   chooseOnce bool
-   extraStats bool
-   countDown int
+	entries    []Entry
+	nChanges   int
+	firstCall  bool
+	chooseOnce bool
+	extraStats bool
+	countDown  int
 }
 
 func NewAdapter(jsonFile string, chooseOnce bool, extraStats bool) *Adapter {
@@ -88,7 +88,7 @@ func NewAdapter(jsonFile string, chooseOnce bool, extraStats bool) *Adapter {
 
 	a.nChanges = -1 // The first choice doesn't count as a change.
 	a.firstCall = true
-   a.chooseOnce = chooseOnce
+	a.chooseOnce = chooseOnce
 
 	return a
 }
@@ -103,19 +103,19 @@ func (a *Adapter) Reconfigure(cdb *db.DB, b *Brancher, m *db.Manager) {
 		originalM = m.Strat()
 	)
 
-   if a.countDown == 0 {
-      a.countDown = 30
-   } else {
-      a.countDown--
-      return
-   }
+	if a.countDown == 0 {
+		a.countDown = 30
+	} else {
+		a.countDown--
+		return
+	}
 
 	if a.firstCall {
 		p = NewGProportions(cdb)
 	} else {
-      if a.chooseOnce {
-         return
-      }
+		if a.chooseOnce {
+			return
+		}
 		p = NewLProportions(cdb)
 		if cdb.NLearned() < 3 && !a.firstCall {
 			return
@@ -124,11 +124,11 @@ func (a *Adapter) Reconfigure(cdb *db.DB, b *Brancher, m *db.Manager) {
 
 	// Find the best match
 	for i := range a.entries {
-      if a.extraStats {
-         d = EuclideanDistExtra(p, &a.entries[i].Proportions)
-      } else {
-         d = EuclideanDist(p, &a.entries[i].Proportions)
-      }
+		if a.extraStats {
+			d = EuclideanDistExtra(p, &a.entries[i].Proportions)
+		} else {
+			d = EuclideanDist(p, &a.entries[i].Proportions)
+		}
 		if d < bestD {
 			bestD = d
 			bestI = i

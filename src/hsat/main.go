@@ -17,18 +17,18 @@ import (
 
 // flags
 var (
-	seed      int64
-	file      string
-	logFile   string
-	cpuprof   string
-	quiet     bool
-	analyze   bool
-	extraStats   bool
-	chooseOnce   bool
-	benchmark bool
-	adaptive  string
-	branch    *dpll.Brancher = dpll.NewBrancher()
-	manage    *db.Manager    = db.NewManager()
+	seed       int64
+	file       string
+	logFile    string
+	cpuprof    string
+	quiet      bool
+	analyze    bool
+	extraStats bool
+	chooseOnce bool
+	benchmark  bool
+	adaptive   string
+	branch     *dpll.Brancher = dpll.NewBrancher()
+	manage     *db.Manager    = db.NewManager()
 )
 
 func main() {

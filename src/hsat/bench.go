@@ -162,27 +162,27 @@ func testFormula(formulaFile string, texFile string, jsonFile string) {
 		}
 	}
 
-   chooseOnce := false
-   extraStats := false
-   for i := 0; i < 4; i++ {
-      // get all 4 combos
-      if i > 1 {
-         chooseOnce = true
-      }
-      if i % 2 == 1 {
-         extraStats = !extraStats
-      }
-      // Run the Adaptive bench
-      before := time.Now()
-      g, a := runAdaptiveBench(file, jsonFile, chooseOnce, extraStats)
-      after := time.Now()
-      if g == nil {
-         fmt.Fprintf(tex, "& TO & --- ")
-      } else {
-         thisRun := after.Sub(before)
-         fmt.Fprintf(tex, "& %s & %d", thisRun, a.NChanges())
-      }
-   }
+	chooseOnce := false
+	extraStats := false
+	for i := 0; i < 4; i++ {
+		// get all 4 combos
+		if i > 1 {
+			chooseOnce = true
+		}
+		if i%2 == 1 {
+			extraStats = !extraStats
+		}
+		// Run the Adaptive bench
+		before := time.Now()
+		g, a := runAdaptiveBench(file, jsonFile, chooseOnce, extraStats)
+		after := time.Now()
+		if g == nil {
+			fmt.Fprintf(tex, "& TO & --- ")
+		} else {
+			thisRun := after.Sub(before)
+			fmt.Fprintf(tex, "& %s & %d", thisRun, a.NChanges())
+		}
+	}
 	fmt.Fprintf(tex, "\\\\\\hline")
 
 }

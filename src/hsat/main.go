@@ -23,6 +23,8 @@ var (
 	cpuprof   string
 	quiet     bool
 	analyze   bool
+	extraStats   bool
+	chooseOnce   bool
 	benchmark bool
 	adaptive  string
 	branch    *dpll.Brancher = dpll.NewBrancher()
@@ -38,6 +40,8 @@ func main() {
 	flag.BoolVar(&quiet, "q", false, "True for quiet output. States \"SAT\" or \"UNSAT\"")
 	flag.BoolVar(&analyze, "e", false, "True for examination output. If true, will not actually run solver.")
 	flag.BoolVar(&benchmark, "b", false, "True for benchmark output.")
+	flag.BoolVar(&extraStats, "s", false, "True for extra statistics.")
+	flag.BoolVar(&chooseOnce, "c", false, "True for choosing once, then not adapting.")
 	flag.StringVar(&adaptive, "a", "", "Path to analysis json file. Enables adaptive solving")
 	flag.Var(branch, "branch", "DPLL branching rule")
 	flag.Var(manage, "dbms", "DPLL clause database management strategy")
@@ -72,7 +76,7 @@ func main() {
 		fmt.Printf("%s\n", a)
 		return
 	} else if adaptive != "" {
-		runAdaptiveSolver(file, adaptive, quiet)
+		runAdaptiveSolver(file, adaptive, chooseOnce, extraStats, quiet)
 	} else {
 		runNormalSolver(file, branch, manage, quiet)
 	}
@@ -90,7 +94,7 @@ func analyzeFormula(file string) string {
 	return dpll.AnalyzeTexString(db)
 }
 
-func runAdaptiveSolver(file string, json string, quiet bool) {
+func runAdaptiveSolver(file string, json string, chooseOnce bool, extraStats, quiet bool) {
 	// Initialize the cdb and assignment
 	cdb, a, err := initSolver(file)
 	if err != nil {
@@ -99,7 +103,7 @@ func runAdaptiveSolver(file string, json string, quiet bool) {
 	// Set the proper max db size
 	manage.MaxLearned = cdb.NGiven() / 3
 	// Read the data from the file and make the adapter
-	adapt := dpll.NewAdapter(json)
+	adapt := dpll.NewAdapter(json, chooseOnce, extraStats)
 	// Use the adapter to set the initial state
 	b := dpll.NewBrancher()
 	adapt.Reconfigure(cdb, b, manage)

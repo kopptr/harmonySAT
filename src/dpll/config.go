@@ -65,10 +65,12 @@ type Adapter struct {
 	entries   []Entry
 	nChanges  int
 	firstCall bool
+   chooseOnce bool
+   extraStats bool
    countDown int
 }
 
-func NewAdapter(jsonFile string) *Adapter {
+func NewAdapter(jsonFile string, chooseOnce bool, extraStats bool) *Adapter {
 	var e error
 	a := new(Adapter)
 	a.entries = make([]Entry, 17)
@@ -86,6 +88,7 @@ func NewAdapter(jsonFile string) *Adapter {
 
 	a.nChanges = -1 // The first choice doesn't count as a change.
 	a.firstCall = true
+   a.chooseOnce = chooseOnce
 
 	return a
 }
@@ -110,6 +113,9 @@ func (a *Adapter) Reconfigure(cdb *db.DB, b *Brancher, m *db.Manager) {
 	if a.firstCall {
 		p = NewGProportions(cdb)
 	} else {
+      if a.chooseOnce {
+         return
+      }
 		p = NewLProportions(cdb)
 		if cdb.NLearned() < 3 && !a.firstCall {
 			return
@@ -118,7 +124,11 @@ func (a *Adapter) Reconfigure(cdb *db.DB, b *Brancher, m *db.Manager) {
 
 	// Find the best match
 	for i := range a.entries {
-		d = EuclideanDist(p, &a.entries[i].Proportions)
+      if a.extraStats {
+         d = EuclideanDistExtra(p, &a.entries[i].Proportions)
+      } else {
+         d = EuclideanDist(p, &a.entries[i].Proportions)
+      }
 		if d < bestD {
 			bestD = d
 			bestI = i
@@ -141,6 +151,14 @@ func (a *Adapter) NChanges() int {
 }
 
 func EuclideanDist(p1 *Proportions, p2 *Proportions) float64 {
+	return math.Abs(math.Sqrt(
+		math.Pow((p1.Binary-p2.Binary), 2.0) +
+			math.Pow((p1.Ternary-p2.Ternary), 2.0) +
+			math.Pow((p1.Horn-p2.Horn), 2.0) +
+			math.Pow((p1.Definite-p2.Definite), 2.0)))
+}
+
+func EuclideanDistExtra(p1 *Proportions, p2 *Proportions) float64 {
 	return math.Abs(math.Sqrt(
 		math.Pow((p1.Binary-p2.Binary), 2.0) +
 			math.Pow((p1.Ternary-p2.Ternary), 2.0) +

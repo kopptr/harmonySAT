@@ -112,7 +112,7 @@ func runBench(file string, b dpll.BranchRule, d db.ClauseDBMS) *guess.Guess {
 	return g
 }
 
-func runAdaptiveBench(file string, jsonFile string) (*guess.Guess, *dpll.Adapter) {
+func runAdaptiveBench(file string, jsonFile string, chooseOnce bool, extraStats bool) (*guess.Guess, *dpll.Adapter) {
 
 	runtime.GOMAXPROCS(3)
 	timeout := time.After(20 * time.Minute)
@@ -125,7 +125,7 @@ func runAdaptiveBench(file string, jsonFile string) (*guess.Guess, *dpll.Adapter
 	// Set the proper max db size
 	manage.MaxLearned = cdb.NGiven() / 3
 	// Read the data from the file and make the adapter
-	adapt := dpll.NewAdapter(jsonFile)
+	adapt := dpll.NewAdapter(jsonFile, chooseOnce, extraStats)
 	// Use the adapter to set the initial state
 	b := dpll.NewBrancher()
 	m := db.NewManager()
@@ -154,7 +154,7 @@ func testFormula(formulaFile string, texFile string, jsonFile string) {
 			g := runBench(file, b, m)
 			after := time.Now()
 			if g == nil {
-				fmt.Fprintf(tex, "TO & ")
+				fmt.Fprintf(tex, "& TO ")
 			} else {
 				thisRun := after.Sub(before)
 				fmt.Fprintf(tex, "& %s ", thisRun)
@@ -162,17 +162,27 @@ func testFormula(formulaFile string, texFile string, jsonFile string) {
 		}
 	}
 
-	// Run the Adaptive bench
-	before := time.Now()
-	g, a := runAdaptiveBench(file, jsonFile)
-	after := time.Now()
-	if g == nil {
-		fmt.Fprintf(tex, "& TO & --- ")
-	} else {
-		thisRun := after.Sub(before)
-		fmt.Fprintf(tex, "& %s & %d", thisRun, a.NChanges())
-	}
-
+   chooseOnce := false
+   extraStats := false
+   for i := 0; i < 4; i++ {
+      // get all 4 combos
+      if i > 1 {
+         chooseOnce = true
+      }
+      if i % 2 == 1 {
+         extraStats = !extraStats
+      }
+      // Run the Adaptive bench
+      before := time.Now()
+      g, a := runAdaptiveBench(file, jsonFile, chooseOnce, extraStats)
+      after := time.Now()
+      if g == nil {
+         fmt.Fprintf(tex, "& TO & --- ")
+      } else {
+         thisRun := after.Sub(before)
+         fmt.Fprintf(tex, "& %s & %d", thisRun, a.NChanges())
+      }
+   }
 	fmt.Fprintf(tex, "\\\\\\hline")
 
 }

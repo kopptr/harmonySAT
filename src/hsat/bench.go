@@ -162,12 +162,12 @@ func testFormula(formulaFile string, texFile string, jsonFile string) {
 		}
 	}
 
-	chooseOnce := false
+	chooseOnce := true
 	extraStats := false
 	for i := 0; i < 4; i++ {
 		// get all 4 combos
 		if i > 1 {
-			chooseOnce = true
+			chooseOnce = false
 		}
 		if i%2 == 1 {
 			extraStats = !extraStats
@@ -185,9 +185,9 @@ func testFormula(formulaFile string, texFile string, jsonFile string) {
 		} else {
 			thisRun := after.Sub(before)
          if chooseOnce {
-			fmt.Fprintf(tex, "& %s & %d", thisRun, a.NChanges())
+            fmt.Fprintf(tex, "& %s ", thisRun)
          } else {
-			fmt.Fprintf(tex, "& %s ", thisRun)
+            fmt.Fprintf(tex, "& %s & %d", thisRun, a.NChanges())
          }
 		}
 	}

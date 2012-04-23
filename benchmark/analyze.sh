@@ -5,7 +5,7 @@ go install hsat
 DIR=$1
 BENCH=`ls ${DIR}`
 #BENCH=`ls test/*.cnf`
-BRANCH="ordered random vsids moms"
+BRANCH="ordered random vsids moms vmtf"
 DBMS="queue berkmin" # DO NOT put none. swapping then dead
 
 echo "\\documentclass{article}"

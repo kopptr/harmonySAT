@@ -2,6 +2,7 @@ package db
 
 import (
 	"dpll/assignment/guess"
+	"dpll/assignment"
 	"dpll/db/cnf"
 	"errors"
 	"fmt"
@@ -14,14 +15,28 @@ type CountStats struct {
 	Lowest  float64
 }
 
-// TODO reimplement as a heap
+type pair struct {
+   count int
+   lit int
+}
+
 type LitCounts struct {
 	counts []int
+   vmtf []pair
 }
 
 func NewLitCounts(nVar int) (lc *LitCounts) {
 	lc = new(LitCounts)
 	lc.counts = make([]int, nVar*2)
+	lc.vmtf = make([]pair, nVar*2)
+   for i := 0; i < nVar; i++ {
+      lc.vmtf[i].count = 0;
+      lc.vmtf[i].lit = i+1;
+   }
+   for i := nVar; i < 2*nVar; i++ {
+      lc.vmtf[i].count = 0;
+      lc.vmtf[i].lit = -1*(i-nVar+1);
+   }
 	return
 }
 
@@ -65,6 +80,83 @@ func (lc *LitCounts) Get(l *cnf.Lit) (int, error) {
 	panic("LitCount.Max is horribly broken\n")
 }
 
+func (lc *LitCounts) AddGiven(vars []int) {
+	for _, v := range vars {
+		if v < 0 {
+			lc.counts[(-1*v)-1]++
+			lc.vmtf[(-1*v)-1].count++
+		} else if v > 0 {
+			lc.counts[(len(lc.counts)/2)+v-1]++
+			lc.vmtf[(len(lc.counts)/2)+v-1].count++
+		}
+	}
+}
+
+func (lc *LitCounts) sortVmtf() {
+   var (
+      biggest int
+      tmp pair
+   )
+   for i := range lc.vmtf {
+      biggest = i
+      for j := i; j < len(lc.vmtf); j++ {
+         if lc.vmtf[i].count > lc.vmtf[biggest].count {
+            biggest = i
+         }
+      }
+      tmp = lc.vmtf[i]
+      lc.vmtf[i] = lc.vmtf[biggest]
+      lc.vmtf[biggest] = tmp
+   }
+}
+
+const varsToMove = 8
+func (lc *LitCounts) reorderVmtf(c []int) {
+   var (
+      n int
+      place = 0
+      tmp pair
+   )
+   if len(c) < varsToMove {
+      n = len(c)
+   } else {
+      n = varsToMove
+   }
+   for i := range lc.vmtf {
+      for j := range c {
+         if c[i] == lc.vmtf[j].lit {
+            tmp = lc.vmtf[place]
+            lc.vmtf[place] = lc.vmtf[j]
+            lc.vmtf[j] = tmp
+            place++
+            break
+         }
+      }
+      if place == n {
+         break
+      }
+   }
+}
+
+func (lc *LitCounts) GetNextVmtf(a *assignment.Assignment) (l *cnf.Lit) {
+   var lit uint
+   for i := range lc.vmtf {
+      if lc.vmtf[i].lit < 0 {
+         lit = uint(-1*lc.vmtf[i].lit)
+      } else {
+         lit = uint(lc.vmtf[i].lit)
+      }
+      if val, err := a.Get(lit); val == guess.Unassigned && err == nil {
+         if lc.vmtf[i].lit < 0 {
+            return &cnf.Lit{uint(lc.vmtf[i].lit*-1), cnf.Pos}
+         } else {
+            return &cnf.Lit{uint(lc.vmtf[i].lit), cnf.Pos}
+         }
+      }
+   }
+   panic("getNextVmtf is broken")
+}
+
 func (lc *LitCounts) Add(vars []int) {
 	for _, v := range vars {
 		if v < 0 {
@@ -73,6 +165,7 @@ func (lc *LitCounts) Add(vars []int) {
 			lc.counts[(len(lc.counts)/2)+v-1]++
 		}
 	}
+   lc.reorderVmtf(vars)
 }
 
 func (lc *LitCounts) DivCounts(divisor int) {

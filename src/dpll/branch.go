@@ -17,9 +17,10 @@ const (
 	Random
 	Vsids
 	Moms
+   Vmtf
 )
 
-var branchFuncs = [...]func(*db.DB, *assignment.Assignment) *cnf.Lit{ordered, random, vsids, moms}
+var branchFuncs = [...]func(*db.DB, *assignment.Assignment) *cnf.Lit{ordered, random, vsids, moms, vmtf}
 
 type Brancher struct {
 	Decide func(*db.DB, *assignment.Assignment) *cnf.Lit
@@ -118,9 +119,13 @@ func moms(db *db.DB, a *assignment.Assignment) (l *cnf.Lit) {
 	panic("MOMS is broken")
 }
 
+func vmtf(db *db.DB, a *assignment.Assignment) (l *cnf.Lit) {
+   return db.Counts.GetNextVmtf(a)
+}
+
 // Brancher needs to satisfy the flag.Value interface
 func (b Brancher) String() string {
-	return b.rule.String()
+   return  b.rule.String()
 }
 
 func (b BranchRule) String() (s string) {
@@ -133,6 +138,8 @@ func (b BranchRule) String() (s string) {
 		s = "vsids"
 	case Moms:
 		s = "moms"
+	case Vmtf:
+		s = "vmtf"
 	default:
 		s = "unimplemented"
 	}
@@ -151,6 +158,8 @@ func (b *Brancher) Set(s string) error {
 		b.SetRule(Vsids)
 	case "moms":
 		b.SetRule(Moms)
+	case "vmtf":
+		b.SetRule(Vmtf)
 	default:
 		return errors.New(fmt.Sprintf("\"Set\" given invalid value: %s", s))
 	}

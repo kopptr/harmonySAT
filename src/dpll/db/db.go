@@ -145,7 +145,11 @@ func (db *DB) AddEntry(vars []int, shouldSort bool) {
 	}
 
 	// Update Lit Counts
-	db.Counts.Add(vars)
+   if db.learning {
+      db.Counts.Add(vars)
+   } else {
+      db.Counts.AddGiven(vars)
+   }
 }
 
 func (db *DB) DelEntry(e *Entry) {
@@ -206,6 +210,7 @@ func (db *DB) GetWatchList(l cnf.Lit) *WatchList {
 
 func (db *DB) StartLearning() {
 	db.learning = true
+   db.Counts.sortVmtf()
 }
 
 func (db *DB) IsLearning() bool {

@@ -124,10 +124,10 @@ func (lc *LitCounts) reorderVmtf(c []int) {
    }
    for i := range lc.vmtf {
       for j := range c {
-         if c[i] == lc.vmtf[j].lit {
+         if c[j] == lc.vmtf[i].lit {
             tmp = lc.vmtf[place]
-            lc.vmtf[place] = lc.vmtf[j]
-            lc.vmtf[j] = tmp
+            lc.vmtf[place] = lc.vmtf[i]
+            lc.vmtf[i] = tmp
             place++
             break
          }

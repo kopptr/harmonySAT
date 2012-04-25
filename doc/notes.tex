@@ -1,0 +1,47 @@
+\documentclass{article}
+
+\usepackage{geometry}
+\usepackage{url}
+
+\title{Notes}
+
+\begin{document}
+\maketitle
+
+\paragraph{Things I Did}
+\begin{itemize}
+\item Finished implementation of Adaptive portion of the solver.
+\item Built a benchmark functionality into the solver
+\item Found some instances that wouldn't time out.
+\item Ran benches, built adaptive input
+\item Tried adaptive - used both given and learned to decide distance
+\item Tried adaptive - used learned to decide distance
+\item
+\end{itemize}
+
+\paragraph{Notes}
+\begin{itemize}
+\item New formulas --- Found a bunch, as well as a handful of ones that are application.
+\item generate random formulas --- Mitsuo Motoki --- generate soln,
+then generate consistent
+clauses\footnote{\url{
+   http://www.is.titech.ac.jp/~watanabe/gensat/a1/index.html}}.
+\item clause:variable ratio of 4.2 --- only applies to 3SAT
+\item SAT Competition winner determination --- 2 stages. Stage 1, selection by
+jury. Second stage has longer timeout (5000s). Winner is the most formulas
+solved. Ties broken by cumulative time. Separate rankings for wall clock time
+and cpu time.
+\end{itemize}
+
+\paragraph{ToDo}
+\begin{itemize}
+\item Implement L1 Norm. Compare \& contrast.
+\item Implement adaptive solver timing itself using the same mechanism as the
+benchmarks.
+\item Change solver to make pretty table
+\item Find more instances with differing Stats and that don't time out.
+\item Optimize the configurations individually?
+\end{itemize}
+
+
+\end{document}

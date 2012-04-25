@@ -1,0 +1,6 @@
+TODO:
+-----
+
+Learn how to generate random SATS.
+
+Best var:clause ratio is 4.2, but this is only true for 3SAT instances.

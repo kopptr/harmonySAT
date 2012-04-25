@@ -136,7 +136,7 @@ func runAdaptiveBench(file string, jsonFile string, chooseOnce bool, extraStats 
 }
 
 func testFormula(formulaFile string, texFile string, jsonFile string) {
-	branches := [...]dpll.BranchRule{dpll.Ordered, dpll.Random, dpll.Vsids, dpll.Moms}
+	branches := [...]dpll.BranchRule{dpll.Ordered, dpll.Random, dpll.Vsids, dpll.Moms, dpll.Vmtf}
 	dbms := [...]db.ClauseDBMS{db.Queue, db.BerkMin}
 
 	tex, err := os.OpenFile(texFile, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0664)

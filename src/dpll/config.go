@@ -70,6 +70,17 @@ type Adapter struct {
 	countDown  int
 }
 
+type StatSet struct {
+	Binary   bool // Having exactly two literals
+	Ternary  bool // Having exactly three literals
+	Horn     bool // Having <= one positive literal
+	Definite bool // Having exactly one positive literal
+	Lowest   bool
+	Low      bool
+	High     bool
+	Highest  bool
+}
+
 func NewAdapter(jsonFile string, chooseOnce bool, extraStats bool) *Adapter {
 	var e error
 	a := new(Adapter)
@@ -89,6 +100,7 @@ func NewAdapter(jsonFile string, chooseOnce bool, extraStats bool) *Adapter {
 	a.nChanges = -1 // The first choice doesn't count as a change.
 	a.firstCall = true
 	a.chooseOnce = chooseOnce
+   a.extraStats = extraStats
 
 	return a
 }

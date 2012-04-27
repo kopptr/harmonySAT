@@ -38,6 +38,7 @@ for bench in ${BENCH}; do
    echo -n "${bench} & " >> ${TEX}
    ./bin/hsat -q -file=${bench} -b
    echo "" >> ${TEX}
+   echo "finished ${bench}"
 done
 
 echo "\\end{tabular}" >> ${TEX}

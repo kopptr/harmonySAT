@@ -40,6 +40,7 @@ for bench in ${BENCH}; do
    echo -n "${bench} & " >> ${TEX}
    ./bin/hsat -file=${bench} -a=${JSON} -b >> ${TEX}
    echo "" >> ${TEX}
+   echo "done with ${bench}"
 done
 
 echo "\\end{tabular}" >> ${TEX}

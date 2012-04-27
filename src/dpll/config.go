@@ -82,7 +82,7 @@ type StatSet struct {
 }
 
 func NewAdapter(jsonFile string, chooseOnce bool, extraStats bool) *Adapter {
-	var e error
+	var err error
 	a := new(Adapter)
 	a.entries = make([]Entry, 17)
 	jsonReader, err := os.Open(jsonFile)
@@ -91,8 +91,12 @@ func NewAdapter(jsonFile string, chooseOnce bool, extraStats bool) *Adapter {
 	}
 	jsonD := json.NewDecoder(jsonReader)
 	for i := range a.entries {
-		e = jsonD.Decode(&(a.entries[i]))
-		if e != nil {
+		err = jsonD.Decode(&(a.entries[i].Proportions))
+		if err != nil {
+			break
+		}
+		err = jsonD.Decode(&(a.entries[i].Config))
+		if err != nil {
 			break
 		}
 	}

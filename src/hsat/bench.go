@@ -19,6 +19,7 @@ func benchmarkFormula(formulaFile string, texFile string, jsonFile string) {
 		bestDbms     db.ClauseDBMS
 		e            dpll.Entry
 	)
+   bestDuration = time.Hour * 5
 	branches := [...]dpll.BranchRule{dpll.Ordered, dpll.Random, dpll.Vsids, dpll.Moms, dpll.Vmtf}
 	dbms := [...]db.ClauseDBMS{db.Queue, db.BerkMin}
 
@@ -48,7 +49,7 @@ func benchmarkFormula(formulaFile string, texFile string, jsonFile string) {
 			} else {
 				thisRun := after.Sub(before)
 				fmt.Fprintf(tex, "& %s ", thisRun)
-				if thisRun.Nanoseconds() < bestDuration.Nanoseconds() || bestDbms == 0 {
+				if thisRun.Nanoseconds() < bestDuration.Nanoseconds() {
 					bestDuration = thisRun
 					bestBr = b
 					bestDbms = m
@@ -59,17 +60,16 @@ func benchmarkFormula(formulaFile string, texFile string, jsonFile string) {
 	fmt.Fprintf(tex, "\\\\\\hline")
 
 	// Write the json
-	if bestDbms != 0 {
-		db, _, err := initSolver(file)
-		if err != nil {
-			log.Fatal(err)
-		}
-		e.Proportions = *(dpll.NewGProportions(db))
-		e.Config.Dbms = bestDbms
-		e.Config.Branch = bestBr
-		jsonE.Encode(e)
-	}
-
+   db, _, err := initSolver(file)
+   if err != nil {
+      log.Fatal(err)
+   }
+   e.Proportions = *(dpll.NewGProportions(db))
+   e.Config.Dbms = bestDbms
+   e.Config.Branch = bestBr
+   fmt.Printf("%s,%d,%d\n", e.Proportions,e.Config.Branch, e.Config.Dbms)
+   jsonE.Encode(e.Proportions)
+   jsonE.Encode(e.Config)
 }
 
 func writeTableHeader(tex *os.File) {

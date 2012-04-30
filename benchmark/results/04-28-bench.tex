@@ -1,0 +1,39 @@
+\documentclass{article}
+\usepackage[paperheight=8.5in, paperwidth=15in]{geometry}
+\usepackage{fullpage}
+
+\title{Base Solver Measurements}
+\author{Tim Kopp}
+\date{04/27/12}
+
+\begin{document}
+\maketitle
+
+\begin{table}[ht!]
+\centering
+\begin{tabular}{|c||c|c|c|c|c|c|c|c||c|c|c|c|c|c|c|c|c|c|}\hline
+FILE & Bin & Tern & Horn & Def & HI & hi & lo & LO & \{O,Q\} & \{O,B\} & \{R,Q\} & \{R,B\} & \{V,Q\} & \{V,B\} & \{M,Q\} & \{M,B\} & \{T,Q\} & \{T,B\} \\\hline\hline
+benchmark/analysis/ais6.cnf & 72 & 26 & 98 & 26 & 0.295082 & 0.286885 & 0.081967 & 0.336066 & 7.738ms & 7.082ms & 6.364ms & 7.123ms & 7.462ms & 10.26ms & 188.694ms & 6.699ms & 7.06ms & 6.862ms \\\hline
+benchmark/analysis/bw_large.b.cnf & 71 & 29 & 85 & 14 & 0.000000 & 0.000000 & 0.000000 & 1.000000 & 1m41.192322s & 1m41.130403s TO & TO & TO & TO & TO & TO & & 1m41.315553s & 1m37.751307s \\\hline
+benchmark/analysis/F34-5-23-31.cnf & 0 & 67 & 60 & 58 & 0.037037 & 0.679012 & 0.283951 & 0.000000 & 27.754ms & 25.017ms & 1m44.788971s & 2m52.187495s & 1m1.883136s & 13.226056s & 5m19.634179s & 15m39.581258s & 97.905ms & 88.455ms \\\hline
+benchmark/analysis/F-5-29-31.cnf & 18 & 45 & 62 & 60 & 0.106667 & 0.760000 & 0.066667 & 0.066667 & 5.027ms & 4.716ms & 8.109ms & 11.042ms & 7.673ms & 10.752ms & 13.745ms & 10.101ms & 4.736ms & 3.716ms \\\hline
+benchmark/analysis/f600.cnf & 0 & 100 & 51 & 39 & 0.000000 & 0.000000 & 0.000000 & 1.000000 TO & TO & TO & TO & TO & TO & TO & TO & TO & TO & \\\hline
+benchmark/analysis/F-6-53-61.cnf & 17 & 44 & 61 & 60 & 0.000000 & 0.527778 & 0.407407 & 0.064815 & 22.377ms & 20.973ms & 83.741ms & 23.123ms & 21.199ms & 96.785ms & 79.529ms & 64.629ms & 55.325ms & 51.598ms \\\hline
+benchmark/analysis/flat100-34.cnf & 91 & 9 & 91 & 0 & 0.000000 & 0.000000 & 0.085000 & 0.915000 & 13.682ms & 13.223ms & 41.34ms & 32.607ms & 14.499ms & 14.805ms & 72.345ms & 123.861ms & 12.376ms & 13.195ms \\\hline
+benchmark/analysis/hanoi4.cnf & 52 & 47 & 74 & 19 & 0.000000 & 0.000000 & 0.000000 & 1.000000 TO & TO & TO & TO & TO & TO & TO & TO & TO & TO & \\\hline
+benchmark/analysis/huge.cnf & 81 & 19 & 90 & 12 & 0.000000 & 0.000000 & 0.000000 & 1.000000 & 217.635ms & 208.698ms & 187.42ms & 227.229ms & 221.622ms & 89.659ms & 451.494ms & 129.082ms & 203.091ms & 199.521ms \\\hline
+benchmark/analysis/logistics.b.cnf & 55 & 39 & 90 & 37 & 0.000000 & 0.000000 & 0.000000 & 1.000000 TO & TO & TO & TO & TO & TO & TO & TO & TO & TO & \\\hline
+benchmark/analysis/medium.cnf & 78 & 21 & 88 & 20 & 0.000000 & 0.293103 & 0.146552 & 0.560345 & 11.319ms & 9.957ms & 10.913ms & 10.456ms & 9.52ms & 10.327ms & 9.896ms & 10.675ms & 9.924ms & 10.672ms \\\hline
+benchmark/analysis/sw100-56.cnf & 97 & 0 & 97 & 0 & 0.000000 & 0.000000 & 0.000000 & 1.000000 & 56.117ms & 51.75ms TO & & 16m57.355853s TO & TO & TO & TO & & 55.258ms & 52.187ms \\\hline
+benchmark/analysis/uf100-01000.cnf & 0 & 100 & 48 & 39 & 0.020000 & 0.420000 & 0.475000 & 0.085000 & 1m6.67307s & 59.783402s & 2m3.923665s & 1m10.954751s & 9.184934s & 7.303735s & 46.365349s & 10.862922s & 25.724376s & 23.645143s \\\hline
+benchmark/analysis/uf100-0110.cnf & 0 & 100 & 53 & 40 & 0.010000 & 0.490000 & 0.355000 & 0.145000 & 5m14.309989s & 4m45.633856s & 14m4.228321s & 5m57.547207s & 14m27.689536s & 2m43.932183s TO & & 5m41.091493s & 4m31.427644s & 4m11.599974s \\\hline
+benchmark/analysis/uf100-0153.cnf & 0 & 100 & 49 & 37 & 0.005000 & 0.490000 & 0.375000 & 0.130000 & 57.402036s & 51.717515s & 4.073824s & 55.723732s & 402.85ms & 156.344ms & 2m22.591621s & 1m4.135849s & 46.996951s & 43.325631s \\\hline
+benchmark/analysis/uf100-0155.cnf & 0 & 100 & 51 & 38 & 0.025000 & 0.390000 & 0.520000 & 0.065000 & 1m48.986246s & 1m38.43397s & 2m49.10199s & 32.852219s & 8.077183s & 303.482ms & 29.12073s & 3m9.389373s & 2m24.707695s & 2m10.4597s \\\hline
+benchmark/analysis/uf100-0159.cnf & 0 & 100 & 58 & 43 & 0.020000 & 0.470000 & 0.365000 & 0.145000 & 11m24.709019s & 10m15.697228s & 8m14.576477s & 3m51.195496s & 1m23.368973s & 15.051556s & 1m4.412686s & 3m40.701965s & 4m58.678198s & 4m37.001333s \\\hline
+benchmark/analysis/uf100-0200.cnf & 0 & 100 & 51 & 40 & 0.035000 & 0.395000 & 0.445000 & 0.125000 & 13.140053s & 11.868833s & 19.471391s & 7m30.253412s & 2.888845s & 576.641ms & 18m25.772529s & 20.295931s & 10.094427s & 9.229979s \\\hline
+benchmark/analysis/uf100-0592.cnf & 0 & 100 & 47 & 35 & 0.005000 & 0.470000 & 0.415000 & 0.110000 & 17m57.825577s & 16m56.329593s & 1m4.215467s & 3m5.96604s & 4m19.656134s & 47.928173s & 5m53.398035s & 7m22.485944s & 16m15.06349s & 14m48.935962s \\\hline
+benchmark/analysis/uf100-0750.cnf & 0 & 100 & 53 & 39 & 0.010000 & 0.465000 & 0.415000 & 0.110000 & 8m5.584652s & 7m15.458739s & 1m3.766906s & 11m35.175516s & 3m18.718806s & 47.900296s & 13.062674s & 5m55.438565s & 43.296409s & 39.254162s \\\hline
+benchmark/analysis/vda_gr_rcs_w9.shuffled.cnf & 99 & 0 & 74 & 50 & 0.000000 & 0.000000 & 0.000000 & 1.000000 TO & TO & TO & TO & TO & TO & TO & TO & TO & TO & \\\hline
+\end{tabular}
+\end{table}
+\end{document}
